@@ -19,6 +19,7 @@ parser = argparse.ArgumentParser(description='WILLOW-chia-forks-offline-wallet-b
 parser.add_argument('-m','--mnemonic', help='The mnemonic used to create a private key. Use \'default\''
                                             ' to use the default mnemonic registered in the system\'s keychain.', required=False)
 parser.add_argument('-d','--db_path', help='The path to the db where the balance will be queried.', required=False)
+parser.add_argument('-n','--denominator', help='Number of units that make a single coin.', required=False, default = 1000000000000)
 parser.add_argument('-p','--prefix', help='The prefix of the coin used to generate the addresses', required=True if __name__ == '__main__' else False, default='xch')
 arguments = vars(parser.parse_args())
 
@@ -31,6 +32,7 @@ class willow():
         self.prefix = arguments['prefix']
         self.mnemonic = arguments['mnemonic']
         self.number_of_ph_to_search = 500
+        self.denominator = arguments['denominator']
 
         if 'mnemonic' not in arguments.keys() and 'db_path' not in arguments.keys():
             exit('ERROR: Either the mnemonic needs to be provided (to create the json with all addresses) or the db path (to check the wallet balance) !')
@@ -91,7 +93,7 @@ class willow():
             for row in rows:
 
                 xch_raw=int.from_bytes(row[7], 'big')
-                xch=xch_raw/1000000000000
+                xch=xch_raw/self.denominator
                 is_coin_spent = row[3]
                 if is_coin_spent:
                     coin_spent = xch + coin_spent
