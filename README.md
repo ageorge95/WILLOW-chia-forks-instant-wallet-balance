@@ -8,7 +8,7 @@ Collection of scripts used to check the balance of a wallet, including ALL the a
 # High level overview
 - The script has 2 main functionalities:
     - it can generate the first 500 addresses of a mnemonic and save them into a json file
-    - it can query the full node db and get the balance of all those addresses, thus getiing the coin balance of the whole wallet
+    - it can query the full node db and get the balance of all those addresses, thus geting the coin balance of the whole wallet
     
 - !!! WARNING !!!
    - Because the tool needs your mnemonic the first time you generate all the addresses, be REALLY CAREFULL not to accidentally share the mnemonic
