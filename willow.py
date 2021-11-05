@@ -33,15 +33,16 @@ class willow():
         self.mnemonic = arguments['mnemonic']
         self.number_of_ph_to_search = 500
         self.denominator = arguments['denominator']
+        self.db_path = arguments['db_path']
 
-        if not arguments['mnemonic'] and not arguments['db_path']:
+        if not self.mnemonic and not self.db_path:
             exit('ERROR: Either the mnemonic needs to be provided (to create the json with all addresses) or the db path (to check the wallet balance) !')
-        if arguments['mnemonic'] and arguments['db_path']:
+        if self.mnemonic and self.db_path:
             exit('ERROR: Either the mnemonic needs to be provided (to create the json with all addresses) or the db path (to check the wallet balance) ! Not both !!')
 
     def run(self):
-        if arguments['mnemonic']: return self.create_addresses()
-        if arguments['db_path']: return self. get_wallet_balance()
+        if self.mnemonic: return self.create_addresses()
+        if self.db_path: return self. get_wallet_balance()
 
     def create_addresses(self):
         keychain: Keychain = Keychain()
@@ -65,7 +66,7 @@ class willow():
 
     def get_wallet_balance(self):
 
-        db_filepath = "C:\\Users\\g4m3rx\\.hddcoin\\mainnet\\db\\blockchain_v1_mainnet.sqlite"
+        db_filepath = self.db_path
         conn = connect(db_filepath)
         dbcursor = conn.cursor()
 
