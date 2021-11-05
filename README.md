@@ -21,7 +21,9 @@ Collection of scripts used to check the balance of a wallet, including ALL the a
 # How to use
 The tool was tested just in Windows, but should work on every OS where python is supported.
 
-If you want fast support (faster than with github issues that is), join our Discord server: TBD
+It was designed from the gound-up to be used as a sub-module as well, so if you want to include it in a bigger set of scripts, you can do that 🙂. Just import the willow class and you are good to go.
+
+If you want fast support (faster than with github issues that is), join our Discord server: https://discord.gg/qU9zRP9x5u
 
 ## WINDOWS usage - instructions
 
