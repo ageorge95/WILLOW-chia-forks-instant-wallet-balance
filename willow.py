@@ -17,8 +17,8 @@ from chia_blockchain.chia.wallet.derive_keys import master_sk_to_wallet_sk
 
 parser = argparse.ArgumentParser(description='WILLOW-chia-forks-offline-wallet-balance')
 parser.add_argument('-m','--mnemonic', help='The mnemonic used to create a private key. Use \'default\''
-                                            ' to use the default mnemonic registered in the system\'s keychain.', required=False)
-parser.add_argument('-d','--db_path', help='The path to the db where the balance will be queried.', required=False)
+                                            ' to use the default mnemonic registered in the system\'s keychain.', required=False, default = None)
+parser.add_argument('-d','--db_path', help='The path to the db where the balance will be queried.', required=False, default = None)
 parser.add_argument('-n','--denominator', help='Number of units that make a single coin.', required=False, default = 1000000000000)
 parser.add_argument('-p','--prefix', help='The prefix of the coin used to generate the addresses', required=True if __name__ == '__main__' else False, default='xch')
 arguments = vars(parser.parse_args())
@@ -34,21 +34,21 @@ class willow():
         self.number_of_ph_to_search = 500
         self.denominator = arguments['denominator']
 
-        if 'mnemonic' not in arguments.keys() and 'db_path' not in arguments.keys():
+        if not arguments['mnemonic'] and not arguments['db_path']:
             exit('ERROR: Either the mnemonic needs to be provided (to create the json with all addresses) or the db path (to check the wallet balance) !')
-        if 'mnemonic' in arguments.keys() and 'db_path' in arguments.keys():
-            exit('ERROR: Either the mnemonic needs to be provided (to create the json with all addresses) or the db path (to check the wallet balance) !')
+        if arguments['mnemonic'] and arguments['db_path']:
+            exit('ERROR: Either the mnemonic needs to be provided (to create the json with all addresses) or the db path (to check the wallet balance) ! Not both !!')
 
     def run(self):
-        if 'mnemonic' in arguments.keys(): return self.create_addresses()
-        if 'db_path' in arguments.keys(): return self. get_wallet_balance()
+        if arguments['mnemonic']: return self.create_addresses()
+        if arguments['db_path']: return self. get_wallet_balance()
 
     def create_addresses(self):
         keychain: Keychain = Keychain()
         if self.mnemonic == 'default':
-            all_sks = [(keychain.get_all_private_keys()[0][0], None)] # from hot wallet
+            all_sks = [[(keychain.get_all_private_keys()[0][0], None)]] # from hot wallet
         else:
-            all_sks = [(keychain.return_private_key_from_mnemonic(mnemonic=self.mnemonic), None)]
+            all_sks = [[(keychain.return_private_key_from_mnemonic(mnemonic=self.mnemonic), None)]]
 
         self.all_addresses = []
 
@@ -57,7 +57,8 @@ class willow():
                 self.all_addresses.append(
                     encode_puzzle_hash(create_puzzlehash_for_pk(master_sk_to_wallet_sk(sk, uint32(i)).get_g1()), self.prefix)
                 )
-        with open('first_{}_addresses_{}.json', 'w') as json_out_handle:
+        with open('first_{}_addresses_{}.json'.format(self.number_of_ph_to_search,
+                                                      self.prefix), 'w') as json_out_handle:
             dump(self.all_addresses, json_out_handle, indent=2)
 
         return self.all_addresses
@@ -96,9 +97,11 @@ class willow():
                 xch=xch_raw/self.denominator
                 is_coin_spent = row[3]
                 if is_coin_spent:
-                    coin_spent = xch + coin_spent
+                    coin_spent += xch
+                    total_coin_spent += xch
                 else:
-                    coin_balance = xch + coin_balance
+                    coin_balance += xch
+                    total_coin_balance += xch
 
             if not self.disable_print:
                 print('{} | available: {} | spent: {}'.format(wallet_addr,
