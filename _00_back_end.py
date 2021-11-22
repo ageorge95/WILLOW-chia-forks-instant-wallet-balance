@@ -262,7 +262,7 @@ class WILLOW_back_end():
                   entry[1]['coin_balance'],
                   entry[1]['coin_spent']
                   ] for entry in to_return.items()]
-        self._log.info('Now printing ALL raw data:\n{}'.format(tabulate(table, ['Wallet',
+        self._log.info('Balance for each address:\n{}'.format(tabulate(table, ['Wallet',
                                                                                 'Available Balance',
                                                                                 'Spent Coins'], tablefmt="grid")))
         self._log.info('TOTAL: {} available coins, {} spent coins'.format(total_coin_balance,
