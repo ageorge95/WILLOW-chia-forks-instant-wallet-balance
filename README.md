@@ -1,5 +1,5 @@
 # WILLOW-chia-forks-offline-wallet-balance
-Collection of scripts used to check the balance of a wallet, including ALL the addresses of that wallet. It can also check the balance of a single address.
+Collection of scripts used to check the balance of a wallet, including ALL the addresses of that wallet. It can also check the balance of a single/multiple addresses.
 
 ## Contributors
 
@@ -7,12 +7,12 @@ Collection of scripts used to check the balance of a wallet, including ALL the a
 
 # High level overview
 - The script has 2 main functionalities:
-    - it can generate the first 500 addresses of a mnemonic and save them into a json file
-    - it can query the full node db and get the balance of all those addresses, thus geting the coin balance of the whole wallet
+    - it can generate the first 500 (default) addresses of a mnemonic
+    - it can query the full node db and get the balance of all those addresses, thus getting the coin balance of the whole wallet
     
 - !!! WARNING !!!
-   - Because the tool needs your mnemonic the first time you generate all the addresses, be REALLY CAREFULL not to accidentally share the mnemonic
-   - This code is posted here on github and I tried not to obfuscate anything so PLEASE feel free to review the code before you run it. I just added on top of the chia-blockchain code, so the review will take like 5-10 minutes.! 
+   - Because the tool needs your mnemonic to generate all the addresses, be REALLY CAREFUL not to accidentally share the mnemonic
+   - The backend is posted here on github and I tried not to obfuscate anything so PLEASE feel free to review the code before you run it.
 
 # Feedback/ Contribution
 - Please post any issues you encountered or any feature requests in the issues tab.
@@ -21,21 +21,19 @@ Collection of scripts used to check the balance of a wallet, including ALL the a
 # How to use
 The tool was tested just in Windows, but should work on every OS where python is supported.
 
-It was designed from the gound-up to be used as a sub-module as well, so if you want to include it in a bigger set of scripts, you can do that 🙂. Just import the willow class and you are good to go.
+It was designed from the gound-up to be used as a sub-module as well, so if you want to include it in a bigger set of scripts, you can do that 🙂. Just import _00_back_end.WILLOW_back_end and you are good to go.
 
 If you want fast support (faster than with github issues that is), join our Discord server: https://discord.gg/qU9zRP9x5u
 
 ## WINDOWS usage - instructions
 
-1. Have 
-   - a python distro installed on your system. I recommend python 3.9.x x64bit
-   
-2. Run prepare_python_venv.bat and wait for it to setup the virtual environment
+1. Have the full node db of the coin you are about to check.
 
-2. Run RUN_willow.bat with the appropiate parameters and follow the instructions on-screen
-   - you MUST provide EITHER
-        - the mnemonic, to generate a json containing all the wallet addresses
-        - the path to the full node db, so that the json created earlier will be read and all addresses checked
+2. Run the compiled exe for windows and follow the instructions on screen.
+
+GUI overview:
+   
+![alt text](https://raw.githubusercontent.com/ageorge95/WILLOW-chia-forks-offline-wallet-balance/main/ReadMe_res/GUI_overview.jpg?raw=true)
 
 # Support
 Found this project useful? Send your ❤ in any form you can 🙂. Please contact me if you donated and want to be added to the contributors list !
