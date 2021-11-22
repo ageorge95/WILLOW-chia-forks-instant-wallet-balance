@@ -245,14 +245,14 @@ class WILLOW_back_end():
             for row in rows:
 
                 coin_raw=int.from_bytes(row[7], 'big')
-                coin=coin_raw/self.config[coin]['denominator']
+                parsed_coin=coin_raw/self.config[coin]['denominator']
                 is_coin_spent = row[3]
                 if is_coin_spent:
-                    coin_spent += coin
-                    total_coin_spent += coin
+                    coin_spent += parsed_coin
+                    total_coin_spent += parsed_coin
                 else:
-                    coin_balance += coin
-                    total_coin_balance += coin
+                    coin_balance += parsed_coin
+                    total_coin_balance += parsed_coin
 
             to_return[wallet_addr]['coin_spent'] = coin_spent
             to_return[wallet_addr]['coin_balance'] = coin_balance
