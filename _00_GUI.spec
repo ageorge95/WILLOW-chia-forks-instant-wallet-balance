@@ -7,7 +7,8 @@ block_cipher = None
 a = Analysis(['_00_GUI.py'],
              pathex=['chia_blockchain'],
              binaries=[],
-             datas=[('version.txt', '.'),
+             datas=[('icon.ico', '.'),
+			  ('version.txt', '.'),
               ('donation.gif', '.'),
               (sys.prefix+r'/tcl/tix8.4.3', 'tcl/tix8.4.3'),
               ('chia_blockchain/chia', 'chia')],
@@ -40,4 +41,5 @@ exe = EXE(pyz,
           disable_windowed_traceback=False,
           target_arch=None,
           codesign_identity=None,
-          entitlements_file=None )
+          entitlements_file=None,
+		  icon='icon.ico' )
