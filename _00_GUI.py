@@ -77,7 +77,7 @@ class sponsor_reminder():
 
     def sponsor_link(self,
                      *args):
-        webbrowser.open_new('https://github.com/ageorge95/LEAF-chia-plot-check-organiser#support')
+        webbrowser.open_new('https://github.com/ageorge95/WILLOW-chia-forks-offline-wallet-balance#support')
 
     def sponsor_gif_animation(self):
         while True:
