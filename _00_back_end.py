@@ -6,8 +6,8 @@ from tabulate import tabulate
 from traceback import format_exc
 from sys import path
 from os import path as os_path
-path.append(os_path.join(os_path.dirname(__file__)))
-path.append(os_path.join(os_path.dirname(__file__), 'chia_blockchain'))
+path.insert(0,os_path.join(os_path.dirname(__file__)))
+path.insert(0,os_path.join(os_path.dirname(__file__), 'chia_blockchain'))
 
 from chia_blockchain.chia.util.keychain import mnemonic_to_seed
 from chia_blockchain.chia.util.bech32m import encode_puzzle_hash,\
