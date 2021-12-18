@@ -1,7 +1,8 @@
 from argparse import ArgumentParser
 from _00_base import configure_logger_and_queue
 from _00_back_end import WILLOW_back_end
-import os
+import os,\
+    sys
 
 class WILLOWcli(configure_logger_and_queue,
                 WILLOW_back_end):
@@ -18,7 +19,9 @@ class WILLOWcli(configure_logger_and_queue,
             return False
         return True
 
-parser = ArgumentParser(description='WILLOW CLI interface')
+parser = ArgumentParser(description='CLI: WILLOW-chia-forks-offline-wallet-balance |'
+                                    ' ' + open('version.txt' if os.path.isfile('version.txt')
+                                                             else os.path.join(sys._MEIPASS, 'version.txt') , 'r').read())
 
 parser.add_argument('-c',
                     '--coin',
