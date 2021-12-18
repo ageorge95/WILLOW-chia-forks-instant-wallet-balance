@@ -273,7 +273,7 @@ class WILLOW_back_end():
         if verbose: self._log.info('Balance for each address:\n{}'.format(tabulate(table, ['Wallet',
                                                                                 'Available Balance',
                                                                                 'Spent Coins'], tablefmt="grid")))
-        if verbose: self._log.info('TOTAL: {} available coins, {} spent coins'.format(total_coin_balance,
+        if verbose: self._log.info('TOTAL: available coins:{}, spent coins:{},'.format(total_coin_balance,
                                                                           total_coin_spent))
 
         return to_return
