@@ -182,15 +182,15 @@ class WILLOW_back_end():
 
     def __init__(self):
 
-        if os_path.isfile('config.json'):
+        if os_path.isfile('config_willow.json'):
             try:
-                with open('config.json', 'r') as json_in_handle:
+                with open('config_willow.json', 'r') as json_in_handle:
                     self.config = load(json_in_handle)
             except:
                 self.config = initial_config
         else:
             self.config = initial_config
-            with open('config.json', 'w') as json_out_handle:
+            with open('config_willow.json', 'w') as json_out_handle:
                 dump(self.config, json_out_handle, indent=2)
 
         super(WILLOW_back_end, self).__init__()
