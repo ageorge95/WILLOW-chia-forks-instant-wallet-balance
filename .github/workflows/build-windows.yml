@@ -23,12 +23,22 @@ jobs:
           run: |
             python _00_update_version.py "${{ github.event.release.name }}"
             pyinstaller _00_GUI.spec
-        - name: upload windows artifact
+            pyinstaller _00_CLI.spec
+        - name: upload windows artifact __ GUI
           uses: actions/upload-release-asset@v1
           env:
             GITHUB_TOKEN: ${{ github.token }}
           with:
             upload_url: ${{ github.event.release.upload_url }}
-            asset_path: ./dist/${{ github.event.release.name }}.exe
-            asset_name: ${{ github.event.release.name }}.exe
+            asset_path: ./dist/GUI${{ github.event.release.name }}.exe
+            asset_name: GUI_${{ github.event.release.name }}.exe
+            asset_content_type: application/zip
+        - name: upload windows artifact __ CLI
+          uses: actions/upload-release-asset@v1
+          env:
+            GITHUB_TOKEN: ${{ github.token }}
+          with:
+            upload_url: ${{ github.event.release.upload_url }}
+            asset_path: ./dist/CLI${{ github.event.release.name }}.exe
+            asset_name: CLI_${{ github.event.release.name }}.exe
             asset_content_type: application/zip
