@@ -178,10 +178,13 @@ initial_config = {'AEC': {'db_filepath': '{userdir}\\.aedge\\mainnet\\db\\blockc
                          'friendly_name': 'venidium'}}
 
 class WILLOW_back_end():
-
-    _log: getLogger
+    
+    _log: getLogger = None
 
     def __init__(self):
+
+        if not self._log:
+            self._log = getLogger()
 
         if os_path.isfile('config_willow.json'):
             try:
