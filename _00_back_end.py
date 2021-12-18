@@ -178,7 +178,7 @@ initial_config = {'AEC': {'db_filepath': '{userdir}\\.aedge\\mainnet\\db\\blockc
                          'friendly_name': 'venidium'}}
 
 class WILLOW_back_end():
-    
+
     _log: getLogger = None
 
     def __init__(self):
@@ -202,9 +202,10 @@ class WILLOW_back_end():
     def return_addresses(self,
                          mnemonic: str,
                          prefix: str,
-                         nr_of_addresses: int = 500) -> list:
+                         nr_of_addresses: int = 500,
+                         verbose: bool = True) -> list:
 
-        self._log.info('Generating {} addresses based on the provided mnemonic. Please wait ...'.format(nr_of_addresses))
+        if verbose: self._log.info('Generating {} addresses based on the provided mnemonic. Please wait ...'.format(nr_of_addresses))
         all_addresses = []
         try:
             seed = mnemonic_to_seed(mnemonic=mnemonic,
@@ -213,7 +214,7 @@ class WILLOW_back_end():
 
             for i in range(nr_of_addresses):
                 all_addresses.append(encode_puzzle_hash(create_puzzlehash_for_pk(master_sk_to_wallet_sk(sk, uint32(i)).get_g1()), prefix))
-            self._log.info('{} addresses successfully generated:\n{}'.format(nr_of_addresses,'\n'.join(all_addresses)))
+            if verbose: self._log.info('{} addresses successfully generated:\n{}'.format(nr_of_addresses,'\n'.join(all_addresses)))
         except:
             self._log.error('Oh snap ! There was an error while generating the addresses:\n{}'.format(format_exc(chain=False)))
 
@@ -222,7 +223,8 @@ class WILLOW_back_end():
 
     def return_total_balance(self,
                              addresses: list,
-                             coin) -> dict:
+                             coin,
+                             verbose: bool = True) -> list:
 
         db_filepath = self.config[coin]['db_filepath']
         conn = connect(db_filepath)
@@ -231,11 +233,11 @@ class WILLOW_back_end():
         total_coin_balance = 0
         total_coin_spent = 0
 
-        to_return = {}
+        to_return = []
 
         for wallet_addr in addresses:
 
-            to_return[wallet_addr] = {}
+            to_append = {}
 
             puzzle_hash_bytes = decode_puzzle_hash(wallet_addr)
             puzzle_hash = puzzle_hash_bytes.hex()
@@ -258,18 +260,20 @@ class WILLOW_back_end():
                     coin_balance += parsed_coin
                     total_coin_balance += parsed_coin
 
-            to_return[wallet_addr]['coin_spent'] = coin_spent
-            to_return[wallet_addr]['coin_balance'] = coin_balance
+            to_append['wallet_addr'] = wallet_addr
+            to_append['coin_spent'] = coin_spent
+            to_append['coin_balance'] = coin_balance
+            to_return.append(to_append)
 
         table = [[
-                  entry[0],
-                  entry[1]['coin_balance'],
-                  entry[1]['coin_spent']
-                  ] for entry in to_return.items()]
-        self._log.info('Balance for each address:\n{}'.format(tabulate(table, ['Wallet',
+                  entry['wallet_addr'],
+                  entry['coin_balance'],
+                  entry['coin_spent']
+                  ] for entry in to_return]
+        if verbose: self._log.info('Balance for each address:\n{}'.format(tabulate(table, ['Wallet',
                                                                                 'Available Balance',
                                                                                 'Spent Coins'], tablefmt="grid")))
-        self._log.info('TOTAL: {} available coins, {} spent coins'.format(total_coin_balance,
+        if verbose: self._log.info('TOTAL: {} available coins, {} spent coins'.format(total_coin_balance,
                                                                           total_coin_spent))
 
         return to_return
