@@ -59,13 +59,13 @@ if __name__ == '__main__':
     WILLOWobj = WILLOWcli()
 
     if not WILLOWobj.check_valid_coin(coin=args.coin):
-        exit('Your coin is not in the config: {}'.format(args.coin))
+        sys.exit('Your coin is not in the config: {}'.format(args.coin))
 
     if not args.mnemonic and not args.addresses:
-        exit('At least a mnemonic or some addresses must be provided !')
+        sys.exit('At least a mnemonic or some addresses must be provided !')
 
     if args.mnemonic and args.addresses:
-        exit('No mnemonic and no addresses were provided !')
+        sys.exit('No mnemonic and no addresses were provided !')
 
     WILLOWobj.return_total_balance(addresses=WILLOWobj.return_addresses(mnemonic=args.mnemonic,
                                                                        prefix=args.coin.lower(),
