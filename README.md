@@ -23,7 +23,7 @@ The tool was tested just in Windows, but should work on every OS where python is
 
 It was designed from the ground-up to be used as a sub-module as well, so if you want to include it in a bigger set of scripts, you can do that 🙂. Just import _00_back_end.WILLOW_back_end and you are good to go.
 
-NOTE#1: Using it as a sub-module may get you to fall into a rabbit hole. For that reason, recently a CLI interface was implemented which will completly isolate your scripts from willow.
+NOTE#1: Using it as a sub-module may get you to fall into a rabbit hole. For that reason, recently a CLI interface was implemented which will completely isolate your scripts from willow.
 
 NOTE#2: Long story short you have 3 ways to use willow in your scripts:
 - M#1 using the WILLOW class directly
