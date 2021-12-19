@@ -30,7 +30,7 @@ jobs:
             GITHUB_TOKEN: ${{ github.token }}
           with:
             upload_url: ${{ github.event.release.upload_url }}
-            asset_path: ./dist/GUI${{ github.event.release.name }}.exe
+            asset_path: ./dist/GUI_${{ github.event.release.name }}.exe
             asset_name: GUI_${{ github.event.release.name }}.exe
             asset_content_type: application/zip
         - name: upload windows artifact __ CLI
@@ -39,6 +39,6 @@ jobs:
             GITHUB_TOKEN: ${{ github.token }}
           with:
             upload_url: ${{ github.event.release.upload_url }}
-            asset_path: ./dist/CLI${{ github.event.release.name }}.exe
+            asset_path: ./dist/CLI_${{ github.event.release.name }}.exe
             asset_name: CLI_${{ github.event.release.name }}.exe
             asset_content_type: application/zip
