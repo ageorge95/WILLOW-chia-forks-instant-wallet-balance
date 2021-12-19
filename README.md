@@ -25,7 +25,7 @@ It was designed from the ground-up to be used as a sub-module as well, so if you
 
 NOTE#1: Using it as a sub-module may get you to fall into a rabbit hole. For that reason, recently a CLI interface was implemented which will completly isolate your scripts from willow.
 
-NOTE#2: Long story short you have 3 new to use willow in your scripts:
+NOTE#2: Long story short you have 3 ways to use willow in your scripts:
 - M#1 using the WILLOW class directly
 - M#2 using _00_CLI.py to direct your queries (recommended)
 - M#3 using the compiled CLI exe (more I/O overhead then M#2)
