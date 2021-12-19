@@ -4,10 +4,10 @@ from json import load,\
     dump
 from tabulate import tabulate
 from traceback import format_exc
-from sys import path
+import sys
 from os import path as os_path
-path.insert(0,os_path.join(os_path.dirname(__file__)))
-path.insert(0,os_path.join(os_path.dirname(__file__), 'chia_blockchain'))
+sys.path.insert(0,os_path.join(os_path.dirname(__file__)))
+sys.path.insert(0,os_path.join(os_path.dirname(__file__), 'chia_blockchain'))
 
 from chia_blockchain.chia.util.keychain import mnemonic_to_seed
 from chia_blockchain.chia.util.bech32m import encode_puzzle_hash,\
@@ -186,15 +186,18 @@ class WILLOW_back_end():
         if not self._log:
             self._log = getLogger()
 
-        if os_path.isfile('config_willow.json'):
+        config_path = 'config_willow.json' if '_MEIPASS' in sys.__dict__\
+                                           else os_path.join(os_path.dirname(__file__),'config_willow.json')
+
+        if os_path.isfile(config_path):
             try:
-                with open('config_willow.json', 'r') as json_in_handle:
+                with open(config_path, 'r') as json_in_handle:
                     self.config = load(json_in_handle)
             except:
                 self.config = initial_config
         else:
             self.config = initial_config
-            with open('config_willow.json', 'w') as json_out_handle:
+            with open(config_path, 'w') as json_out_handle:
                 dump(self.config, json_out_handle, indent=2)
 
         super(WILLOW_back_end, self).__init__()

@@ -256,7 +256,9 @@ class App():
 
     def __init__(self, root):
         self.root = root
-        self.root.title('WILLOW-chia-forks-offline-wallet-balance | ' + open('version.txt' if path.isfile('version.txt') else path.join(sys._MEIPASS, 'version.txt') , 'r').read())
+        version_filepath = path.join(path.dirname(__file__),'version.txt') if '_MEIPASS' in sys.__dict__\
+                                                                           else 'version.txt'
+        self.root.title('WILLOW-chia-forks-offline-wallet-balance | ' + open(version_filepath, 'r').read())
         self.root.iconbitmap('icon.ico' if path.isfile('icon.ico') else path.join(sys._MEIPASS, 'icon.ico'))
 
         sponsor_frame = ttk.Labelframe(text="Sponsor")
