@@ -19,11 +19,8 @@ class WILLOWcli(configure_logger_and_queue,
             return False
         return True
 
-version_filepath = os.path.join(os.path.dirname(__file__),'version.txt') if '_MEIPASS' in sys.__dict__\
-                                                                         else 'version.txt'
-
 parser = ArgumentParser(description='CLI: WILLOW-chia-forks-offline-wallet-balance |'
-                                    ' ' + open(version_filepath, 'r').read())
+                                    ' ' + open(os.path.join(os.path.dirname(__file__),'version.txt'), 'r').read())
 
 parser.add_argument('-c',
                     '--coin',
