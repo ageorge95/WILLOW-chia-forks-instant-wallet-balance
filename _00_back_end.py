@@ -17,7 +17,10 @@ from chia_blockchain.chia.util.ints import uint32
 from blspy import AugSchemeMPL
 from chia_blockchain.chia.wallet.derive_keys import master_sk_to_wallet_sk
 
-initial_config = {'AEC': {'db_filepath': '{userdir}\\.aedge\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=os_path.expanduser("~")),
+initial_config = {'LLC': {'db_filepath': '{userdir}\\.littlelambocoin\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=os_path.expanduser("~")),
+                         'denominator': 1000,
+                         'friendly_name': 'littlelambocoin'},
+                 'AEC': {'db_filepath': '{userdir}\\.aedge\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=os_path.expanduser("~")),
                          'denominator': 1000000000000,
                          'friendly_name': 'aedge'},
                  'APPLE': {'db_filepath': '{userdir}\\.apple\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=os_path.expanduser("~")),
