@@ -251,7 +251,7 @@ class FormControls(buttons_label_state_change,
                 cli_path = path.join(path.dirname(__file__), 'CLI_{}.exe'.format(open(path.join(sys._MEIPASS, 'version.txt'), 'r').read()))  if '_MEIPASS' in sys.__dict__ \
                                                                             else '{} _00_CLI.py'.format(sys.executable)
 
-                CLI_args = '{cli_path} --coin={coin} --no-verbose '
+                CLI_args = '"{cli_path}" --coin={coin} --no-verbose '
                 if self.method_to_use.get() == 'via_mnemonic':
                     CLI_args += ' --mnemonic={mnemonic} '
                 if self.method_to_use.get() == 'via_wallet_addresses':
