@@ -1,3 +1,6 @@
 [submodule "chia_blockchain"]
 	path = chia_blockchain
 	url = https://github.com/Chia-Network/chia-blockchain
+[submodule "chives_blockchain"]
+	path = chives_blockchain
+	url = https://github.com/HiveProject2021/chives-blockchain

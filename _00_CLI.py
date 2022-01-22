@@ -1,14 +1,17 @@
 from argparse import ArgumentParser
-from _00_base import configure_logger_and_queue
-from _00_back_end import WILLOW_back_end
+from _00_base import configure_logger_and_queue,\
+    config_handler
+from _00_back_end import select_backend
 import os,\
     sys
+from logging import getLogger
 
 class WILLOWcli(configure_logger_and_queue,
-                WILLOW_back_end):
+                config_handler):
 
     def __init__(self):
         super(WILLOWcli, self).__init__()
+
 
     def return_configured_coins(self):
         return [entry[0] for entry in self.config.items()]
@@ -55,7 +58,12 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    WILLOWobj = WILLOWcli()
+    class mixer(WILLOWcli,
+                select_backend(coin=args.coin)):
+        def __init__(self):
+            super(mixer, self).__init__()
+
+    WILLOWobj = mixer()
 
     if not WILLOWobj.check_valid_coin(coin=args.coin):
         sys.exit('Your coin is not in the config: {}'.format(args.coin))
@@ -66,9 +74,20 @@ if __name__ == '__main__':
     if args.mnemonic and args.addresses:
         sys.exit('No mnemonic and no addresses were provided !')
 
-    WILLOWobj.return_total_balance(addresses=WILLOWobj.return_addresses(mnemonic=args.mnemonic,
+    message_payload = WILLOWobj.return_total_balance(addresses=WILLOWobj.return_addresses(mnemonic=args.mnemonic,
                                                                        prefix=args.coin.lower(),
-                                                                       nr_of_addresses=args.numberAddresses,
-                                                                       verbose=args.verbose),
-                                   coin=args.coin,
-                                   verbose=args.verbose)
+                                                                       nr_of_addresses=args.numberAddresses),
+                                                       coin=args.coin)
+
+    if not args.verbose:
+        print('$${}$$'.format(str(message_payload)))
+    else:
+        log = getLogger()
+        for message in message_payload['message_payload']:
+            # getattr seems to fail here ...
+            if message[0] == 'info':
+                log.info(message[1])
+            elif message[0] == 'error':
+                log.error(message[1])
+            else:
+                log.info(message[1])
