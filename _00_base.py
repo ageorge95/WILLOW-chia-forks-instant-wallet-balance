@@ -5,6 +5,11 @@ from logging import basicConfig,\
     getLogger
 from sys import stdout
 from queue import Queue
+from os import path
+from json import load,\
+    dump
+import sys
+from _00_config import initial_config
 
 def configure_logger():
     class CustomFormatter(Formatter):
@@ -73,3 +78,21 @@ class configure_logger_and_queue():
         formatter = Formatter('%(asctime)s %(levelname)-4s %(message)s')
         self.queue_handler.setFormatter(formatter)
         self._log.addHandler(self.queue_handler)
+
+class config_handler():
+    def __init__(self):
+        super(config_handler, self).__init__()
+
+        config_path = 'config_willow.json' if '_MEIPASS' in sys.__dict__ \
+            else path.join(path.dirname(__file__), 'config_willow.json')
+
+        if path.isfile(config_path):
+            try:
+                with open(config_path, 'r') as json_in_handle:
+                    self.config = load(json_in_handle)
+            except:
+                self.config = initial_config
+        else:
+            self.config = initial_config
+            with open(config_path, 'w') as json_out_handle:
+                dump(self.config, json_out_handle, indent=2)

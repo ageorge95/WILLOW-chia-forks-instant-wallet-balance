@@ -1,6 +1,9 @@
 # -*- mode: python ; coding: utf-8 -*-
 import sys
 
+from subprocess import call
+call("pyinstaller _00_CLI.spec")
+
 block_cipher = None
 
 
@@ -10,6 +13,7 @@ a = Analysis(['_00_GUI.py'],
              datas=[('icon.ico', '.'),
 			  ('version.txt', '.'),
               ('donation.gif', '.'),
+              ('dist/_00_CLI.exe', '.'),
               (sys.prefix+r'/tcl/tix8.4.3', 'tcl/tix8.4.3'),
               ('chia_blockchain/chia', 'chia')],
              hiddenimports=[],
@@ -37,7 +41,7 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=False,
+          console=True,
           disable_windowed_traceback=False,
           target_arch=None,
           codesign_identity=None,

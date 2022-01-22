@@ -9,12 +9,14 @@ from signal import signal,\
     SIGINT
 from threading import Thread
 from logging import getLogger
+from subprocess import check_output,\
+    PIPE,\
+    CREATE_NO_WINDOW
 from tkinter.scrolledtext import Text, Scrollbar, ScrolledText
 from tkinter import tix, simpledialog, Entry
 from tkinter import ttk, N, S, E, W, END, Label, NONE
-
-from _00_base import configure_logger_and_queue
-from _00_back_end import WILLOW_back_end
+from _00_base import configure_logger_and_queue,\
+    config_handler
 
 class buttons_label_state_change():
     combobox_coin_to_use: ttk.Combobox
@@ -163,9 +165,8 @@ class FormInput():
         return self.scrolled_text_input.get("1.0", END).split('\n')
 
 class FormControls(buttons_label_state_change,
-                   WILLOW_back_end,
                    configure_logger_and_queue,
-                   ):
+                   config_handler):
 
     def __init__(self,
                  frame,
@@ -245,9 +246,33 @@ class FormControls(buttons_label_state_change,
             def action():
                 self.disable_all_buttons()
                 self.backend_label_busy(text='Busy with computing the balance !')
-                self.get_balance(input=self.input_frame.return_input()[:-1],
-                                 coin=self.coin_to_use.get().split('__')[0],
-                                 method=self.method_to_use.get())
+                self._log.info('Backend process detached. Please wait ...')
+
+                cli_path = path.join(path.dirname(__file__), 'CLI_{}.exe'.format(open(path.join(sys._MEIPASS, 'version.txt'), 'r').read()))  if '_MEIPASS' in sys.__dict__ \
+                                                                            else '{} _00_CLI.py'.format(sys.executable)
+
+                CLI_args = '{cli_path} --coin={coin} --no-verbose '
+                if self.method_to_use.get() == 'via_mnemonic':
+                    CLI_args += ' --mnemonic={mnemonic} '
+                if self.method_to_use.get() == 'via_wallet_addresses':
+                    CLI_args += ' --addresses={addresses} '
+
+                process_out = check_output(CLI_args.format(cli_path=cli_path,
+                                                          coin=self.coin_to_use.get().split('__')[0],
+                                                          mnemonic='"{}"'.format(' '.join(self.input_frame.return_input()[:-1])),
+                                                          addresses=self.input_frame.return_input()[:-1]),
+                                 stderr=PIPE, stdin=PIPE, creationflags=CREATE_NO_WINDOW)
+
+                messages_as_list = eval(process_out.decode('utf-8').split('$$')[1])['message_payload']
+                for message in messages_as_list:
+                    # getattr seems to fail here ...
+                    if message[0] == 'info':
+                        self._log.info(message[1])
+                    elif message[0] == 'error':
+                        self._log.error(message[1])
+                    else:
+                        self._log.info(message[1])
+
                 self.enable_all_buttons()
                 self.backend_label_free()
             Thread(target=action).start()
