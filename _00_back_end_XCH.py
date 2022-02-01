@@ -38,6 +38,16 @@ class WILLOW_back_end():
 
         super(WILLOW_back_end, self).__init__()
 
+    def _encode_puzzle_hash(self,
+                            puzzle_hash,
+                            prefix):
+        return encode_puzzle_hash(puzzle_hash=puzzle_hash,
+                                  prefix=prefix)
+
+    def _decode_puzzle_hash(self,
+                            address: str):
+        return decode_puzzle_hash(address=address)
+
     def return_addresses(self,
                          mnemonic: str,
                          prefix: str,
