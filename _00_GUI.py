@@ -249,9 +249,9 @@ class FormControls(buttons_label_state_change,
                 self._log.info('Backend process detached. Please wait ...')
 
                 cli_path = path.join(path.dirname(__file__), 'CLI_{}.exe'.format(open(path.join(sys._MEIPASS, 'version.txt'), 'r').read()))  if '_MEIPASS' in sys.__dict__ \
-                                                                            else '{} _00_CLI.py'.format(sys.executable)
+                                                                            else '"{}" _00_CLI.py'.format(sys.executable)
 
-                CLI_args = '"{cli_path}" --coin={coin} --no-verbose '
+                CLI_args = '{cli_path} --coin={coin} --no-verbose '
                 if self.method_to_use.get() == 'via_mnemonic':
                     CLI_args += ' --mnemonic={mnemonic} '
                 if self.method_to_use.get() == 'via_wallet_addresses':
@@ -260,7 +260,7 @@ class FormControls(buttons_label_state_change,
                 process_out = check_output(CLI_args.format(cli_path=cli_path,
                                                           coin=self.coin_to_use.get().split('__')[0],
                                                           mnemonic='"{}"'.format(' '.join(self.input_frame.return_input()[:-1])),
-                                                          addresses=self.input_frame.return_input()[:-1]),
+                                                          addresses=','.join(self.input_frame.return_input()[:-1])),
                                  stderr=PIPE, stdin=PIPE, creationflags=CREATE_NO_WINDOW)
 
                 messages_as_list = eval(process_out.decode('utf-8').split('$$')[1])['message_payload']

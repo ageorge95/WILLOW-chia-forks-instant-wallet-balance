@@ -74,10 +74,16 @@ if __name__ == '__main__':
     if args.mnemonic and args.addresses:
         sys.exit('No mnemonic and no addresses were provided !')
 
-    message_payload = WILLOWobj.return_total_balance(addresses=WILLOWobj.return_addresses(mnemonic=args.mnemonic,
-                                                                       prefix=args.coin.lower(),
-                                                                       nr_of_addresses=args.numberAddresses),
-                                                       coin=args.coin)
+    call_params = {'coin': args.coin}
+
+    if args.mnemonic:
+        call_params.update({'addresses': WILLOWobj.return_addresses(mnemonic=args.mnemonic,
+                                                                   prefix=args.coin.lower(),
+                                                                   nr_of_addresses=args.numberAddresses)})
+    if args.addresses:
+        call_params.update({'addresses': args.addresses})
+
+    message_payload = WILLOWobj.return_total_balance(**call_params)
 
     if not args.verbose:
         print('$${}$$'.format(str(message_payload)))
