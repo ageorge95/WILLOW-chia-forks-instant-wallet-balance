@@ -16,6 +16,7 @@ from chives_blockchain.chives.util.ints import uint32
 from blspy import AugSchemeMPL
 from chives_blockchain.chives.wallet.derive_keys import master_sk_to_wallet_sk
 from _00_config import initial_config
+from _00_base import db_wrapper_selector
 
 class WILLOW_back_end():
 
@@ -77,8 +78,17 @@ class WILLOW_back_end():
                              coin) -> list:
 
         db_filepath = self.config[coin]['db_filepath']
-        conn = connect(db_filepath)
-        dbcursor = conn.cursor()
+        db_ver = 0
+        if 'v1' in os_path.basename(db_filepath).lower():
+            db_ver = 1
+        if 'v2' in os_path.basename(db_filepath).lower():
+            db_ver = 2
+        db_wrapper = db_wrapper_selector(db_ver)()
+        if not db_wrapper:
+            self.print_payload.append(['error',
+                                       'INCOMPATIBLE DB'])
+
+        db_wrapper.connect_to_db(db_filepath=db_filepath)
 
         total_coin_balance = 0
         total_coin_spent = 0
@@ -92,17 +102,18 @@ class WILLOW_back_end():
             puzzle_hash_bytes = decode_puzzle_hash(wallet_addr)
             puzzle_hash = puzzle_hash_bytes.hex()
 
-            dbcursor.execute("SELECT * FROM coin_record WHERE puzzle_hash=?", (puzzle_hash,))
-            rows = dbcursor.fetchall()
+            rows = db_wrapper.get_coins_by_puzzlehash(puzzlehash=puzzle_hash)
 
             coin_spent = 0
             coin_balance = 0
 
             for row in rows:
 
-                coin_raw=int.from_bytes(row[7], 'big')
+                amount, spent = row
+
+                coin_raw=int.from_bytes(amount, 'big')
                 parsed_coin=coin_raw/self.config[coin]['denominator']
-                is_coin_spent = row[3]
+                is_coin_spent = spent
                 if is_coin_spent:
                     coin_spent += parsed_coin
                     total_coin_spent += parsed_coin

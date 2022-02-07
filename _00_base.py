@@ -10,6 +10,37 @@ from json import load,\
     dump
 import sys
 from _00_config import initial_config
+from sqlite3 import connect
+
+class db_wrapper_v1():
+    def connect_to_db(self,
+                      db_filepath):
+        self._conn = connect(db_filepath)
+        self._dbcursor = self._conn.cursor()
+
+    def get_coins_by_puzzlehash(self,
+                                puzzlehash):
+        self._dbcursor.execute("SELECT amount, spent_index FROM coin_record WHERE puzzle_hash=?", (puzzlehash,))
+        return self._dbcursor.fetchall()
+
+class db_wrapper_v2():
+    def connect_to_db(self,
+                      db_filepath):
+        self._conn = connect(db_filepath)
+        self._dbcursor = self._conn.cursor()
+
+    def get_coins_by_puzzlehash(self,
+                                puzzlehash):
+        self._dbcursor.execute("SELECT amount, spent_index FROM coin_record WHERE puzzle_hash=?", (bytes.fromhex(puzzlehash),))
+        return self._dbcursor.fetchall()
+
+def db_wrapper_selector(version: int):
+    if version == 1:
+        return db_wrapper_v1
+    elif version == 2:
+        return db_wrapper_v2
+    else:
+        return None
 
 def configure_logger():
     class CustomFormatter(Formatter):
