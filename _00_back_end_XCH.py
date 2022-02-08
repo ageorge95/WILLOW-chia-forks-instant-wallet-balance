@@ -42,6 +42,8 @@ class WILLOW_back_end():
     def _encode_puzzle_hash(self,
                             puzzle_hash,
                             prefix):
+        if type(puzzle_hash) == str:
+            puzzle_hash = hexstr_to_bytes(puzzle_hash)
         return encode_puzzle_hash(puzzle_hash=puzzle_hash,
                                   prefix=prefix)
 
