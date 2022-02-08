@@ -1,6 +1,9 @@
 from os import path
 
-initial_config = {'BPX': {'db_filepath': '{userdir}\\.bpx\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+initial_config = {'GL': {'db_filepath': '{userdir}\\.gold\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                         'denominator': 1000000000000,
+                         'friendly_name': 'gold'},
+                  'BPX': {'db_filepath': '{userdir}\\.bpx\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                          'denominator': 1000000000000,
                          'friendly_name': 'bpx'},
                   'LLC': {'db_filepath': '{userdir}\\.littlelambocoin\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
