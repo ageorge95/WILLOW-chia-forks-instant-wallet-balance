@@ -17,6 +17,7 @@ from blspy import AugSchemeMPL
 from chia_blockchain.chia.wallet.derive_keys import master_sk_to_wallet_sk
 from _00_config import initial_config
 from _00_base import db_wrapper_selector
+from chia_blockchain.chia.util.byte_types import hexstr_to_bytes
 
 class WILLOW_back_end():
 
