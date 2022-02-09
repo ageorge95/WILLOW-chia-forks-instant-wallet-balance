@@ -180,7 +180,7 @@ class FormControls(buttons_label_state_change,
             self.combobox_coin_to_use.configure(values=list(filter(lambda x:self.coin_filter_entry.get().lower() in x.lower(),
                                                                    ['{}__{}'.format(entry[0], entry[1]['friendly_name']) for entry in self.config.items()])))
         self.coin_filter_entry = Entry(self.frame)
-        self.coin_filter_entry.grid(column=0, row=1)
+        self.coin_filter_entry.grid(column=0, row=1, sticky='W')
         self.coin_filter_entry.bind("<KeyRelease>", coin_to_filter)
 
         self.label_coin_to_use = Label(self.frame, text='Coin to be used:')
@@ -193,8 +193,8 @@ class FormControls(buttons_label_state_change,
             values=['{}__{}'.format(entry[0], entry[1]['friendly_name']) for entry in self.config.items()]
         )
         self.combobox_coin_to_use.set('SELECT A COIN')
-        self.label_coin_to_use.grid(column=0, row=0)
-        self.combobox_coin_to_use.grid(column=0, row=2)
+        self.label_coin_to_use.grid(column=0, row=0, sticky=W)
+        self.combobox_coin_to_use.grid(column=0, row=2, sticky=W)
 
         self.label_method_to_use = Label(self.frame, text='Method to be used:')
         self.method_to_use = tk.StringVar()
@@ -207,27 +207,32 @@ class FormControls(buttons_label_state_change,
                     'via_wallet_addresses']
         )
         self.combobox_method_to_use.set('SELECT A METHOD')
-        self.label_method_to_use.grid(column=0, row=4)
-        self.combobox_method_to_use.grid(column=0, row=5)
+        self.label_method_to_use.grid(column=0, row=4, sticky=W)
+        self.combobox_method_to_use.grid(column=0, row=5, sticky=W)
 
         self.label_backend_status_notify = Label(self.frame, text='Back-end status:')
-        self.label_backend_status_notify.grid(column=2, row=1)
+        self.label_backend_status_notify.grid(column=3, row=1)
         self.label_backend_status = Label(self.frame, text="Doing nothing ...", fg='#33cc33')
-        self.label_backend_status.grid(column=2, row=2)
+        self.label_backend_status.grid(column=3, row=2)
 
         self.separator_filtering_v = ttk.Separator(self.frame, orient='vertical')
-        self.separator_filtering_v.grid(column=1, row=0, rowspan=10, sticky=(N, S))
+        self.separator_filtering_v.grid(column=2, row=0, rowspan=10, sticky=(N, S))
 
         self.separator_filtering_h = ttk.Separator(self.frame, orient='horizontal')
-        self.separator_filtering_h.grid(column=0, row=6, columnspan=2, sticky=(W, E))
+        self.separator_filtering_h.grid(column=0, row=6, columnspan=3, sticky=(W, E))
 
         self.label_hover_hints = Label(self.frame, text='NOTE: Hover on the buttons below for more info.')
-        self.label_hover_hints.grid(column=0, row=7)
+        self.label_hover_hints.grid(column=0, row=7, columnspan=2)
 
         self.button_show_balance = ttk.Button(self.frame, text='Show balance', command=self.master_show_balance)
         self.button_show_balance.grid(column=0, row=8, sticky=W)
         self.tip_show_balance = tix.Balloon(self.frame)
-        self.tip_show_balance.bind_widget(self.button_show_balance,balloonmsg="Will display the balance of all the provided addresses or the first 500 addresses of a provided mnemonic.")
+        self.tip_show_balance.bind_widget(self.button_show_balance,balloonmsg="Will display the balance of all the provided addresses OR the first 500 addresses of a provided mnemonic.")
+
+        self.button_show_CATs = ttk.Button(self.frame, text='Show CATs', command=self.master_show_CATs)
+        self.button_show_CATs.grid(column=1, row=8, sticky=W)
+        self.tip_show_balance = tix.Balloon(self.frame)
+        self.tip_show_balance.bind_widget(self.button_show_CATs,balloonmsg="Will display the CATs in all the provided addresses OR the first 500 addresses of a provided mnemonic.")
 
     def check_coin_selection(self):
         if self.coin_to_use.get() == 'SELECT A COIN':
@@ -240,6 +245,9 @@ class FormControls(buttons_label_state_change,
             self._log.warning('Please select a method !')
             return False
         return True
+
+    def master_show_CATs(self):
+        pass
 
     def master_show_balance(self):
         if self.check_coin_selection() and self.check_method_selection():
@@ -293,7 +301,7 @@ class App():
         self.input_frame = FormInput(input_frame)
 
         controls_frame = ttk.Labelframe(text="Controls")
-        controls_frame.grid(row=1, column=0, sticky="nsw")
+        controls_frame.grid(row=1, column=0, sticky="nsew")
         self.controls_frame = FormControls(controls_frame,
                                            self.input_frame)
 
