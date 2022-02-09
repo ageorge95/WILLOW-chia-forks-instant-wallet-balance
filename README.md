@@ -1,5 +1,9 @@
-# WILLOW-chia-forks-offline-wallet-balance
-Collection of scripts used to check the balance of a wallet, including ALL the addresses of that wallet. It can also check the balance of a single/multiple addresses.
+# WILLOW-chia-forks-instant-wallet-balance
+Collection of scripts used to
+- check the balance of a wallet, including ALL the addresses of that wallet, using the mnemonic
+- check the balance of single/multiple addresses, without the need of a mnemonic
+
+You need to have the full node database on your computer for the tool to work.
 
 ## Contributors
 
