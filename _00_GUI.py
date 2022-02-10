@@ -22,6 +22,7 @@ class buttons_label_state_change():
     combobox_coin_to_use: ttk.Combobox
     combobox_method_to_use: ttk.Combobox
     button_show_balance: ttk.Button
+    button_show_CATs: ttk.Button
     label_backend_status: Label
     _log: getLogger
 
@@ -33,7 +34,8 @@ class buttons_label_state_change():
 
         self.buttons = [self.combobox_coin_to_use,
                         self.combobox_method_to_use,
-                        self.button_show_balance
+                        self.button_show_balance,
+                        self.button_show_CATs
                         ]
     def disable_all_buttons(self):
         self.get_buttons_reference()
@@ -178,7 +180,7 @@ class FormControls(buttons_label_state_change,
 
         def coin_to_filter(*args):
             self.combobox_coin_to_use.configure(values=list(filter(lambda x:self.coin_filter_entry.get().lower() in x.lower(),
-                                                                   ['{}__{}'.format(entry[0], entry[1]['friendly_name']) for entry in self.config.items()])))
+                                                                   ['{}__{}'.format(entry[0], entry[1]['friendly_name']) for entry in self.config['assets'].items()])))
         self.coin_filter_entry = Entry(self.frame)
         self.coin_filter_entry.grid(column=0, row=1, sticky='W')
         self.coin_filter_entry.bind("<KeyRelease>", coin_to_filter)
@@ -190,11 +192,18 @@ class FormControls(buttons_label_state_change,
             textvariable=self.coin_to_use,
             width=15,
             state='readonly',
-            values=['{}__{}'.format(entry[0], entry[1]['friendly_name']) for entry in self.config.items()]
+            values=['{}__{}'.format(entry[0], entry[1]['friendly_name']) for entry in self.config['assets'].items()]
         )
         self.combobox_coin_to_use.set('SELECT A COIN')
         self.label_coin_to_use.grid(column=0, row=0, sticky=W)
         self.combobox_coin_to_use.grid(column=0, row=2, sticky=W)
+
+        self.addresses_to_use_entry = Entry(self.frame)
+        self.addresses_to_use_entry.insert(END, '10')
+        self.addresses_to_use_entry.grid(column=1, row=1, sticky='W')
+
+        self.label_addresses_to_use = Label(self.frame, text='Addresses to generate:')
+        self.label_addresses_to_use.grid(column=1, row=0, sticky=W)
 
         self.label_method_to_use = Label(self.frame, text='Method to be used:')
         self.method_to_use = tk.StringVar()
@@ -246,11 +255,53 @@ class FormControls(buttons_label_state_change,
             return False
         return True
 
+    def check_addresses_to_use_input(self):
+        try:
+            int(self.addresses_to_use_entry.get())
+        except:
+            self._log.warning(f"{ self.addresses_to_use_entry.get() } does not seem to be an integer ...")
+            return False
+        return True
+
     def master_show_CATs(self):
-        pass
+        if self.check_coin_selection() and self.check_method_selection() and self.check_addresses_to_use_input():
+            def action():
+                self.disable_all_buttons()
+                self.backend_label_busy(text='Busy with computing the CATs !')
+                self._log.info('Backend process detached. Please wait ...')
+
+                cli_path = path.join(path.dirname(__file__), 'CLI_{}.exe'.format(open(path.join(sys._MEIPASS, 'version.txt'), 'r').read()))  if '_MEIPASS' in sys.__dict__ \
+                                                                            else '"{}" _00_CLI.py'.format(sys.executable)
+
+                CLI_args = '{cli_path} --coin={coin} --numberAddresses={nr_of_addresses} --no-verbose --cats'
+                if self.method_to_use.get() == 'via_mnemonic':
+                    CLI_args += ' --mnemonic={mnemonic} '
+                if self.method_to_use.get() == 'via_wallet_addresses':
+                    CLI_args += ' --addresses {addresses} '
+
+                process_out = check_output(CLI_args.format(cli_path=cli_path,
+                                                          coin=self.coin_to_use.get().split('__')[0],
+                                                          mnemonic='"{}"'.format(' '.join(self.input_frame.return_input()[:-1])),
+                                                          addresses = ' '.join(self.input_frame.return_input()[:-1]),
+                                                          nr_of_addresses = int(self.addresses_to_use_entry.get())),
+                                 stderr=PIPE, stdin=PIPE, creationflags=CREATE_NO_WINDOW)
+
+                messages_as_list = eval(process_out.decode('utf-8').split('$$')[1])['message_payload']
+                for message in messages_as_list:
+                    # getattr seems to fail here ...
+                    if message[0] == 'info':
+                        self._log.info(message[1])
+                    elif message[0] == 'error':
+                        self._log.error(message[1])
+                    else:
+                        self._log.info(message[1])
+
+                self.enable_all_buttons()
+                self.backend_label_free()
+            Thread(target=action).start()
 
     def master_show_balance(self):
-        if self.check_coin_selection() and self.check_method_selection():
+        if self.check_coin_selection() and self.check_method_selection() and self.check_addresses_to_use_input():
             def action():
                 self.disable_all_buttons()
                 self.backend_label_busy(text='Busy with computing the balance !')
@@ -259,16 +310,17 @@ class FormControls(buttons_label_state_change,
                 cli_path = path.join(path.dirname(__file__), 'CLI_{}.exe'.format(open(path.join(sys._MEIPASS, 'version.txt'), 'r').read()))  if '_MEIPASS' in sys.__dict__ \
                                                                             else '"{}" _00_CLI.py'.format(sys.executable)
 
-                CLI_args = '{cli_path} --coin={coin} --no-verbose '
+                CLI_args = '{cli_path} --coin={coin} --numberAddresses={nr_of_addresses} --no-verbose '
                 if self.method_to_use.get() == 'via_mnemonic':
                     CLI_args += ' --mnemonic={mnemonic} '
                 if self.method_to_use.get() == 'via_wallet_addresses':
-                    CLI_args += ' --addresses={addresses} '
+                    CLI_args += ' --addresses {addresses} '
 
                 process_out = check_output(CLI_args.format(cli_path=cli_path,
                                                           coin=self.coin_to_use.get().split('__')[0],
                                                           mnemonic='"{}"'.format(' '.join(self.input_frame.return_input()[:-1])),
-                                                          addresses=','.join(self.input_frame.return_input()[:-1])),
+                                                          addresses = ' '.join(self.input_frame.return_input()[:-1]),
+                                                          nr_of_addresses = int(self.addresses_to_use_entry.get())),
                                  stderr=PIPE, stdin=PIPE, creationflags=CREATE_NO_WINDOW)
 
                 messages_as_list = eval(process_out.decode('utf-8').split('$$')[1])['message_payload']

@@ -1,9 +1,13 @@
 from sqlite3 import connect
-from logging import getLogger
 from json import load,\
     dump
+from yaml import safe_load
 from tabulate import tabulate
 from traceback import format_exc
+import requests
+requests.packages.urllib3.disable_warnings()
+import logging
+logging.getLogger("urllib3").setLevel(logging.WARNING)
 import sys
 from os import path as os_path
 sys.path.insert(0,os_path.join(os_path.dirname(__file__)))
@@ -18,6 +22,20 @@ from chia_blockchain.chia.wallet.derive_keys import master_sk_to_wallet_sk
 from _00_config import initial_config
 from _00_base import db_wrapper_selector
 from chia_blockchain.chia.util.byte_types import hexstr_to_bytes
+from subprocess import check_output
+
+def get_brun_output(asset_ID,
+                    ph):
+    return check_output(['brun.exe',
+                         "(a (q 2 30 (c 2 (c 5 (c 23 (c (sha256 28 11) (c (sha256 28 5) ()))))))"
+                         " (c (q (a 4 . 1) (q . 2) (a (i 5 (q 2 22 (c 2 (c 13 (c (sha256 26 (sha256 28 20)"
+                         " (sha256 26 (sha256 26 (sha256 28 18) 9) (sha256 26 11 (sha256 28 ())))) ())))) (q . 11)) 1)"
+                         " 11 26 (sha256 28 8) (sha256 26 (sha256 26 (sha256 28 18) 5)"
+                         " (sha256 26 (a 22 (c 2 (c 7 (c (sha256 28 28) ())))) (sha256 28 ())))) 1))",
+                         "(0x72dec062874cd4d3aab892a0906688a1ae412b0109982e1797a170add88bdcdc"
+                         " 0x{asset_ID}"
+                         " 0x{ph})".format(asset_ID=asset_ID,
+                                           ph=ph)]).decode('utf-8')
 
 class WILLOW_back_end():
 
@@ -73,14 +91,13 @@ class WILLOW_back_end():
             self.print_payload.append(['error',
                                        'Oh snap ! There was an error while generating the addresses:\n{}'.format(format_exc(chain=False))])
 
-
         return all_addresses
 
-    def return_total_balance(self,
-                             addresses: list,
-                             coin) -> list:
+    def process_balance(self,
+                        addresses: list,
+                        asset)  -> list:
 
-        db_filepath = self.config[coin]['db_filepath']
+        db_filepath = self.config['assets'][asset]['db_filepath']
         db_ver = 0
         if 'v1' in os_path.basename(db_filepath).lower():
             db_ver = 1
@@ -115,7 +132,7 @@ class WILLOW_back_end():
                 amount, spent = row
 
                 coin_raw=int.from_bytes(amount, 'big')
-                parsed_coin=coin_raw/self.config[coin]['denominator']
+                parsed_coin=coin_raw/self.config['assets'][asset]['denominator']
                 is_coin_spent = spent
                 if is_coin_spent:
                     coin_spent += parsed_coin
@@ -144,6 +161,100 @@ class WILLOW_back_end():
 
         return {'data': to_return,
                 'message_payload': self.print_payload}
+
+    def process_balance_CATS_only(self,
+                                  addresses: list,
+                                  asset)  -> list:
+
+        # generate CATs wrapped addresses
+        all_CAT_addrs = {}
+        for CAT_info in self.config['CATs'].items():
+            all_CAT_addrs[CAT_info[0]] = []
+            for address in addresses:
+                all_CAT_addrs[CAT_info[0]].append({'vanilla_addr': address,
+                                                  'wrapped_addr': self._encode_puzzle_hash(get_brun_output(asset_ID=CAT_info[1]['ID'],
+                                                                                                            ph = self._decode_puzzle_hash(address)),
+                                                                                                            prefix=asset.lower())})
+
+        db_filepath = self.config['assets'][asset]['db_filepath']
+        db_ver = 0
+        if 'v1' in os_path.basename(db_filepath).lower():
+            db_ver = 1
+        if 'v2' in os_path.basename(db_filepath).lower():
+            db_ver = 2
+        db_wrapper = db_wrapper_selector(db_ver)()
+        if not db_wrapper:
+            self.print_payload.append(['error',
+                                       'INCOMPATIBLE DB'])
+
+        db_wrapper.connect_to_db(db_filepath=db_filepath)
+
+        to_return = {}
+
+        for CAT in all_CAT_addrs.items():
+            for CAT_addrs in CAT[1]:
+                if CAT[0] not in to_return.keys():
+                    to_return[CAT[0]] = []
+
+                wallet_addr = CAT_addrs['wrapped_addr']
+
+                to_append = {}
+
+                puzzle_hash_bytes = decode_puzzle_hash(wallet_addr)
+                puzzle_hash = puzzle_hash_bytes.hex()
+
+                rows = db_wrapper.get_coins_by_puzzlehash(puzzlehash=puzzle_hash)
+
+                coin_spent = 0
+                coin_balance = 0
+
+                for row in rows:
+
+                    amount, spent = row
+
+                    coin_raw=int.from_bytes(amount, 'big')
+                    parsed_coin=coin_raw/self.config['CATs'][CAT[0]]['denominator']
+                    is_coin_spent = spent
+                    if is_coin_spent:
+                        coin_spent += parsed_coin
+                    else:
+                        coin_balance += parsed_coin
+
+                to_append['wallet_addr'] = wallet_addr
+                to_append['coin_spent'] = coin_spent
+                to_append['coin_balance'] = coin_balance
+                to_return[CAT[0]].append(to_append)
+
+        final_str = ''
+
+        for appended_data in to_return.items():
+            final_str += '\n'*4 + tabulate(tabular_data = [[entry['wallet_addr'],
+                                                  entry['coin_balance'],
+                                                  entry['coin_spent']] for entry in appended_data[1]],
+                                          headers = [f"{ self.config['CATs'][appended_data[0]]['friendly_name'] } aka { appended_data[0] } Wallet",
+                                                      'Available Balance',
+                                                      'Spent Coins'],
+                                          tablefmt="grid")
+            final_str += '\n' + f"TOTAL balance: {sum([x['coin_balance'] for x in appended_data[1]])}" \
+                                f"\nTOTAL spent: {sum([x['coin_spent'] for x in appended_data[1]])}"
+
+        self.print_payload.append(['info',
+                                   'Balance for each CAT:\n{}'.format(final_str)])
+
+        return {'data': to_return,
+                'message_payload': self.print_payload}
+
+    def return_total_balance(self,
+                             addresses: list,
+                             asset,
+                             cats_only: bool) -> list:
+
+        if not cats_only:
+            return self.process_balance(addresses = addresses,
+                                        asset = asset)
+        else:
+            return self.process_balance_CATS_only(addresses = addresses,
+                                                  asset = asset)
 
     def check_mnemonic_integrity(self,
                                  mnemonic: str):
