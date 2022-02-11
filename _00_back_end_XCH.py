@@ -23,23 +23,33 @@ from chia_blockchain.chia.wallet.derive_keys import master_sk_to_wallet_sk
 from _00_config import initial_config
 from _00_base import db_wrapper_selector
 from chia_blockchain.chia.util.byte_types import hexstr_to_bytes
-from subprocess import check_output
+from io import StringIO
+from clvm_tools.cmds import brun
+
+class Capturing(list):
+    def __enter__(self):
+        self._stdout = sys.stdout
+        sys.stdout = self._stringio = StringIO()
+        return self
+    def __exit__(self, *args):
+        self.extend(self._stringio.getvalue().splitlines())
+        del self._stringio    # free up some memory
+        sys.stdout = self._stdout
 
 def get_brun_output(asset_ID,
                     ph):
-    brun_exe = os_path.join(sys._MEIPASS, 'brun.exe') if '_MEIPASS' in sys.__dict__\
-                                           else 'brun.exe'
 
-    return check_output([brun_exe,
-                         "(a (q 2 30 (c 2 (c 5 (c 23 (c (sha256 28 11) (c (sha256 28 5) ()))))))"
-                         " (c (q (a 4 . 1) (q . 2) (a (i 5 (q 2 22 (c 2 (c 13 (c (sha256 26 (sha256 28 20)"
-                         " (sha256 26 (sha256 26 (sha256 28 18) 9) (sha256 26 11 (sha256 28 ())))) ())))) (q . 11)) 1)"
-                         " 11 26 (sha256 28 8) (sha256 26 (sha256 26 (sha256 28 18) 5)"
-                         " (sha256 26 (a 22 (c 2 (c 7 (c (sha256 28 28) ())))) (sha256 28 ())))) 1))",
-                         "(0x72dec062874cd4d3aab892a0906688a1ae412b0109982e1797a170add88bdcdc"
-                         " 0x{asset_ID}"
-                         " 0x{ph})".format(asset_ID=asset_ID,
-                                           ph=ph)]).decode('utf-8')
+    with Capturing() as output:
+        brun(["", "(a (q 2 30 (c 2 (c 5 (c 23 (c (sha256 28 11) (c (sha256 28 5) ()))))))"
+                             " (c (q (a 4 . 1) (q . 2) (a (i 5 (q 2 22 (c 2 (c 13 (c (sha256 26 (sha256 28 20)"
+                             " (sha256 26 (sha256 26 (sha256 28 18) 9) (sha256 26 11 (sha256 28 ())))) ())))) (q . 11)) 1)"
+                             " 11 26 (sha256 28 8) (sha256 26 (sha256 26 (sha256 28 18) 5)"
+                             " (sha256 26 (a 22 (c 2 (c 7 (c (sha256 28 28) ())))) (sha256 28 ())))) 1))",
+                             "(0x72dec062874cd4d3aab892a0906688a1ae412b0109982e1797a170add88bdcdc"
+                             " 0x{asset_ID}"
+                             " 0x{ph})".format(asset_ID=asset_ID,
+                                               ph=ph)])
+    return output[0]
 
 class WILLOW_back_end():
 
