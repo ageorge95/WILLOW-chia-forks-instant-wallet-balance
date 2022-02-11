@@ -1,7 +1,9 @@
 # WILLOW-chia-forks-instant-wallet-balance
 Collection of scripts used to
-- check the balance of a wallet, including ALL the addresses of that wallet, using the mnemonic
-- check the balance of single/multiple addresses, without the need of a mnemonic
+- check the asset's balance of a wallet, including ALL the addresses of that wallet, using the mnemonic
+- check the asset's balance of single/multiple addresses, without the need of a mnemonic
+- check the CATs balance of a wallet, including ALL the addresses of that wallet, using the mnemonic
+- check the CATs balance of single/multiple addresses, without the need of a mnemonic
 
 You need to have the full node database on your computer for the tool to work.
 
@@ -11,12 +13,9 @@ You need to have the full node database on your computer for the tool to work.
 
 # High level overview
 - The script has 2 main functionalities:
-    - it can generate the first 500 (default) addresses of a mnemonic
+    - it can generate the first x addresses of a mnemonic
     - it can query the full node db and get the balance of all those addresses, thus getting the coin balance of the whole wallet
-    
-- !!! WARNING !!!
-   - Because the tool needs your mnemonic to generate all the addresses, be REALLY CAREFUL not to accidentally share the mnemonic
-   - The backend is posted here on github and I tried not to obfuscate anything so PLEASE feel free to review the code before you run it.
+    - it can detect both the asset's balance and the CATs of a given address/ mnemonic
 
 # Feedback/ Contribution
 - Please post any issues you encountered or any feature requests in the issues tab.
