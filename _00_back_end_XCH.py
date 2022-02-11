@@ -5,14 +5,10 @@ clvm_rs_root = os_path.join(sys._MEIPASS, 'clvm_rs_0_1_2/clvm_rs') if '_MEIPASS'
                                            else 'clvm_rs_0_1_2/clvm_rs'
 path.insert(0, os_path.dirname(clvm_rs_root))
 
-from sqlite3 import connect
 from json import load,\
     dump
-from yaml import safe_load
 from tabulate import tabulate
 from traceback import format_exc
-import requests
-requests.packages.urllib3.disable_warnings()
 import logging
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 sys.path.insert(0,os_path.join(os_path.dirname(__file__)))
