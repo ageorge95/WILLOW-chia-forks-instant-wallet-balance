@@ -1,3 +1,10 @@
+import sys
+from sys import path
+from os import path as os_path
+clvm_rs_root = os_path.join(sys._MEIPASS, 'clvm_rs_0_1_2/clvm_rs') if '_MEIPASS' in sys.__dict__\
+                                           else os_path.join(sys._MEIPASS, 'clvm_rs_0_1_2/clvm_rs')
+path.insert(0, os_path.dirname(clvm_rs_root))
+
 from sqlite3 import connect
 from json import load,\
     dump
@@ -8,8 +15,6 @@ import requests
 requests.packages.urllib3.disable_warnings()
 import logging
 logging.getLogger("urllib3").setLevel(logging.WARNING)
-import sys
-from os import path as os_path
 sys.path.insert(0,os_path.join(os_path.dirname(__file__)))
 sys.path.insert(0,os_path.join(os_path.dirname(__file__), 'chia_blockchain'))
 from chia_blockchain.chia.util.keychain import mnemonic_to_seed
@@ -26,7 +31,10 @@ from subprocess import check_output
 
 def get_brun_output(asset_ID,
                     ph):
-    return check_output(['brun.exe',
+    brun_exe = os_path.join(sys._MEIPASS, 'brun.exe') if '_MEIPASS' in sys.__dict__\
+                                           else 'brun.exe'
+
+    return check_output([brun_exe,
                          "(a (q 2 30 (c 2 (c 5 (c 23 (c (sha256 28 11) (c (sha256 28 5) ()))))))"
                          " (c (q (a 4 . 1) (q . 2) (a (i 5 (q 2 22 (c 2 (c 13 (c (sha256 26 (sha256 28 20)"
                          " (sha256 26 (sha256 26 (sha256 28 18) 9) (sha256 26 11 (sha256 28 ())))) ())))) (q . 11)) 1)"
