@@ -56,6 +56,9 @@ parser.add_argument('--cats', dest='cats_only', action='store_true')
 parser.add_argument('--no-cats', dest='cats_only', action='store_false')
 parser.set_defaults(cats_only=False)
 
+parser.add_argument('--just_addresses', dest='just_addresses', action='store_true')
+parser.set_defaults(just_addresses=False)
+
 if __name__ == '__main__':
 
     os.system("color") # enable color in the console
@@ -69,17 +72,8 @@ if __name__ == '__main__':
 
     WILLOWobj = mixer()
 
-    if not WILLOWobj.check_valid_coin(coin=args.coin):
-        sys.exit('Your coin is not in the config: {}'.format(args.coin))
-
-    if not args.mnemonic and not args.addresses:
-        sys.exit('At least a mnemonic or some addresses must be provided !')
-
-    if args.mnemonic and args.addresses:
-        sys.exit('No mnemonic and no addresses were provided !')
-
     call_params = {'asset': args.coin,
-                   'cats_only': args.cats_only}
+                       'cats_only': args.cats_only}
 
     if args.mnemonic:
         call_params.update({'addresses': WILLOWobj.return_addresses(mnemonic=args.mnemonic,
@@ -89,17 +83,32 @@ if __name__ == '__main__':
     if args.addresses:
         call_params.update({'addresses': args.addresses})
 
-    message_payload = WILLOWobj.return_total_balance(**call_params)
+    if not args.just_addresses:
 
-    if not args.verbose:
-        print('$${}$$'.format(str(message_payload)))
+        if not WILLOWobj.check_valid_coin(coin=args.coin):
+            sys.exit('Your coin is not in the config: {}'.format(args.coin))
+
+        if not args.mnemonic and not args.addresses:
+            sys.exit('At least a mnemonic or some addresses must be provided !')
+
+        if args.mnemonic and args.addresses:
+            sys.exit('No mnemonic and no addresses were provided !')
+
+        message_payload = WILLOWobj.return_total_balance(**call_params)
+
+        if not args.verbose:
+            print('$${}$$'.format(str(message_payload)))
+        else:
+            log = getLogger()
+            for message in message_payload['message_payload']:
+                # getattr seems to fail here ...
+                if message[0] == 'info':
+                    log.info(message[1])
+                elif message[0] == 'error':
+                    log.error(message[1])
+                else:
+                    log.info(message[1])
+
     else:
-        log = getLogger()
-        for message in message_payload['message_payload']:
-            # getattr seems to fail here ...
-            if message[0] == 'info':
-                log.info(message[1])
-            elif message[0] == 'error':
-                log.error(message[1])
-            else:
-                log.info(message[1])
+        print(f"$${ call_params['addresses'] }$$")
+
