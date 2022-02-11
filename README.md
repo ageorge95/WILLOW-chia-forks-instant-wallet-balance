@@ -15,7 +15,7 @@ You need to have the full node database on your computer for the tool to work.
 - The script has 2 main functionalities:
     - it can generate the first x addresses of a mnemonic
     - it can query the full node db and get the balance of all those addresses, thus getting the coin balance of the whole wallet
-    - it can detect both the asset's balance and the CATs of a given address/ mnemonic
+        - it can detect both the asset's balance and the CATs of a given address/ mnemonic
 
 # Feedback/ Contribution
 - Please post any issues you encountered or any feature requests in the issues tab.
