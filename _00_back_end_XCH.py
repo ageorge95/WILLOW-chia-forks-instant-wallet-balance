@@ -83,23 +83,27 @@ class WILLOW_back_end():
                          prefix: str,
                          nr_of_addresses: int = 500) -> list:
 
-        self.print_payload.append(['info',
-                                   'Generating {} addresses based on the provided mnemonic. Please wait ...'.format(nr_of_addresses)])
-        all_addresses = []
-        try:
-            seed = mnemonic_to_seed(mnemonic=mnemonic,
-                                    passphrase='')
-            sk = AugSchemeMPL.key_gen(seed)
+        if self.check_mnemonic_integrity(mnemonic):
 
-            for i in range(nr_of_addresses):
-                all_addresses.append(encode_puzzle_hash(create_puzzlehash_for_pk(master_sk_to_wallet_sk(sk, uint32(i)).get_g1()), prefix))
             self.print_payload.append(['info',
-                                       '{} addresses successfully generated:\n{}'.format(nr_of_addresses,'\n'.join(all_addresses))])
-        except:
-            self.print_payload.append(['error',
-                                       'Oh snap ! There was an error while generating the addresses:\n{}'.format(format_exc(chain=False))])
+                                       'Generating {} addresses based on the provided mnemonic. Please wait ...'.format(nr_of_addresses)])
+            all_addresses = []
+            try:
+                seed = mnemonic_to_seed(mnemonic=mnemonic,
+                                        passphrase='')
+                sk = AugSchemeMPL.key_gen(seed)
 
-        return all_addresses
+                for i in range(nr_of_addresses):
+                    all_addresses.append(encode_puzzle_hash(create_puzzlehash_for_pk(master_sk_to_wallet_sk(sk, uint32(i)).get_g1()), prefix))
+                self.print_payload.append(['info',
+                                           '{} addresses successfully generated:\n{}'.format(nr_of_addresses,'\n'.join(all_addresses))])
+            except:
+                self.print_payload.append(['error',
+                                           'Oh snap ! There was an error while generating the addresses:\n{}'.format(format_exc(chain=False))])
+
+            return all_addresses
+        else:
+            return []
 
     def process_balance(self,
                         addresses: list,
@@ -267,25 +271,12 @@ class WILLOW_back_end():
     def check_mnemonic_integrity(self,
                                  mnemonic: str):
         if mnemonic == '':
-            self.print_payload.append(['warning',
-                                              'Please input a non-empty mnemonic !'])
+            self.print_payload.append(['error',
+                                       'Please input a non-empty mnemonic !'])
             return False
         if mnemonic.count(' ') != 23:
-            self.print_payload.append(['warning',
-                                              'Your mnemonic appears to NOT have the exact number of words !'])
+            self.print_payload.append(['error',
+                                       'Your mnemonic appears to NOT have the exact number of words !'])
             return False
 
         return True
-
-    def get_balance(self,
-                    input: list,
-                    coin: str,
-                    method: str):
-        if method == 'via_mnemonic':
-            if not self.check_mnemonic_integrity(input[0]):
-                return
-            input = self.return_addresses(mnemonic=input[0],
-                                          prefix=coin.lower())
-
-        self.return_total_balance(addresses=input,
-                                  coin=coin)

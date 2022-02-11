@@ -341,8 +341,6 @@ class FormControls(buttons_label_state_change,
                             self._log.info(message[1])
                 except:
                     self._log.error(f"Failed to parse the balance !\n{format_exc(chain=False)}")
-                    self.enable_all_buttons()
-                    self.backend_label_free()
 
                 self.enable_all_buttons()
                 self.backend_label_free()
