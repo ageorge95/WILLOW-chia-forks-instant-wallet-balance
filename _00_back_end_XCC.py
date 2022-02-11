@@ -2,7 +2,7 @@ import sys
 from sys import path
 from os import path as os_path
 clvm_rs_root = os_path.join(sys._MEIPASS, 'clvm_rs_0_1_15/clvm_rs') if '_MEIPASS' in sys.__dict__\
-                                           else os_path.join(sys._MEIPASS, 'clvm_rs_0_1_15/clvm_rs')
+                                           else 'clvm_rs_0_1_15/clvm_rs'
 path.insert(0, os_path.dirname(clvm_rs_root))
 
 from sqlite3 import connect
