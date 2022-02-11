@@ -82,7 +82,8 @@ class WILLOW_back_end():
 
     def _decode_puzzle_hash(self,
                             address: str):
-        return decode_puzzle_hash(address=address)
+
+        return decode_puzzle_hash(address=address).hex()
 
     def return_addresses(self,
                          mnemonic: str,
