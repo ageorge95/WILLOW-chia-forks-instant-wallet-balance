@@ -17,6 +17,7 @@ from tkinter import tix, simpledialog, Entry
 from tkinter import ttk, N, S, E, W, END, Label, NONE
 from _00_base import configure_logger_and_queue,\
     config_handler
+from traceback import format_exc
 
 class buttons_label_state_change():
     combobox_coin_to_use: ttk.Combobox
@@ -279,22 +280,27 @@ class FormControls(buttons_label_state_change,
                 if self.method_to_use.get() == 'via_wallet_addresses':
                     CLI_args += ' --addresses {addresses} '
 
-                process_out = check_output(CLI_args.format(cli_path=cli_path,
-                                                          coin=self.coin_to_use.get().split('__')[0],
-                                                          mnemonic='"{}"'.format(' '.join(self.input_frame.return_input()[:-1])),
-                                                          addresses = ' '.join(self.input_frame.return_input()[:-1]),
-                                                          nr_of_addresses = int(self.addresses_to_use_entry.get())),
-                                 stderr=PIPE, stdin=PIPE, creationflags=CREATE_NO_WINDOW)
+                try:
+                    process_out = check_output(CLI_args.format(cli_path=cli_path,
+                                                              coin=self.coin_to_use.get().split('__')[0],
+                                                              mnemonic='"{}"'.format(' '.join(self.input_frame.return_input()[:-1])),
+                                                              addresses = ' '.join(self.input_frame.return_input()[:-1]),
+                                                              nr_of_addresses = int(self.addresses_to_use_entry.get())),
+                                     stderr=PIPE, stdin=PIPE, creationflags=CREATE_NO_WINDOW)
 
-                messages_as_list = eval(process_out.decode('utf-8').split('$$')[1])['message_payload']
-                for message in messages_as_list:
-                    # getattr seems to fail here ...
-                    if message[0] == 'info':
-                        self._log.info(message[1])
-                    elif message[0] == 'error':
-                        self._log.error(message[1])
-                    else:
-                        self._log.info(message[1])
+                    messages_as_list = eval(process_out.decode('utf-8').split('$$')[1])['message_payload']
+                    for message in messages_as_list:
+                        # getattr seems to fail here ...
+                        if message[0] == 'info':
+                            self._log.info(message[1])
+                        elif message[0] == 'error':
+                            self._log.error(message[1])
+                        else:
+                            self._log.info(message[1])
+                except:
+                    self._log.error(f"Failed to parse the CATs balance !\n{format_exc(chain=False)}")
+                    self.enable_all_buttons()
+                    self.backend_label_free()
 
                 self.enable_all_buttons()
                 self.backend_label_free()
@@ -316,22 +322,27 @@ class FormControls(buttons_label_state_change,
                 if self.method_to_use.get() == 'via_wallet_addresses':
                     CLI_args += ' --addresses {addresses} '
 
-                process_out = check_output(CLI_args.format(cli_path=cli_path,
-                                                          coin=self.coin_to_use.get().split('__')[0],
-                                                          mnemonic='"{}"'.format(' '.join(self.input_frame.return_input()[:-1])),
-                                                          addresses = ' '.join(self.input_frame.return_input()[:-1]),
-                                                          nr_of_addresses = int(self.addresses_to_use_entry.get())),
-                                 stderr=PIPE, stdin=PIPE, creationflags=CREATE_NO_WINDOW)
+                try:
+                    process_out = check_output(CLI_args.format(cli_path=cli_path,
+                                                              coin=self.coin_to_use.get().split('__')[0],
+                                                              mnemonic='"{}"'.format(' '.join(self.input_frame.return_input()[:-1])),
+                                                              addresses = ' '.join(self.input_frame.return_input()[:-1]),
+                                                              nr_of_addresses = int(self.addresses_to_use_entry.get())),
+                                     stderr=PIPE, stdin=PIPE, creationflags=CREATE_NO_WINDOW)
 
-                messages_as_list = eval(process_out.decode('utf-8').split('$$')[1])['message_payload']
-                for message in messages_as_list:
-                    # getattr seems to fail here ...
-                    if message[0] == 'info':
-                        self._log.info(message[1])
-                    elif message[0] == 'error':
-                        self._log.error(message[1])
-                    else:
-                        self._log.info(message[1])
+                    messages_as_list = eval(process_out.decode('utf-8').split('$$')[1])['message_payload']
+                    for message in messages_as_list:
+                        # getattr seems to fail here ...
+                        if message[0] == 'info':
+                            self._log.info(message[1])
+                        elif message[0] == 'error':
+                            self._log.error(message[1])
+                        else:
+                            self._log.info(message[1])
+                except:
+                    self._log.error(f"Failed to parse the balance !\n{format_exc(chain=False)}")
+                    self.enable_all_buttons()
+                    self.backend_label_free()
 
                 self.enable_all_buttons()
                 self.backend_label_free()
