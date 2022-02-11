@@ -168,11 +168,17 @@ initial_config = {'assets': {'GL': {'db_filepath': '{userdir}\\.gold\\mainnet\\d
                                  'friendly_name': 'taco'},
                          'XVM': {'db_filepath': '{userdir}\\.venidium\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                  'denominator': 1000000000000,
-                                 'friendly_name': 'venidium'}},
-                  'CATs': {'CH21': {'ID': '509deafe3cd8bbfbb9ccce1d930e3d7b57b40c964fa33379b18d628175eb7a8f',
+                                 'friendly_name': 'venidium'}
+                             },
+                  'CATs': {'XCH': {'CH21': {'ID': '509deafe3cd8bbfbb9ccce1d930e3d7b57b40c964fa33379b18d628175eb7a8f',
                                     'denominator': 1000,
                                     'friendly_name': 'Chia Holiday 2021 token'},
-                           'SBX': {'ID': '78ad32a8c9ea70f27d73e9306fc467bab2a6b15b30289791e37ab6e8612212b1',
-                                    'denominator': 1000,
-                                    'friendly_name': 'Spacebucks'}
-                           }}
+                                   'SBX': {'ID': '78ad32a8c9ea70f27d73e9306fc467bab2a6b15b30289791e37ab6e8612212b1',
+                                            'denominator': 1000,
+                                            'friendly_name': 'Spacebucks'}},
+                           'XCC': {'KTY': {'ID': '3e3a7614a02d9714a21927ef99c7ef9bf8270e374dc6ecc48f2619cbc70c4ddc',
+                                            'denominator': 1000,
+                                            'friendly_name': 'chives kitty'},
+                                   }
+                           }
+                  }

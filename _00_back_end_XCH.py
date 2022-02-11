@@ -184,9 +184,15 @@ class WILLOW_back_end():
                                   addresses: list,
                                   asset)  -> list:
 
+        if asset not in self.config['CATs'].keys():
+            self.print_payload.append(['error',
+                                       f"No CATs definition found for { asset }"])
+            return {'data': {},
+                    'message_payload': self.print_payload}
+
         # generate CATs wrapped addresses
         all_CAT_addrs = {}
-        for CAT_info in self.config['CATs'].items():
+        for CAT_info in self.config['CATs'][asset].items():
             all_CAT_addrs[CAT_info[0]] = []
             for address in addresses:
                 all_CAT_addrs[CAT_info[0]].append({'vanilla_addr': address,
@@ -231,7 +237,7 @@ class WILLOW_back_end():
                     amount, spent = row
 
                     coin_raw=int.from_bytes(amount, 'big')
-                    parsed_coin=coin_raw/self.config['CATs'][CAT[0]]['denominator']
+                    parsed_coin=coin_raw/self.config['CATs'][asset][CAT[0]]['denominator']
                     is_coin_spent = spent
                     if is_coin_spent:
                         coin_spent += parsed_coin
@@ -249,7 +255,7 @@ class WILLOW_back_end():
             final_str += '\n'*4 + tabulate(tabular_data = [[entry['wallet_addr'],
                                                   entry['coin_balance'],
                                                   entry['coin_spent']] for entry in appended_data[1]],
-                                          headers = [f"{ self.config['CATs'][appended_data[0]]['friendly_name'] } aka { appended_data[0] } Wallet",
+                                          headers = [f"{ self.config['CATs'][asset][appended_data[0]]['friendly_name'] } aka { appended_data[0] } Wallet",
                                                       'Available Balance',
                                                       'Spent Coins'],
                                           tablefmt="grid")
