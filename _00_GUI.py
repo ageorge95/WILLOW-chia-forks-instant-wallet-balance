@@ -17,11 +17,13 @@ from tkinter import tix, simpledialog, Entry
 from tkinter import ttk, N, S, E, W, END, Label, NONE
 from _00_base import configure_logger_and_queue,\
     config_handler
+from traceback import format_exc
 
 class buttons_label_state_change():
     combobox_coin_to_use: ttk.Combobox
     combobox_method_to_use: ttk.Combobox
     button_show_balance: ttk.Button
+    button_show_CATs: ttk.Button
     label_backend_status: Label
     _log: getLogger
 
@@ -33,7 +35,8 @@ class buttons_label_state_change():
 
         self.buttons = [self.combobox_coin_to_use,
                         self.combobox_method_to_use,
-                        self.button_show_balance
+                        self.button_show_balance,
+                        self.button_show_CATs
                         ]
     def disable_all_buttons(self):
         self.get_buttons_reference()
@@ -178,9 +181,9 @@ class FormControls(buttons_label_state_change,
 
         def coin_to_filter(*args):
             self.combobox_coin_to_use.configure(values=list(filter(lambda x:self.coin_filter_entry.get().lower() in x.lower(),
-                                                                   ['{}__{}'.format(entry[0], entry[1]['friendly_name']) for entry in self.config.items()])))
+                                                                   ['{}__{}'.format(entry[0], entry[1]['friendly_name']) for entry in self.config['assets'].items()])))
         self.coin_filter_entry = Entry(self.frame)
-        self.coin_filter_entry.grid(column=0, row=1)
+        self.coin_filter_entry.grid(column=0, row=1, sticky='W')
         self.coin_filter_entry.bind("<KeyRelease>", coin_to_filter)
 
         self.label_coin_to_use = Label(self.frame, text='Coin to be used:')
@@ -190,11 +193,18 @@ class FormControls(buttons_label_state_change,
             textvariable=self.coin_to_use,
             width=15,
             state='readonly',
-            values=['{}__{}'.format(entry[0], entry[1]['friendly_name']) for entry in self.config.items()]
+            values=['{}__{}'.format(entry[0], entry[1]['friendly_name']) for entry in self.config['assets'].items()]
         )
         self.combobox_coin_to_use.set('SELECT A COIN')
-        self.label_coin_to_use.grid(column=0, row=0)
-        self.combobox_coin_to_use.grid(column=0, row=2)
+        self.label_coin_to_use.grid(column=0, row=0, sticky=W)
+        self.combobox_coin_to_use.grid(column=0, row=2, sticky=W)
+
+        self.addresses_to_use_entry = Entry(self.frame)
+        self.addresses_to_use_entry.insert(END, '10')
+        self.addresses_to_use_entry.grid(column=1, row=1, sticky='W')
+
+        self.label_addresses_to_use = Label(self.frame, text='Addresses to generate:')
+        self.label_addresses_to_use.grid(column=1, row=0, sticky=W)
 
         self.label_method_to_use = Label(self.frame, text='Method to be used:')
         self.method_to_use = tk.StringVar()
@@ -207,27 +217,32 @@ class FormControls(buttons_label_state_change,
                     'via_wallet_addresses']
         )
         self.combobox_method_to_use.set('SELECT A METHOD')
-        self.label_method_to_use.grid(column=0, row=4)
-        self.combobox_method_to_use.grid(column=0, row=5)
+        self.label_method_to_use.grid(column=0, row=4, sticky=W)
+        self.combobox_method_to_use.grid(column=0, row=5, sticky=W)
 
         self.label_backend_status_notify = Label(self.frame, text='Back-end status:')
-        self.label_backend_status_notify.grid(column=2, row=1)
+        self.label_backend_status_notify.grid(column=3, row=1)
         self.label_backend_status = Label(self.frame, text="Doing nothing ...", fg='#33cc33')
-        self.label_backend_status.grid(column=2, row=2)
+        self.label_backend_status.grid(column=3, row=2)
 
         self.separator_filtering_v = ttk.Separator(self.frame, orient='vertical')
-        self.separator_filtering_v.grid(column=1, row=0, rowspan=10, sticky=(N, S))
+        self.separator_filtering_v.grid(column=2, row=0, rowspan=10, sticky=(N, S))
 
         self.separator_filtering_h = ttk.Separator(self.frame, orient='horizontal')
-        self.separator_filtering_h.grid(column=0, row=6, columnspan=2, sticky=(W, E))
+        self.separator_filtering_h.grid(column=0, row=6, columnspan=3, sticky=(W, E))
 
         self.label_hover_hints = Label(self.frame, text='NOTE: Hover on the buttons below for more info.')
-        self.label_hover_hints.grid(column=0, row=7)
+        self.label_hover_hints.grid(column=0, row=7, columnspan=2)
 
         self.button_show_balance = ttk.Button(self.frame, text='Show balance', command=self.master_show_balance)
         self.button_show_balance.grid(column=0, row=8, sticky=W)
         self.tip_show_balance = tix.Balloon(self.frame)
-        self.tip_show_balance.bind_widget(self.button_show_balance,balloonmsg="Will display the balance of all the provided addresses or the first 500 addresses of a provided mnemonic.")
+        self.tip_show_balance.bind_widget(self.button_show_balance,balloonmsg="Will display the balance of all the provided addresses OR the first 500 addresses of a provided mnemonic.")
+
+        self.button_show_CATs = ttk.Button(self.frame, text='Show CATs', command=self.master_show_CATs)
+        self.button_show_CATs.grid(column=1, row=8, sticky=W)
+        self.tip_show_balance = tix.Balloon(self.frame)
+        self.tip_show_balance.bind_widget(self.button_show_CATs,balloonmsg="Will display the CATs in all the provided addresses OR the first 500 addresses of a provided mnemonic.")
 
     def check_coin_selection(self):
         if self.coin_to_use.get() == 'SELECT A COIN':
@@ -241,8 +256,58 @@ class FormControls(buttons_label_state_change,
             return False
         return True
 
+    def check_addresses_to_use_input(self):
+        try:
+            int(self.addresses_to_use_entry.get())
+        except:
+            self._log.warning(f"{ self.addresses_to_use_entry.get() } does not seem to be an integer ...")
+            return False
+        return True
+
+    def master_show_CATs(self):
+        if self.check_coin_selection() and self.check_method_selection() and self.check_addresses_to_use_input():
+            def action():
+                self.disable_all_buttons()
+                self.backend_label_busy(text='Busy with computing the CATs !')
+                self._log.info('Backend process detached. Please wait ...')
+
+                cli_path = path.join(path.dirname(__file__), 'CLI_{}.exe'.format(open(path.join(sys._MEIPASS, 'version.txt'), 'r').read()))  if '_MEIPASS' in sys.__dict__ \
+                                                                            else '"{}" _00_CLI.py'.format(sys.executable)
+
+                CLI_args = '{cli_path} --coin={coin} --numberAddresses={nr_of_addresses} --no-verbose --cats'
+                if self.method_to_use.get() == 'via_mnemonic':
+                    CLI_args += ' --mnemonic={mnemonic} '
+                if self.method_to_use.get() == 'via_wallet_addresses':
+                    CLI_args += ' --addresses {addresses} '
+
+                try:
+                    process_out = check_output(CLI_args.format(cli_path=cli_path,
+                                                              coin=self.coin_to_use.get().split('__')[0],
+                                                              mnemonic='"{}"'.format(' '.join(self.input_frame.return_input()[:-1])),
+                                                              addresses = ' '.join(self.input_frame.return_input()[:-1]),
+                                                              nr_of_addresses = int(self.addresses_to_use_entry.get())),
+                                     stderr=PIPE, stdin=PIPE, creationflags=CREATE_NO_WINDOW)
+
+                    messages_as_list = eval(process_out.decode('utf-8').split('$$')[1])['message_payload']
+                    for message in messages_as_list:
+                        # getattr seems to fail here ...
+                        if message[0] == 'info':
+                            self._log.info(message[1])
+                        elif message[0] == 'error':
+                            self._log.error(message[1])
+                        else:
+                            self._log.info(message[1])
+                except:
+                    self._log.error(f"Failed to parse the CATs balance !\n{format_exc(chain=False)}")
+                    self.enable_all_buttons()
+                    self.backend_label_free()
+
+                self.enable_all_buttons()
+                self.backend_label_free()
+            Thread(target=action).start()
+
     def master_show_balance(self):
-        if self.check_coin_selection() and self.check_method_selection():
+        if self.check_coin_selection() and self.check_method_selection() and self.check_addresses_to_use_input():
             def action():
                 self.disable_all_buttons()
                 self.backend_label_busy(text='Busy with computing the balance !')
@@ -251,27 +316,31 @@ class FormControls(buttons_label_state_change,
                 cli_path = path.join(path.dirname(__file__), 'CLI_{}.exe'.format(open(path.join(sys._MEIPASS, 'version.txt'), 'r').read()))  if '_MEIPASS' in sys.__dict__ \
                                                                             else '"{}" _00_CLI.py'.format(sys.executable)
 
-                CLI_args = '{cli_path} --coin={coin} --no-verbose '
+                CLI_args = '{cli_path} --coin={coin} --numberAddresses={nr_of_addresses} --no-verbose '
                 if self.method_to_use.get() == 'via_mnemonic':
                     CLI_args += ' --mnemonic={mnemonic} '
                 if self.method_to_use.get() == 'via_wallet_addresses':
-                    CLI_args += ' --addresses={addresses} '
+                    CLI_args += ' --addresses {addresses} '
 
-                process_out = check_output(CLI_args.format(cli_path=cli_path,
-                                                          coin=self.coin_to_use.get().split('__')[0],
-                                                          mnemonic='"{}"'.format(' '.join(self.input_frame.return_input()[:-1])),
-                                                          addresses=','.join(self.input_frame.return_input()[:-1])),
-                                 stderr=PIPE, stdin=PIPE, creationflags=CREATE_NO_WINDOW)
+                try:
+                    process_out = check_output(CLI_args.format(cli_path=cli_path,
+                                                              coin=self.coin_to_use.get().split('__')[0],
+                                                              mnemonic='"{}"'.format(' '.join(self.input_frame.return_input()[:-1])),
+                                                              addresses = ' '.join(self.input_frame.return_input()[:-1]),
+                                                              nr_of_addresses = int(self.addresses_to_use_entry.get())),
+                                     stderr=PIPE, stdin=PIPE, creationflags=CREATE_NO_WINDOW)
 
-                messages_as_list = eval(process_out.decode('utf-8').split('$$')[1])['message_payload']
-                for message in messages_as_list:
-                    # getattr seems to fail here ...
-                    if message[0] == 'info':
-                        self._log.info(message[1])
-                    elif message[0] == 'error':
-                        self._log.error(message[1])
-                    else:
-                        self._log.info(message[1])
+                    messages_as_list = eval(process_out.decode('utf-8').split('$$')[1])['message_payload']
+                    for message in messages_as_list:
+                        # getattr seems to fail here ...
+                        if message[0] == 'info':
+                            self._log.info(message[1])
+                        elif message[0] == 'error':
+                            self._log.error(message[1])
+                        else:
+                            self._log.info(message[1])
+                except:
+                    self._log.error(f"Failed to parse the balance !\n{format_exc(chain=False)}")
 
                 self.enable_all_buttons()
                 self.backend_label_free()
@@ -293,7 +362,7 @@ class App():
         self.input_frame = FormInput(input_frame)
 
         controls_frame = ttk.Labelframe(text="Controls")
-        controls_frame.grid(row=1, column=0, sticky="nsw")
+        controls_frame.grid(row=1, column=0, sticky="nsew")
         self.controls_frame = FormControls(controls_frame,
                                            self.input_frame)
 

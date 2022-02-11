@@ -14,11 +14,11 @@ class WILLOWcli(configure_logger_and_queue,
 
 
     def return_configured_coins(self):
-        return [entry[0] for entry in self.config.items()]
+        return [entry[0] for entry in self.config['assets'].items()]
 
     def check_valid_coin(self,
                          coin):
-        if coin not in [entry[0] for entry in self.config.items()]:
+        if coin not in [entry[0] for entry in self.config['assets'].items()]:
             return False
         return True
 
@@ -38,7 +38,7 @@ parser.add_argument('-m',
 
 parser.add_argument('-a',
                     '--addresses',
-                    nargs='+',
+                    nargs='*',
                     help='The addresses to check. Optional.',
                     default=None)
 
@@ -51,6 +51,10 @@ parser.add_argument('-n',
 parser.add_argument('--verbose', dest='verbose', action='store_true')
 parser.add_argument('--no-verbose', dest='verbose', action='store_false')
 parser.set_defaults(verbose=True)
+
+parser.add_argument('--cats', dest='cats_only', action='store_true')
+parser.add_argument('--no-cats', dest='cats_only', action='store_false')
+parser.set_defaults(cats_only=False)
 
 if __name__ == '__main__':
 
@@ -74,12 +78,14 @@ if __name__ == '__main__':
     if args.mnemonic and args.addresses:
         sys.exit('No mnemonic and no addresses were provided !')
 
-    call_params = {'coin': args.coin}
+    call_params = {'asset': args.coin,
+                   'cats_only': args.cats_only}
 
     if args.mnemonic:
         call_params.update({'addresses': WILLOWobj.return_addresses(mnemonic=args.mnemonic,
                                                                    prefix=args.coin.lower(),
                                                                    nr_of_addresses=args.numberAddresses)})
+
     if args.addresses:
         call_params.update({'addresses': args.addresses})
 
