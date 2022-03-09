@@ -126,7 +126,7 @@ initial_config = {'assets': {'GL': {'db_filepath': '{userdir}\\.gold\\mainnet\\d
                          'XFL': {'db_filepath': '{userdir}\\.flora\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                  'denominator': 1000000000000,
                                  'friendly_name': 'flora'},
-                         'XFX': {'db_filepath': '{userdir}\\.flax\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                         'XFX': {'db_filepath': '{userdir}\\.flax\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                  'denominator': 1000000000000,
                                  'friendly_name': 'flax'},
                          'XKA': {'db_filepath': '{userdir}\\.kale\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
