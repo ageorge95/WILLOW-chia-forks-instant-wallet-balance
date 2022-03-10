@@ -156,7 +156,7 @@ initial_config = {'assets': {'GL': {'db_filepath': '{userdir}\\.gold\\mainnet\\d
                          'XSC': {'db_filepath': '{userdir}\\.sector\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                  'denominator': 1000000000000,
                                  'friendly_name': 'sector'},
-                         'XSHIB': {'db_filepath': '{userdir}\\.shibgreen\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                         'XSHIB': {'db_filepath': '{userdir}\\.shibgreen\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                    'denominator': 1000,
                                    'friendly_name': 'shibgreen'},
                          'XSLV': {'db_filepath': '{userdir}\\.salvia\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
