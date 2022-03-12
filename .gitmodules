@@ -4,3 +4,9 @@
 [submodule "chives_blockchain"]
 	path = chives_blockchain
 	url = https://github.com/HiveProject2021/chives-blockchain
+[submodule "joker-blockchain"]
+	path = joker-blockchain
+	url = https://github.com/joker-network/joker-blockchain
+[submodule "joker_blockchain"]
+	path = joker_blockchain
+	url = https://github.com/joker-network/joker-blockchain
