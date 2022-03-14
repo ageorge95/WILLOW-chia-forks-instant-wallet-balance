@@ -15,7 +15,7 @@ initial_config = {'assets': {'XJK': {'db_filepath': '{userdir}\\.joker\\mainnet\
                          'AEC': {'db_filepath': '{userdir}\\.aedge\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                  'denominator': 1000000000000,
                                  'friendly_name': 'aedge'},
-                         'APPLE': {'db_filepath': '{userdir}\\.apple\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                         'APPLE': {'db_filepath': '{userdir}\\.apple\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                    'denominator': 1000000000000,
                                    'friendly_name': 'apple'},
                          'AVO': {'db_filepath': '{userdir}\\.avocado\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
