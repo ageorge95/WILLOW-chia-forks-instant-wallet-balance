@@ -165,7 +165,7 @@ initial_config = {'assets': {'XJK': {'db_filepath': '{userdir}\\.joker\\mainnet\
                          'XSLV': {'db_filepath': '{userdir}\\.salvia\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                   'denominator': 1000000000000,
                                   'friendly_name': 'salvia'},
-                         'XTX': {'db_filepath': '{userdir}\\.taco\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                         'XTX': {'db_filepath': '{userdir}\\.taco\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                  'denominator': 1000000000000,
                                  'friendly_name': 'taco'},
                          'XVM': {'db_filepath': '{userdir}\\.venidium\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
