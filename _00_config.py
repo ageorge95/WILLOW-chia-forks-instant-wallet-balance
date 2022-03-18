@@ -12,7 +12,7 @@ initial_config = {'assets': {'XJK': {'db_filepath': '{userdir}\\.joker\\mainnet\
                           'BPX': {'db_filepath': '{userdir}\\.bpx\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                  'denominator': 1000000000000,
                                  'friendly_name': 'bpx'},
-                          'LLC': {'db_filepath': '{userdir}\\.littlelambocoin\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                          'LLC': {'db_filepath': '{userdir}\\.littlelambocoin\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                  'denominator': 1000,
                                  'friendly_name': 'littlelambocoin'},
                          'AEC': {'db_filepath': '{userdir}\\.aedge\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
