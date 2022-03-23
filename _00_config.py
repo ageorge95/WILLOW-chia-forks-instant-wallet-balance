@@ -1,6 +1,9 @@
 from os import path
 
-initial_config = {'assets': {'XJK': {'db_filepath': '{userdir}\\.joker\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+initial_config = {'assets': {'XGJ': {'db_filepath': '{userdir}\\.goji\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                                 'denominator': 1000000000000,
+                                 'friendly_name': 'goji'},
+                          'XJK': {'db_filepath': '{userdir}\\.joker\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                  'denominator': 100000000,
                                  'friendly_name': 'joker'},
                           'GL': {'db_filepath': '{userdir}\\.gold\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
