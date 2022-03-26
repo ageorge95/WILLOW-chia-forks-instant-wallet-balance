@@ -63,7 +63,7 @@ initial_config = {'assets': {'XGJ': {'db_filepath': '{userdir}\\.goji\\mainnet\\
                          'PEA': {'db_filepath': '{userdir}\\.peas\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                  'denominator': 1000000000000,
                                  'friendly_name': 'peas'},
-                         'PIPS': {'db_filepath': '{userdir}\\.pipscoin\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                         'PIPS': {'db_filepath': '{userdir}\\.pipscoin\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                   'denominator': 1000000000000,
                                   'friendly_name': 'Pipscoin'},
                          'ROLLS': {'db_filepath': '{userdir}\\.rolls\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
