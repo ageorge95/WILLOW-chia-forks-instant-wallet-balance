@@ -36,7 +36,7 @@ initial_config = {'assets': {'XGJ': {'db_filepath': '{userdir}\\.goji\\mainnet\\
                          'CGN': {'db_filepath': '{userdir}\\.chaingreen\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                  'denominator': 1000000000000,
                                  'friendly_name': 'chaingreen'},
-                         'COV': {'db_filepath': '{userdir}\\.covid\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                         'COV': {'db_filepath': '{userdir}\\.covid\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                  'denominator': 1000000000000,
                                  'friendly_name': 'covid'},
                          'GDOG': {'db_filepath': '{userdir}\\.greendoge\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
