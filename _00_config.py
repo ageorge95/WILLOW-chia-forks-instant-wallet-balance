@@ -33,7 +33,7 @@ initial_config = {'assets': {'HCX': {'db_filepath': '{userdir}\\.chinilla\\vanil
                          'AVO': {'db_filepath': '{userdir}\\.avocado\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                  'denominator': 1000000000000,
                                  'friendly_name': 'avocado'},
-                         'CAC': {'db_filepath': '{userdir}\\.cactus\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                         'CAC': {'db_filepath': '{userdir}\\.cactus\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                  'denominator': 1000000000000,
                                  'friendly_name': 'cactus'},
                          'CANS': {'db_filepath': '{userdir}\\.cannabis\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
