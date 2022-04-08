@@ -19,7 +19,8 @@ from chia_blockchain.chia.util.bech32m import encode_puzzle_hash,\
 from chia_blockchain.chia.consensus.coinbase import create_puzzlehash_for_pk
 from chia_blockchain.chia.util.ints import uint32
 from blspy import AugSchemeMPL
-from chia_blockchain.chia.wallet.derive_keys import master_sk_to_wallet_sk
+from chia_blockchain.chia.wallet.derive_keys import master_sk_to_wallet_sk,\
+    master_sk_to_wallet_sk_unhardened
 from _00_config import initial_config
 from _00_base import db_wrapper_selector
 from chia_blockchain.chia.util.byte_types import hexstr_to_bytes
@@ -94,18 +95,39 @@ class WILLOW_back_end():
             self.print_payload.append(['info',
                                        'Generating {} addresses based on the provided mnemonic. Please wait ...'.format(nr_of_addresses)])
             all_addresses = []
+            # generate hardened addresses
             try:
+                tmp_addresses = []
                 seed = mnemonic_to_seed(mnemonic=mnemonic,
                                         passphrase='')
                 sk = AugSchemeMPL.key_gen(seed)
 
                 for i in range(nr_of_addresses):
-                    all_addresses.append(encode_puzzle_hash(create_puzzlehash_for_pk(master_sk_to_wallet_sk(sk, uint32(i)).get_g1()), prefix))
+                    tmp_addresses.append(encode_puzzle_hash(create_puzzlehash_for_pk(master_sk_to_wallet_sk(sk, uint32(i)).get_g1()), prefix))
+
                 self.print_payload.append(['info',
-                                           '{} addresses successfully generated:\n{}'.format(nr_of_addresses,'\n'.join(all_addresses))])
+                                           '{} hardened addresses successfully generated:\n{}'.format(nr_of_addresses,'\n'.join(tmp_addresses))])
+                all_addresses += tmp_addresses
             except:
                 self.print_payload.append(['error',
-                                           'Oh snap ! There was an error while generating the addresses:\n{}'.format(format_exc(chain=False))])
+                                           'Oh snap ! There was an error while generating the hardened addresses:\n{}'.format(format_exc(chain=False))])
+
+            # generate unhardened addresses
+            try:
+                tmp_addresses = []
+                seed = mnemonic_to_seed(mnemonic=mnemonic,
+                                        passphrase='')
+                sk = AugSchemeMPL.key_gen(seed)
+
+                for i in range(nr_of_addresses):
+                    tmp_addresses.append(encode_puzzle_hash(create_puzzlehash_for_pk(master_sk_to_wallet_sk_unhardened(sk, uint32(i)).get_g1()), prefix))
+
+                self.print_payload.append(['info',
+                                           '{} unhardened addresses successfully generated:\n{}'.format(nr_of_addresses,'\n'.join(tmp_addresses))])
+                all_addresses += tmp_addresses
+            except:
+                self.print_payload.append(['error',
+                                           'Oh snap ! There was an error while generating the unhardened addresses:\n{}'.format(format_exc(chain=False))])
 
             return all_addresses
         else:
