@@ -15,7 +15,7 @@ from subprocess import check_output,\
 from tkinter.scrolledtext import Text, Scrollbar, ScrolledText
 from tkinter import tix, simpledialog, Entry
 from tkinter import ttk, N, S, E, W, END, Label, NONE
-from _00_base import configure_logger_and_queue,\
+from _00_WILLOW_base import configure_logger_and_queue,\
     config_handler
 from traceback import format_exc
 

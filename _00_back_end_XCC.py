@@ -21,7 +21,7 @@ from chives_blockchain.chives.util.ints import uint32
 from blspy import AugSchemeMPL
 from chives_blockchain.chives.wallet.derive_keys import master_sk_to_wallet_sk
 from _00_config import initial_config
-from _00_base import db_wrapper_selector
+from _00_WILLOW_base import db_wrapper_selector
 from chives_blockchain.chives.util.byte_types import hexstr_to_bytes
 from io import StringIO
 from clvm_tools.cmds import brun
