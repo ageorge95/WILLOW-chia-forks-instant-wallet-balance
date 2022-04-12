@@ -1,24 +1,25 @@
 # WILLOW-chia-forks-instant-wallet-balance
-Collection of scripts used to
-- check the asset's balance of a wallet, including ALL the addresses of that wallet, using the mnemonic
-- check the asset's balance of single/multiple addresses, without the need of a mnemonic
-- check the CATs balance of a wallet, including ALL the addresses of that wallet, using the mnemonic
+- check the asset's wallet balance, for x addresses of that wallet, using a mnemonic
+- check the asset's wallet balance of single/multiple addresses, without the need of a mnemonic
+
+
+- check the CATs balance of a wallet, including ALL the addresses of that wallet, using a mnemonic
 - check the CATs balance of single/multiple addresses, without the need of a mnemonic
 
-You need to have the full node database on your computer for the tool to work.
+
+- the tool works with both hardened & unhardened addresses, at the same time (meaning that for a given mnemonic it will check for funds the first x hardened and unhardened addresses)
+
+
+- You need to have the full node database on your computer for the tool to work.
+- The full node does not need to be running for the tool to work.
 
 ## Contributors
 
 ![alt text](https://c.tenor.com/FDwYMy302gMAAAAM/tumbleweed-silence.gif?raw=true)
 
-# High level overview
-- The script has 2 main functionalities:
-    - it can generate the first x addresses of a mnemonic
-    - it can query the full node db and get the balance of all those addresses, thus getting the coin balance of the whole wallet
-        - it can detect both the asset's balance and the CATs of a given address/ mnemonic
-
 # Feedback/ Contribution
 - Please post any issues you encountered or any feature requests in the issues tab.
+- Do not forget to join the Discord server dedicated for this tool: https://discord.gg/qU9zRP9x5u
 - Also, feel free to contribute to the tool's development with a PR.
 
 # How to use
@@ -33,11 +34,9 @@ NOTE#2: Long story short you have 3 ways to use willow in your scripts:
 - M#2 using _00_CLI.py to direct your queries (recommended)
 - M#3 using the compiled CLI exe (more I/O overhead then M#2)
 
-If you want fast support (faster than with github issues that is), join our Discord server: https://discord.gg/qU9zRP9x5u
-
 ## WINDOWS usage - instructions
 
-1.1. Have the full node db of the coin you are about to check.
+1.1. Have the full node db of the coin you are about to check. As mentioned before, the full node does not need to be running.
 
 1.2. Run the compiled exe for windows and follow the instructions on screen.
 
@@ -47,7 +46,7 @@ GUI overview:
 
 OR
 
-2.1. Have the full node db of the coin you are about to check.
+2.1. Have the full node db of the coin you are about to check. As mentioned before, the full node does not need to be running.
 
 2.2. Use the compiled CLI interface you are more of a console type of person
 
@@ -63,10 +62,8 @@ Found this project useful? Send your ❤ in any form you can 🙂. Please contac
 - goldcoin OZT---ozt1u8klct3kcluvmu9hha8w6vte70d2z37zy7zydz55gygper0658rqkjqwts
 - salvia XSLV---xslv19j3zexpgels2k8fkp30phxpxxz6syfzq52t2tuy8ac50nfmnennse9vjcw
 - chia XCH---xch1glz7ufrfw9xfp5rnlxxh9mt9vk9yc8yjseet5c6u0mmykq8cpseqna6494
-- chia-rose XCR---xcr1pdf0xetkr0k4pppqwv0hslvldr2qlrem09c00ks9y097zufn8drq5hlprx
 - cryptodoge XCD---xcd1ds6jljkla5gwfjgty8w4q442uznmw9erwmwnvfspulqke3ya9nxqy9fe8t
 - flax XFX---xfx13uwa4zqp0ah5740mknk0z8g3ejdl06sqq8ldvvk90tw058yy447saqjg3u
-- fork XFK---xfk1cxkals86jtug06l5wc2m8nyz3ghxx5alqhj6tl3wjqhc7nagar9sus06un
 - cannabis CANS---cans16ur4nqvvtdr8yduum5pljr3a73q33uuage6ktnsdr579xeerkc5q604j5v
 - socks SOCK---sock1cwu9697vldmkk9mn2rs0ww45dx3aspvjqyygjaw4ucv6unaf8txqsajcvx
 - wheat WHEAT---wheat1z4cz3434w48qumwt2f2dqtmgq4lfyv5aswmda7yfmamhml2afrzsa80mr2
@@ -89,25 +86,26 @@ Found this project useful? Send your ❤ in any form you can 🙂. Please contac
 - lucky SIX---six1r09eundsl9ntdw5vgq9xk9qedcvxdg7tg3urndcewppc3cn55p2syhu2d4
 - BTCGreen xBTC---xbtc1njnsnayxuj4nn0fnzf2nsjnladh79spljx5vvs8v6vqhk9kp6rksgvyszh
 - Olive XOL---xol15l6n5lj8splqasw7cr83c6cpdth93gu29vkf0dx0thkpnd2g36cqnearjs
-- Beer XBR---xbr1gradjuw6sp78936ecumvjh4gx9kdu7g6gjdh4xdx9er9yk4zv9uqfxfxwm
 - Pipscoin PIPS---pips13qcawq6y5dkxqtwnup04m2zmee9lpzsec0zyczt0pd0ra6cuut3qgvhj0k
-- Scam SCM---scm1m3sh0pxvjcen2hyzmjgayac0x55ljhlwrptqu90thp6mtpfngx6qgkjwht
-- peas PEA---pea1u2pn800fn36cg0lhwrcnpf82a2vsdjuhahdekawffew3u7u3c0xs25yqts
 - mint XKM---xkm1k0nkq575wm3nmtkkxwrfmxg7qpt0hxe5m2fvw0dgvw3q0ynmzn3qqu5ntf
-- Kiwi XKW---xkw1g9g80rq7exm9mqmzhwrug2qpkgh30dlgpcxkq7ca4x3d5deapm0swmgquy
-- xcha XCA---xca1zeh3hlyuqau9a6h3xl3nq4efadam3xg5w672v3gvq7gwdyvaq6vs39rksp
 - stor STOR---stor1vahvcz80arp2jl6v4np8grjxncrypzfelmm4uk0gvds5rpuf523qn9w482
 - mogua MGA---mga1a9zhv34v75w8eazly5uuycx0tcskwmeyv8uu0kwc749k9wj866lq0val8m
 - tranzact  TRZ---trz1mct7p22g2m9gn9m0xtuac4mnrwjkev0pqsxgx7tr6cjk2thnxmkq8q45ep
 - Staicoin STAI---stai1m0axlhek947j5mz2wpvy0m9sky49h3jfqwqesy8rmzxfv9j9k5kq9zl6ft
 - chaingreen CGN---cgn1llw5jp9ytz80pjhs96anxrcu7537mr45dg764xj2y3u8swmdf03ql63v0g
 - lotus LCH---lch1yxmdv2jykwsvmwemka3uc2g3zg7dqfaevd8n2z2jht9nstsammtsyla2ex
-- melon MELON---melon1uhrg7a43r0hv5n7k2tq9tsgq5adwc4fvjy7xfdjwqwz58vq2f24szftdfc
-- kujenga XKJ---xkj14yyasecl9cygeu25ptx5562ulqj47pzkwsxrcdt20kdwhqkm0rjqvfedah
 - Venidium XVM---xvm1h35hgaqxyvrgjmmr2qgr48ft0cxltyhnge6zkwkfsl9x93d4uq2qq9la0k
 - aedge AEC---aec148wa08dgfdwuxrpq9sw0rylgnxlfllr9z2d7xsm6qatn5hfvmpfshu2nt6
 - Skynet XNT---xnt1cq8xdu8svwhruefr5khzpqxturemtqrf6gk7uqjyjrhdl2dyapmsh9desg
 - Shibgreen XSHIB---xshib1pkelrz8uml46m6hdw06ttezhaqasexe0527jce4cc03uj4fc8rcsaaatwy
 - ethgreen XETH---xeth1e24uzser8h78gun2jppnqsgx7vsrktzkgdeuknat63ppcfw7htuq2pu73a
 - PecanRolls ROLLS---rolls1lf7cwwl0cwtn6ua0uuncgj90czeg5j42083smq6afstvxsdl7m8syvztjy
-- Silicoin SIT---sit183ks6unvnjhgz8augqe5hyj29uzc7za3ynf937eamn67cs74tnmquenyqh
+- Silicoin SIT---sit1df3l4xpzc65xyzvdlleww6stwt70kd9a4ra0836hf6ahpcwd7yrqj0s60a
+- bpx BPX---bpx10d25g8jechcs2rfstkzpj2rzt68skw4etvqm2j7f8545uzd6kyrqgr2ea8
+- Gold GL---gl1df3l4xpzc65xyzvdlleww6stwt70kd9a4ra0836hf6ahpcwd7yrqqwx0ye
+- joker---xjk1nx6lvms2snd8lge3px422q7dzxw5rl857287qn4h4fvtka8t99fqwtff87
+- profit---profit1df3l4xpzc65xyzvdlleww6stwt70kd9a4ra0836hf6ahpcwd7yrqfhghvg
+- littlelambocoin LLC---llc1wfhhxn4dtr7luedc4lzld2y2q32r66ruvqyppj7vr6g5u75xn92s3pz9gw
+- ecostake ECO---eco1df3l4xpzc65xyzvdlleww6stwt70kd9a4ra0836hf6ahpcwd7yrq5l9vpy
+- chinilla HCX---hcx16ce9d6pj80nw6j2j9hgax30k6ww43na3ve86pm87tecsdhgc03sq7cvnmt
+- goji XGJ---xgj1x0xyfmkz0xylyaaq6360un9hydjc543lrtuwu9pk5d008acq939qrlgdut
