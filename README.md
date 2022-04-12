@@ -4,8 +4,8 @@
 - check the CATs balance of a wallet, including ALL the addresses of that wallet, using a mnemonic
 - check the CATs balance of single/multiple addresses, without the need of a mnemonic
 - the tool works with both hardened & unhardened addresses, at the same time (meaning that for a given mnemonic it will check for funds the first x hardened and unhardened addresses)
-- You need to have the full node database on your computer for the tool to work.
-- The full node does not need to be running for the tool to work.
+- you need to have the full node database on your computer for the tool to work.
+- the full node does not need to be running for the tool to work.
 
 ## Contributors
 
@@ -17,9 +17,9 @@
 - Also, feel free to contribute to the tool's development with a PR.
 
 # How to use
-The tool was tested just in Windows, but should work on every OS where python is supported.
+The tool was designed mainly for Windows, but should work on every OS where python is supported.
 
-It was designed from the ground-up to be used as a sub-module as well, so if you want to include it in a bigger set of scripts, you can do that 🙂. Just import _00_back_end.WILLOW_back_end and you are good to go.
+It can be used as a sub-module, so if you want to include it in a bigger set of scripts, you can do that 🙂. Just import _00_back_end.WILLOW_back_end and you are good to go.
 
 NOTE#1: Using it as a sub-module may get you to fall into a rabbit hole. For that reason, recently a CLI interface was implemented which will completely isolate your scripts from willow.
 
