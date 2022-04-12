@@ -1,15 +1,9 @@
 # WILLOW-chia-forks-instant-wallet-balance
 - check the asset's wallet balance, for x addresses of that wallet, using a mnemonic
 - check the asset's wallet balance of single/multiple addresses, without the need of a mnemonic
-
-
 - check the CATs balance of a wallet, including ALL the addresses of that wallet, using a mnemonic
 - check the CATs balance of single/multiple addresses, without the need of a mnemonic
-
-
 - the tool works with both hardened & unhardened addresses, at the same time (meaning that for a given mnemonic it will check for funds the first x hardened and unhardened addresses)
-
-
 - You need to have the full node database on your computer for the tool to work.
 - The full node does not need to be running for the tool to work.
 
