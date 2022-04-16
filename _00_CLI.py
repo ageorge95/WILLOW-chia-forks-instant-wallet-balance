@@ -61,8 +61,6 @@ parser.set_defaults(just_addresses=False)
 
 if __name__ == '__main__':
 
-    os.system("color") # enable color in the console
-
     args = parser.parse_args()
 
     class mixer(WILLOWcli,

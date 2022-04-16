@@ -5,7 +5,8 @@ from logging import basicConfig,\
     getLogger
 from sys import stdout
 from queue import Queue
-from os import path
+from os import path,\
+    system
 from json import load,\
     dump
 import sys
@@ -96,6 +97,8 @@ class QueueHandler(Handler):
 
 class configure_logger_and_queue():
     def __init__(self):
+        
+        system("color")  # enable color in the console
 
         super(configure_logger_and_queue, self).__init__()
 
