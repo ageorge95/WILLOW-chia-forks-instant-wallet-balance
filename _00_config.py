@@ -1,6 +1,9 @@
 from os import path
 
-initial_config = {'assets': {'HCX': {'db_filepath': '{userdir}\\.chinilla\\vanillanet\\db\\blockchain_v2_vanillanet.sqlite'.format(userdir=path.expanduser("~")),
+initial_config = {'assets': {'XPT': {'db_filepath': '{userdir}\\.petroleum\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                                 'denominator': 1000000000000,
+                                 'friendly_name': 'petroleum'},
+                          'HCX': {'db_filepath': '{userdir}\\.chinilla\\vanillanet\\db\\blockchain_v2_vanillanet.sqlite'.format(userdir=path.expanduser("~")),
                                  'denominator': 1000000000000,
                                  'friendly_name': 'chinilla'},
                           'XGJ': {'db_filepath': '{userdir}\\.goji\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
