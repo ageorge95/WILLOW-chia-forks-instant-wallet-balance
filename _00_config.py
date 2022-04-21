@@ -93,7 +93,7 @@ initial_config = {'assets': {'XPT': {'db_filepath': '{userdir}\\.petroleum\\main
                          'SPARE': {'db_filepath': '{userdir}\\.spare-blockchain\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                    'denominator': 1000000000000,
                                    'friendly_name': 'spare'},
-                         'STAI': {'db_filepath': '{userdir}\\.stai\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                         'STAI': {'db_filepath': '{userdir}\\.stai\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                   'denominator': 1000000000,
                                   'friendly_name': 'staicoin'},
                          'STOR': {'db_filepath': '{userdir}\\.stor\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
