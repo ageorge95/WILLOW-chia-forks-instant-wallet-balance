@@ -50,6 +50,9 @@ parser.add_argument('--cats', dest='cats_only', action='store_true')
 parser.add_argument('--no-cats', dest='cats_only', action='store_false')
 parser.set_defaults(cats_only=False)
 
+parser.add_argument('--just_addresses', dest='just_addresses', action='store_true')
+parser.set_defaults(just_addresses=False)
+
 if __name__ == '__main__':
 
     args = parser.parse_args()
@@ -60,9 +63,15 @@ if __name__ == '__main__':
             super(mixer, self).__init__()
 
     WILLOWobj = mixer()
-    WILLOWobj.exec_full_cycle(mnemonic=' '.join(args.mnemonic),
-                              prefix=args.coin.lower(),
-                              asset=args.coin,
-                              cats_only=args.cats_only,
-                              nr_of_addresses=args.numberAddresses,
-                              custom_addresses=args.addresses)
+    if not args.just_addresses:
+        WILLOWobj.exec_full_cycle(mnemonic=' '.join(args.mnemonic),
+                                  prefix=args.coin.lower(),
+                                  asset=args.coin,
+                                  cats_only=args.cats_only,
+                                  nr_of_addresses=args.numberAddresses,
+                                  custom_addresses=args.addresses)
+    else:
+        print(str(WILLOWobj.return_addresses(mnemonic=' '.join(args.mnemonic),
+                                             prefix=args.coin.lower(),
+                                             asset=args.coin,
+                                             nr_of_addresses=args.numberAddresses)))
