@@ -55,22 +55,22 @@ OR
 ## View the "full" normal wallet balance via a mnemonic
 This requires a mnemonic as the input; full = Addresses_to_generate
 
-![alt text](ReadMe_res/normal wallet.jpg?raw=true)
+![alt text](ReadMe_res/normal_wallet.jpg?raw=true)
 
 ## View the "full" CATs wallets balance via a mnemonic
 This requires a mnemonic as the input; full = Addresses_to_generate
 
-![alt text](ReadMe_res/CATs wallet.jpg?raw=true)
+![alt text](ReadMe_res/CATs_wallet.jpg?raw=true)
 
 ## View the normal wallet balance via a single address
 This requires onlky an address of the wallet as the input.
 
-![alt text](ReadMe_res/normal wallet single addr.jpg?raw=true)
+![alt text](ReadMe_res/normal_wallet_single_addr.jpg?raw=true)
 
 ## View the CATs wallets balance via a single address
 This requires onlky an address of the wallet as the input.
 
-![alt text](ReadMe_res/CATs wallet single addr.jpg?raw=true)
+![alt text](ReadMe_res/CATs_wallet_single_addr.jpg?raw=true)
 
 
 # Support
