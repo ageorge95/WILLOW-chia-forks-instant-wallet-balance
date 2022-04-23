@@ -17,6 +17,7 @@ from tkinter import tix, simpledialog, Entry
 from tkinter import ttk, N, S, E, W, END, Label, NONE
 from _00_WILLOW_base import configure_logger_and_queue,\
     config_handler
+from _00_back_end import WILLOW_back_end
 from traceback import format_exc
 
 class buttons_label_state_change():
@@ -234,12 +235,12 @@ class FormControls(buttons_label_state_change,
         self.label_hover_hints = Label(self.frame, text='NOTE: Hover on the buttons below for more info.')
         self.label_hover_hints.grid(column=0, row=7, columnspan=2)
 
-        self.button_show_balance = ttk.Button(self.frame, text='Show balance', command=self.master_show_balance)
+        self.button_show_balance = ttk.Button(self.frame, text='Show balance', command=(lambda :self.master_show_balance(False)))
         self.button_show_balance.grid(column=0, row=8, sticky=W)
         self.tip_show_balance = tix.Balloon(self.frame)
         self.tip_show_balance.bind_widget(self.button_show_balance,balloonmsg="Will display the balance of all the provided addresses OR the first 500 addresses of a provided mnemonic.")
 
-        self.button_show_CATs = ttk.Button(self.frame, text='Show CATs', command=self.master_show_CATs)
+        self.button_show_CATs = ttk.Button(self.frame, text='Show CATs', command=(lambda :self.master_show_balance(True)))
         self.button_show_CATs.grid(column=1, row=8, sticky=W)
         self.tip_show_balance = tix.Balloon(self.frame)
         self.tip_show_balance.bind_widget(self.button_show_CATs,balloonmsg="Will display the CATs in all the provided addresses OR the first 500 addresses of a provided mnemonic.")
@@ -264,81 +265,20 @@ class FormControls(buttons_label_state_change,
             return False
         return True
 
-    def master_show_CATs(self):
-        if self.check_coin_selection() and self.check_method_selection() and self.check_addresses_to_use_input():
-            def action():
-                self.disable_all_buttons()
-                self.backend_label_busy(text='Busy with computing the CATs !')
-                self._log.info('Backend process detached. Please wait ...')
-
-                cli_path = path.join(path.dirname(__file__), 'CLI_{}.exe'.format(open(path.join(sys._MEIPASS, 'version.txt'), 'r').read()))  if '_MEIPASS' in sys.__dict__ \
-                                                                            else '"{}" _00_CLI.py'.format(sys.executable)
-
-                CLI_args = '{cli_path} --coin={coin} --numberAddresses={nr_of_addresses} --no-verbose --cats'
-                if self.method_to_use.get() == 'via_mnemonic':
-                    CLI_args += ' --mnemonic={mnemonic} '
-                if self.method_to_use.get() == 'via_wallet_addresses':
-                    CLI_args += ' --addresses {addresses} '
-
-                try:
-                    process_out = check_output(CLI_args.format(cli_path=cli_path,
-                                                              coin=self.coin_to_use.get().split('__')[0],
-                                                              mnemonic='"{}"'.format(' '.join(self.input_frame.return_input()[:-1])),
-                                                              addresses = ' '.join(self.input_frame.return_input()[:-1]),
-                                                              nr_of_addresses = int(self.addresses_to_use_entry.get())),
-                                     stderr=PIPE, stdin=PIPE, creationflags=CREATE_NO_WINDOW)
-
-                    messages_as_list = eval(process_out.decode('utf-8').split('$$')[1])['message_payload']
-                    for message in messages_as_list:
-                        # getattr seems to fail here ...
-                        if message[0] == 'info':
-                            self._log.info(message[1])
-                        elif message[0] == 'error':
-                            self._log.error(message[1])
-                        else:
-                            self._log.info(message[1])
-                except:
-                    self._log.error(f"Failed to parse the CATs balance !\n{format_exc(chain=False)}")
-                    self.enable_all_buttons()
-                    self.backend_label_free()
-
-                self.enable_all_buttons()
-                self.backend_label_free()
-            Thread(target=action).start()
-
-    def master_show_balance(self):
+    def master_show_balance(self,
+                            cats_only: bool):
         if self.check_coin_selection() and self.check_method_selection() and self.check_addresses_to_use_input():
             def action():
                 self.disable_all_buttons()
                 self.backend_label_busy(text='Busy with computing the balance !')
-                self._log.info('Backend process detached. Please wait ...')
-
-                cli_path = path.join(path.dirname(__file__), 'CLI_{}.exe'.format(open(path.join(sys._MEIPASS, 'version.txt'), 'r').read()))  if '_MEIPASS' in sys.__dict__ \
-                                                                            else '"{}" _00_CLI.py'.format(sys.executable)
-
-                CLI_args = '{cli_path} --coin={coin} --numberAddresses={nr_of_addresses} --no-verbose '
-                if self.method_to_use.get() == 'via_mnemonic':
-                    CLI_args += ' --mnemonic={mnemonic} '
-                if self.method_to_use.get() == 'via_wallet_addresses':
-                    CLI_args += ' --addresses {addresses} '
 
                 try:
-                    process_out = check_output(CLI_args.format(cli_path=cli_path,
-                                                              coin=self.coin_to_use.get().split('__')[0],
-                                                              mnemonic='"{}"'.format(' '.join(self.input_frame.return_input()[:-1])),
-                                                              addresses = ' '.join(self.input_frame.return_input()[:-1]),
-                                                              nr_of_addresses = int(self.addresses_to_use_entry.get())),
-                                     stderr=PIPE, stdin=PIPE, creationflags=CREATE_NO_WINDOW)
-
-                    messages_as_list = eval(process_out.decode('utf-8').split('$$')[1])['message_payload']
-                    for message in messages_as_list:
-                        # getattr seems to fail here ...
-                        if message[0] == 'info':
-                            self._log.info(message[1])
-                        elif message[0] == 'error':
-                            self._log.error(message[1])
-                        else:
-                            self._log.info(message[1])
+                    WILLOW_back_end().exec_full_cycle(mnemonic=' '.join(self.input_frame.return_input()[:-1]) if self.method_to_use.get() == 'via_mnemonic' else '',
+                                                      prefix=self.coin_to_use.get().split('__')[0].lower(),
+                                                      asset=self.coin_to_use.get().split('__')[0],
+                                                      cats_only=cats_only,
+                                                      nr_of_addresses=int(self.addresses_to_use_entry.get()),
+                                                      custom_addresses=self.input_frame.return_input()[:-1] if self.method_to_use.get() == 'via_wallet_addresses' else '')
                 except:
                     self._log.error(f"Failed to parse the balance !\n{format_exc(chain=False)}")
 
