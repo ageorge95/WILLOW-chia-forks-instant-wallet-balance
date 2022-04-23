@@ -21,7 +21,7 @@ class db_wrapper_v1():
 
     def get_coins_by_puzzlehash(self,
                                 puzzlehash):
-        self._dbcursor.execute("SELECT amount, spent_index FROM coin_record WHERE puzzle_hash=?", (puzzlehash,))
+        self._dbcursor.execute("SELECT timestamp, amount, spent_index FROM coin_record WHERE puzzle_hash=?", (puzzlehash,))
         return self._dbcursor.fetchall()
 
 class db_wrapper_v2():
@@ -32,7 +32,7 @@ class db_wrapper_v2():
 
     def get_coins_by_puzzlehash(self,
                                 puzzlehash):
-        self._dbcursor.execute("SELECT amount, spent_index FROM coin_record WHERE puzzle_hash=?", (bytes.fromhex(puzzlehash),))
+        self._dbcursor.execute("SELECT timestamp, amount, spent_index FROM coin_record WHERE puzzle_hash=?", (bytes.fromhex(puzzlehash),))
         return self._dbcursor.fetchall()
 
 def db_wrapper_selector(version: int):

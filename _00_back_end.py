@@ -131,7 +131,8 @@ class WILLOW_back_end():
 
         to_return = {'address_info': [],
                      'total_coin_balance': 0,
-                     'total_coin_spent': 0}
+                     'total_coin_spent': 0,
+                     'transactions': []}
 
         try:
 
@@ -160,7 +161,7 @@ class WILLOW_back_end():
 
                 for row in rows:
 
-                    amount, spent = row
+                    timestamp, amount, spent = row
 
                     coin_raw=int.from_bytes(amount, 'big')
                     parsed_coin=coin_raw/self.config['assets'][asset]['denominator']
@@ -171,6 +172,10 @@ class WILLOW_back_end():
                     else:
                         coin_balance += parsed_coin
                         to_return['total_coin_balance'] += parsed_coin
+
+                    to_return['transactions'].append({'timestamp': timestamp,
+                                                      'amount': parsed_coin,
+                                                      'is_coin_spent': is_coin_spent})
 
                 to_return['address_info'].append({'wallet_addr': wallet_addr,
                                                   'coin_spent': coin_spent,
@@ -215,36 +220,48 @@ class WILLOW_back_end():
 
             db_wrapper.connect_to_db(db_filepath=db_filepath)
 
-            for CAT in all_CAT_addrs.items():
-                for CAT_addrs in CAT[1]:
-                    if CAT[0] not in to_return.keys():
-                        to_return[CAT[0]] = []
+            for CAT_name, vanilla_wrapped_addrs in all_CAT_addrs.items():
+                total_coin_spent = 0
+                total_coin_balance = 0
 
-                    wallet_addr = CAT_addrs['wrapped_addr']
+                for CAT_addrs in vanilla_wrapped_addrs:
+                    coin_spent = 0
+                    coin_balance = 0
 
-                    puzzle_hash_bytes = decode_puzzle_hash(wallet_addr)
+                    if CAT_name not in to_return.keys():
+                        to_return[CAT_name] = {'address_info': [],
+                                               'total_coin_balance': 0,
+                                               'total_coin_spent': 0,
+                                               'transactions': []}
+
+                    wrapped_addr = CAT_addrs['wrapped_addr']
+
+                    puzzle_hash_bytes = decode_puzzle_hash(wrapped_addr)
                     puzzle_hash = puzzle_hash_bytes.hex()
 
                     rows = db_wrapper.get_coins_by_puzzlehash(puzzlehash=puzzle_hash)
 
-                    coin_spent = 0
-                    coin_balance = 0
-
                     for row in rows:
 
-                        amount, spent = row
+                        timestamp, amount, spent = row
 
                         coin_raw=int.from_bytes(amount, 'big')
-                        parsed_coin=coin_raw/self.config['CATs'][asset][CAT[0]]['denominator']
+                        parsed_coin=coin_raw/self.config['CATs'][asset][CAT_name]['denominator']
                         is_coin_spent = spent
                         if is_coin_spent:
+                            to_return[CAT_name]['total_coin_spent'] += parsed_coin
                             coin_spent += parsed_coin
                         else:
+                            to_return[CAT_name]['total_coin_balance'] += parsed_coin
                             coin_balance += parsed_coin
 
-                    to_return[CAT[0]].append({'wallet_addr': wallet_addr,
-                                              'coin_spent': coin_spent,
-                                              'coin_balance': coin_balance})
+                        to_return[CAT_name]['transactions'].append({'timestamp': timestamp,
+                                                                    'amount': parsed_coin,
+                                                                    'is_coin_spent': is_coin_spent})
+
+                    to_return[CAT_name]['address_info'].append({'wallet_addr': wrapped_addr,
+                                                                'coin_spent': coin_spent,
+                                                                'coin_balance': coin_balance})
         except:
             self._log.error(f"Failed to execute process_balance_CATS_only. Reason:\n{format_exc(chain=False)}")
 
@@ -337,27 +354,31 @@ class WILLOW_back_end():
                 self._log.info(f"TOTAL: available coins:{total_coin_balance}, spent coins:{total_coin_spent}")
 
         else:
+            total_coin_balance = {}
+            total_coin_spent = {}
+
             for addr_type in types_to_show:
                 for CAT in balance[addr_type].keys():
+
+                    if CAT not in total_coin_balance.keys():
+                        total_coin_balance[CAT] = 0
+                        total_coin_spent[CAT] = 0
+
                     final_str = f"Showing the {addr_type} CATs balance for {CAT} -> {self.config['CATs'][asset][CAT]['friendly_name']}\n"
 
                     tabular_data = []
-                    coin_balance = 0
-                    coin_spent = 0
-                    for appended_data in balance[addr_type][CAT]:
+                    for appended_data in balance[addr_type][CAT]['address_info']:
                         tabular_data.append([appended_data['wallet_addr'],
                                              appended_data['coin_balance'],
                                              appended_data['coin_spent']])
-                        coin_balance += appended_data['coin_balance']
-                        coin_spent += appended_data['coin_spent']
 
                     final_str += tabulate(tabular_data = tabular_data,
                                           headers = [f"Wallet Addr",
                                                      'Available Balance',
                                                      'Spent Coins'],
                                           tablefmt="grid")
-                    final_str += '\n' + f"TOTAL balance: {coin_balance}" \
-                                        f"\nTOTAL spent: {coin_spent}"
+                    final_str += '\n' + f"TOTAL balance: {balance[addr_type][CAT]['total_coin_balance']}" \
+                                        f"\nTOTAL spent: {balance[addr_type][CAT]['total_coin_spent']}"
 
                     self._log.info(final_str + '\n'*4)
 
@@ -371,7 +392,7 @@ if __name__ == '__main__':
     my_obj.exec_full_cycle(mnemonic='',
                            prefix='xcc',
                            asset='XCC',
-                           cats_only=False,
+                           cats_only=True,
                            nr_of_addresses=5,
                            custom_addresses=['xcc1amn5txlltvlcnlt6auw24ys6xku7t3npqt2szllassymswnehepszhnjar'],
                            )
