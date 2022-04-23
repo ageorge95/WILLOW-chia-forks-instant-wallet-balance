@@ -21,6 +21,7 @@ from io import StringIO
 from clvm_tools.cmds import brun
 from chia_blockchain.chia.wallet.puzzles.p2_delegated_puzzle_or_hidden_puzzle import puzzle_for_pk
 from tabulate import tabulate
+from datetime import datetime
 
 class Capturing(list):
     def __enter__(self):
@@ -175,7 +176,8 @@ class WILLOW_back_end():
 
                     to_return['transactions'].append({'timestamp': timestamp,
                                                       'amount': parsed_coin,
-                                                      'is_coin_spent': is_coin_spent})
+                                                      'is_coin_spent': is_coin_spent,
+                                                      'wallet': wallet_addr})
 
                 to_return['address_info'].append({'wallet_addr': wallet_addr,
                                                   'coin_spent': coin_spent,
@@ -221,8 +223,6 @@ class WILLOW_back_end():
             db_wrapper.connect_to_db(db_filepath=db_filepath)
 
             for CAT_name, vanilla_wrapped_addrs in all_CAT_addrs.items():
-                total_coin_spent = 0
-                total_coin_balance = 0
 
                 for CAT_addrs in vanilla_wrapped_addrs:
                     coin_spent = 0
@@ -257,7 +257,8 @@ class WILLOW_back_end():
 
                         to_return[CAT_name]['transactions'].append({'timestamp': timestamp,
                                                                     'amount': parsed_coin,
-                                                                    'is_coin_spent': is_coin_spent})
+                                                                    'is_coin_spent': is_coin_spent,
+                                                                    'wallet': wrapped_addr})
 
                     to_return[CAT_name]['address_info'].append({'wallet_addr': wrapped_addr,
                                                                 'coin_spent': coin_spent,
@@ -296,8 +297,8 @@ class WILLOW_back_end():
                         asset: str,
                         cats_only: bool,
                         nr_of_addresses: int = 500,
-                        custom_addresses: list = None
-                        ):
+                        custom_addresses: list = None,
+                        transactions_limit: int = 20):
 
         # compute the required addresses. if needed
         balance = {}
@@ -352,14 +353,15 @@ class WILLOW_back_end():
                                f"{tabulate(table, ['Wallet', 'Available Balance', 'Spent Coins'], tablefmt='grid')}")
 
                 table = [[
-                  entry['timestamp'],
-                  f"\x1b[31;1m- {entry['amount']}\x1b[0m" if entry['is_coin_spent'] else
-                      f"\x1b[32;1m+ {entry['amount']}\x1b[0m",
-                  bool(entry['is_coin_spent'])
-                  ] for entry in balance[addr_type]['transactions']]
+                       datetime.fromtimestamp(entry['timestamp']),
+                       f"\x1b[31;1m- {entry['amount']}\x1b[0m" if entry['is_coin_spent'] else
+                           f"\x1b[32;1m+ {entry['amount']}\x1b[0m",
+                       bool(entry['is_coin_spent']),
+                       entry['wallet']
+                  ] for entry in balance[addr_type]['transactions'][:transactions_limit]]
 
                 self._log.info(f"Transactions history for all $${addr_type}$$ addresses:\n"
-                               f"{tabulate(table, ['Timestamp', 'Balance', 'Spent'], tablefmt='grid')}")
+                               f"{tabulate(table, ['Timestamp', 'Balance', 'Spent', 'Affected wallet'], tablefmt='grid')}")
 
                 self._log.info(f"TOTAL: available coins:{total_coin_balance}, spent coins:{total_coin_spent}")
 
@@ -388,17 +390,19 @@ class WILLOW_back_end():
                                           tablefmt="grid")
 
                     tabular_data = []
-                    for appended_data in balance[addr_type][CAT]['transactions']:
-                        tabular_data.append([appended_data['timestamp'],
+                    for appended_data in balance[addr_type][CAT]['transactions'][:transactions_limit]:
+                        tabular_data.append([datetime.fromtimestamp(appended_data['timestamp']),
                                              f"\x1b[31;1m- {appended_data['amount']}\x1b[0m" if appended_data['is_coin_spent'] else
                                                 f"\x1b[32;1m+ {appended_data['amount']}\x1b[0m",
-                                             bool(appended_data['is_coin_spent'])])
+                                             bool(appended_data['is_coin_spent']),
+                                             appended_data['wallet']])
 
                     final_str += f"\nTransactions for {CAT} -> {self.config['CATs'][asset][CAT]['friendly_name']}\n" + \
                                  tabulate(tabular_data = tabular_data,
                                           headers = [f"Timestamp",
                                                      'Balance',
-                                                     'Spent'],
+                                                     'Spent',
+                                                     'Affected Wallet'],
                                           tablefmt="grid")
 
                     final_str += '\n' + f"TOTAL balance: {balance[addr_type][CAT]['total_coin_balance']}" \
@@ -416,7 +420,7 @@ if __name__ == '__main__':
     my_obj.exec_full_cycle(mnemonic='',
                            prefix='xcc',
                            asset='XCC',
-                           cats_only=True,
+                           cats_only=False,
                            nr_of_addresses=5,
                            custom_addresses=['xcc1amn5txlltvlcnlt6auw24ys6xku7t3npqt2szllassymswnehepszhnjar'],
                            )
