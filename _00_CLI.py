@@ -30,7 +30,7 @@ parser.add_argument('-c',
 
 parser.add_argument('-m',
                     '--mnemonic',
-                    type=str,
+                    nargs='*',
                     help='The mnemonic to be used to generate the addresses. (Optional)',
                     default = None)
 
@@ -60,7 +60,7 @@ if __name__ == '__main__':
             super(mixer, self).__init__()
 
     WILLOWobj = mixer()
-    WILLOWobj.exec_full_cycle(mnemonic=args.mnemonic,
+    WILLOWobj.exec_full_cycle(mnemonic=' '.join(args.mnemonic),
                               prefix=args.coin.lower(),
                               asset=args.coin,
                               cats_only=args.cats_only,
