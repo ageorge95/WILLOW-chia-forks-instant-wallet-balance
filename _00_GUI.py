@@ -116,12 +116,16 @@ class ConsoleUi(configure_logger_and_queue):
 
         self.scrolled_text = Text(frame, state='disabled', width=110, height=46, wrap=NONE, xscrollcommand=self.h_scroll.set, yscrollcommand=self.v_scroll.set)
         self.scrolled_text.grid(row=1, column=0, sticky=(N, S, W, E))
-        self.scrolled_text.configure(font='TkFixedFont')
+        self.scrolled_text.configure(font=('Consolas', 10))
         self.scrolled_text.tag_config('INFO', foreground='black')
         self.scrolled_text.tag_config('DEBUG', foreground='gray')
         self.scrolled_text.tag_config('WARNING', foreground='orange')
         self.scrolled_text.tag_config('ERROR', foreground='red')
         self.scrolled_text.tag_config('CRITICAL', foreground='red', underline=1)
+        self.scrolled_text.tag_config("bold_green", foreground="green", font=('Consolas', 10, 'bold'))
+        self.scrolled_text.tag_config("bold_red", foreground="red", font=('Consolas', 10, 'bold'))
+        self.current_line = 1
+        self.color_tags_map = []
 
         self.h_scroll.config(command=self.scrolled_text.xview)
         self.v_scroll.config(command=self.scrolled_text.yview)
@@ -131,8 +135,38 @@ class ConsoleUi(configure_logger_and_queue):
 
     def display(self, record):
         msg = self.queue_handler.format(record)
+
+        # add new data to the colored tags map
+        msg_as_lines = msg.split('\n')
+        for index, line in enumerate(msg_as_lines, self.current_line):
+            found_green = line.find('\x1b[32;1m')
+            line = line.replace('\x1b[32;1m', '')
+
+            found_red = line.find('\x1b[31;1m')
+            line = line.replace('\x1b[31;1m', '')
+
+            if found_green > -1:
+                self.color_tags_map.append({'line': index,
+                                            'tag_type': 'bold_green',
+                                            'start_char': found_green,
+                                            'end_char': line.find('\x1b[0m')})
+            if found_red > -1:
+                self.color_tags_map.append({'line': index,
+                                            'tag_type': 'bold_red',
+                                            'start_char': found_red,
+                                            'end_char': line.find('\x1b[0m')})
+        self.current_line += len(msg_as_lines)
+
+        msg = msg.replace('\x1b[32;1m', '')
+        msg = msg.replace('\x1b[31;1m', '')
+        msg = msg.replace('\x1b[0m', '')
+
         self.scrolled_text.configure(state='normal')
         self.scrolled_text.insert(tk.END, msg + '\n', record.levelname)
+        for color_tag in self.color_tags_map:
+            self.scrolled_text.tag_add(f"{color_tag['tag_type']}",
+                                       f"{color_tag['line']}.{color_tag['start_char']}",
+                                       f"{color_tag['line']}.{color_tag['end_char']}")
         self.scrolled_text.configure(state='disabled')
 
         # Autoscroll to the bottom
@@ -153,6 +187,10 @@ class ConsoleUi(configure_logger_and_queue):
         self.scrolled_text.configure(state='normal')
         self.scrolled_text.delete('1.0', END)
         self.scrolled_text.configure(state='disabled')
+
+        # clear the variables holding the colored tags map
+        self.current_line = 1
+        self.color_tags_map = []
 
 class FormInput():
 

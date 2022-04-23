@@ -351,6 +351,16 @@ class WILLOW_back_end():
                 self._log.info(f"Balance for each $${addr_type}$$ address:\n"
                                f"{tabulate(table, ['Wallet', 'Available Balance', 'Spent Coins'], tablefmt='grid')}")
 
+                table = [[
+                  entry['timestamp'],
+                  f"\x1b[31;1m- {entry['amount']}\x1b[0m" if entry['is_coin_spent'] else
+                      f"\x1b[32;1m+ {entry['amount']}\x1b[0m",
+                  bool(entry['is_coin_spent'])
+                  ] for entry in balance[addr_type]['transactions']]
+
+                self._log.info(f"Transactions history for all $${addr_type}$$ addresses:\n"
+                               f"{tabulate(table, ['Timestamp', 'Balance', 'Spent'], tablefmt='grid')}")
+
                 self._log.info(f"TOTAL: available coins:{total_coin_balance}, spent coins:{total_coin_spent}")
 
         else:
@@ -364,19 +374,33 @@ class WILLOW_back_end():
                         total_coin_balance[CAT] = 0
                         total_coin_spent[CAT] = 0
 
-                    final_str = f"Showing the {addr_type} CATs balance for {CAT} -> {self.config['CATs'][asset][CAT]['friendly_name']}\n"
-
                     tabular_data = []
                     for appended_data in balance[addr_type][CAT]['address_info']:
                         tabular_data.append([appended_data['wallet_addr'],
                                              appended_data['coin_balance'],
                                              appended_data['coin_spent']])
 
-                    final_str += tabulate(tabular_data = tabular_data,
+                    final_str = f"$${addr_type}$$ CATs balance for {CAT} -> {self.config['CATs'][asset][CAT]['friendly_name']}\n" + \
+                                 tabulate(tabular_data = tabular_data,
                                           headers = [f"Wallet Addr",
                                                      'Available Balance',
                                                      'Spent Coins'],
                                           tablefmt="grid")
+
+                    tabular_data = []
+                    for appended_data in balance[addr_type][CAT]['transactions']:
+                        tabular_data.append([appended_data['timestamp'],
+                                             f"\x1b[31;1m- {appended_data['amount']}\x1b[0m" if appended_data['is_coin_spent'] else
+                                                f"\x1b[32;1m+ {appended_data['amount']}\x1b[0m",
+                                             bool(appended_data['is_coin_spent'])])
+
+                    final_str += f"\nTransactions for {CAT} -> {self.config['CATs'][asset][CAT]['friendly_name']}\n" + \
+                                 tabulate(tabular_data = tabular_data,
+                                          headers = [f"Timestamp",
+                                                     'Balance',
+                                                     'Spent'],
+                                          tablefmt="grid")
+
                     final_str += '\n' + f"TOTAL balance: {balance[addr_type][CAT]['total_coin_balance']}" \
                                         f"\nTOTAL spent: {balance[addr_type][CAT]['total_coin_spent']}"
 
