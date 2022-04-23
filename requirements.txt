@@ -22,3 +22,4 @@ keyrings.cryptfile
 watchdog
 websockets
 pillow
+clvm_rs
