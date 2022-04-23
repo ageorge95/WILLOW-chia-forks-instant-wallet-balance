@@ -39,7 +39,7 @@ NOTE#2: Long story short you have 3 ways to use willow in your scripts:
 
 GUI overview:
    
-![alt text](https://raw.githubusercontent.com/ageorge95/WILLOW-chia-forks-offline-wallet-balance/main/ReadMe_res/GUI_overview.jpg?raw=true)
+![alt text](ReadMe_res/GUI_overview.jpg?raw=true)
 
 OR
 
