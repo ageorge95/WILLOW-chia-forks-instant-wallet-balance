@@ -5,6 +5,7 @@
   - can check the CATs balance of a wallet, including ALL the addresses of that wallet, using a mnemonic
   - can check the CATs balance of single/multiple addresses, without the need of a mnemonic
   - works with both hardened & unhardened addresses, at the same time (meaning that for a given mnemonic it will check for funds the first x hardened and unhardened addresses)
+  - has a lite blockchain explorer which shows the last n transactions of a given mnemonic/ address/ set of addresses; works for both the normal and CATs wallets
 
 - The tool needs:
   - a full node database
@@ -49,6 +50,24 @@ OR
 2.2.1. Just launch the CLI in your favourite console with the -h switch to see the usage instructions; As of now those are:
 
 ![alt text](ReadMe_res/CLI_interface_ex.jpg?raw=true)
+
+# Usage example
+## View the "full" normal wallet balance via a mnemonic
+This requires a mnemonic as the input; full = Addresses_to_generate
+![alt text](ReadMe_res/normal wallet.jpg?raw=true)
+
+## View the "full" CATs wallets balance via a mnemonic
+This requires a mnemonic as the input; full = Addresses_to_generate
+![alt text](ReadMe_res/CATs wallet.jpg?raw=true)
+
+## View the normal wallet balance via a single address
+This requires onlky an address of the wallet as the input.
+![alt text](ReadMe_res/normal wallet single addr.jpg?raw=true)
+
+## View the CATs wallets balance via a single address
+This requires onlky an address of the wallet as the input.
+![alt text](ReadMe_res/CATs wallet single addr.jpg?raw=true)
+
 
 # Support
 Found this project useful? Send your ❤ in any form you can 🙂. Please contact me if you donated and want to be added to the contributors list !
