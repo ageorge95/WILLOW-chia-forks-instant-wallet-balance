@@ -1,10 +1,8 @@
 from argparse import ArgumentParser
 from _00_WILLOW_base import configure_logger_and_queue,\
     config_handler
-from _00_back_end import select_backend
-import os,\
-    sys
-from logging import getLogger
+from _00_back_end import WILLOW_back_end
+import os
 
 class WILLOWcli(configure_logger_and_queue,
                 config_handler):
@@ -32,14 +30,14 @@ parser.add_argument('-c',
 
 parser.add_argument('-m',
                     '--mnemonic',
-                    type=str,
-                    help='The mnemonic to be used to generate the addresses. Optional.',
+                    nargs='*',
+                    help='The mnemonic to be used to generate the addresses. (Optional)',
                     default = None)
 
 parser.add_argument('-a',
                     '--addresses',
                     nargs='*',
-                    help='The addresses to check. Optional.',
+                    help='The addresses to check. (Optional)',
                     default=None)
 
 parser.add_argument('-n',
@@ -48,65 +46,23 @@ parser.add_argument('-n',
                     help='How many addresses to create ? Default 500.',
                     default=500)
 
-parser.add_argument('--verbose', dest='verbose', action='store_true')
-parser.add_argument('--no-verbose', dest='verbose', action='store_false')
-parser.set_defaults(verbose=True)
-
 parser.add_argument('--cats', dest='cats_only', action='store_true')
 parser.add_argument('--no-cats', dest='cats_only', action='store_false')
 parser.set_defaults(cats_only=False)
-
-parser.add_argument('--just_addresses', dest='just_addresses', action='store_true')
-parser.set_defaults(just_addresses=False)
 
 if __name__ == '__main__':
 
     args = parser.parse_args()
 
     class mixer(WILLOWcli,
-                select_backend(coin=args.coin)):
+                WILLOW_back_end):
         def __init__(self):
             super(mixer, self).__init__()
 
     WILLOWobj = mixer()
-
-    call_params = {'asset': args.coin,
-                       'cats_only': args.cats_only}
-
-    if args.mnemonic:
-        call_params.update({'addresses': WILLOWobj.return_addresses(mnemonic=args.mnemonic,
-                                                                   prefix=args.coin.lower(),
-                                                                   nr_of_addresses=args.numberAddresses)})
-
-    if args.addresses:
-        call_params.update({'addresses': args.addresses})
-
-    if not args.just_addresses:
-
-        if not WILLOWobj.check_valid_coin(coin=args.coin):
-            sys.exit('Your coin is not in the config: {}'.format(args.coin))
-
-        if not args.mnemonic and not args.addresses:
-            sys.exit('At least a mnemonic or some addresses must be provided !')
-
-        if args.mnemonic and args.addresses:
-            sys.exit('No mnemonic and no addresses were provided !')
-
-        message_payload = WILLOWobj.return_total_balance(**call_params)
-
-        if not args.verbose:
-            print('$${}$$'.format(str(message_payload)))
-        else:
-            log = getLogger()
-            for message in message_payload['message_payload']:
-                # getattr seems to fail here ...
-                if message[0] == 'info':
-                    log.info(message[1])
-                elif message[0] == 'error':
-                    log.error(message[1])
-                else:
-                    log.info(message[1])
-
-    else:
-        print(f"$${ call_params['addresses'] }$$")
-
+    WILLOWobj.exec_full_cycle(mnemonic=' '.join(args.mnemonic),
+                              prefix=args.coin.lower(),
+                              asset=args.coin,
+                              cats_only=args.cats_only,
+                              nr_of_addresses=args.numberAddresses,
+                              custom_addresses=args.addresses)
