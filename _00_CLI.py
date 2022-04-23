@@ -71,7 +71,7 @@ if __name__ == '__main__':
                                   nr_of_addresses=args.numberAddresses,
                                   custom_addresses=args.addresses)
     else:
-        print(str(WILLOWobj.return_addresses(mnemonic=' '.join(args.mnemonic),
-                                             prefix=args.coin.lower(),
-                                             asset=args.coin,
-                                             nr_of_addresses=args.numberAddresses)))
+        print('$$$' + str(WILLOWobj.return_addresses(mnemonic=' '.join(args.mnemonic),
+                                                     prefix=args.coin.lower(),
+                                                     asset=args.coin,
+                                                     nr_of_addresses=args.numberAddresses)))
