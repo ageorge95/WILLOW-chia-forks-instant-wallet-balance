@@ -164,7 +164,7 @@ initial_config = {'assets': {'XPT': {'db_filepath': '{userdir}\\.petroleum\\main
                                     'denominator': 100000000,
                                     'friendly_name': 'chives',
                                     'wallet_sk_derivation_port': 9699},
-                            'XCD': {'db_filepath': '{userdir}\\.cryptodoge\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                            'XCD': {'db_filepath': '{userdir}\\.cryptodoge\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                     'denominator': 1000000,
                                     'friendly_name': 'cryptodoge',
                                     'wallet_sk_derivation_port': 8444},
