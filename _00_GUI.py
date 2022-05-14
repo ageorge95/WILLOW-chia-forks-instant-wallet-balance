@@ -10,11 +10,12 @@ from signal import signal,\
 from threading import Thread
 from logging import getLogger
 from ttkwidgets.frames import Tooltip
-from tkinter.scrolledtext import Text, Scrollbar, ScrolledText
+from tkinter.scrolledtext import ScrolledText
 from tkinter import Tk, ttk,\
     N, S, E, W,\
     END, NONE,\
-    Label, Entry
+    Label, Entry,\
+    Text, Scrollbar
 from _00_WILLOW_base import configure_logger_and_queue,\
     config_handler
 from _00_back_end import WILLOW_back_end
