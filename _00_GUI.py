@@ -9,13 +9,12 @@ from signal import signal,\
     SIGINT
 from threading import Thread
 from logging import getLogger
-from subprocess import check_output,\
-    PIPE,\
-    CREATE_NO_WINDOW
 from ttkwidgets.frames import Tooltip
 from tkinter.scrolledtext import Text, Scrollbar, ScrolledText
-from tkinter import tix, simpledialog, Entry
-from tkinter import ttk, N, S, E, W, END, Label, NONE
+from tkinter import Tk, ttk,\
+    N, S, E, W,\
+    END, NONE,\
+    Label, Entry
 from _00_WILLOW_base import configure_logger_and_queue,\
     config_handler
 from _00_back_end import WILLOW_back_end
@@ -358,7 +357,7 @@ class App():
         sys.exit()
 
 def main():
-    root = tix.Tk()
+    root = Tk()
     root.resizable(False, False)
     app = App(root)
     app.root.mainloop()
