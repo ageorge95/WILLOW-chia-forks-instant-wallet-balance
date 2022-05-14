@@ -12,6 +12,7 @@ from logging import getLogger
 from subprocess import check_output,\
     PIPE,\
     CREATE_NO_WINDOW
+from ttkwidgets.frames import Tooltip
 from tkinter.scrolledtext import Text, Scrollbar, ScrolledText
 from tkinter import tix, simpledialog, Entry
 from tkinter import ttk, N, S, E, W, END, Label, NONE
@@ -105,8 +106,8 @@ class ConsoleUi(configure_logger_and_queue):
         # add a button to clear the text
         self.button_clear_console = ttk.Button(self.frame, text='CLEAR CONSOLE', command=self.clear_console)
         self.button_clear_console.grid(column=0, row=0, sticky=W)
-        self.tip_clear_console = tix.Balloon(self.frame)
-        self.tip_clear_console.bind_widget(self.button_clear_console,balloonmsg="Will clear the text from the console frame.")
+        self.tip_clear_console = Tooltip(self.frame,
+                                         text="Will clear the text from the console frame.")
 
         # Create a ScrolledText wdiget
         self.h_scroll = Scrollbar(self.frame, orient='horizontal')
@@ -200,8 +201,8 @@ class FormInput():
         self.scrolled_text_input = ScrolledText(self.frame, width=58, height=28)
         self.scrolled_text_input.grid(row=0, column=0, sticky=(N, S, W, E))
         self.scrolled_text_input.configure(font='TkFixedFont')
-        self.tip_text_input = tix.Balloon(self.frame)
-        self.tip_text_input.bind_widget(self.scrolled_text_input, balloonmsg="Insert here the mnemonic (1 mnemonic 1 line) or the wallet addresses (x addresses 1 line).")
+        self.tip_text_input = Tooltip(self.frame,
+                                      text="Insert here the mnemonic (1 mnemonic 1 line) or the wallet addresses (x addresses 1 line).")
 
     def return_input(self):
         return self.scrolled_text_input.get("1.0", END).split('\n')
@@ -275,13 +276,13 @@ class FormControls(buttons_label_state_change,
 
         self.button_show_balance = ttk.Button(self.frame, text='Show balance', command=(lambda :self.master_show_balance(False)))
         self.button_show_balance.grid(column=0, row=8, sticky=W)
-        self.tip_show_balance = tix.Balloon(self.frame)
-        self.tip_show_balance.bind_widget(self.button_show_balance,balloonmsg="Will display the balance of all the provided addresses OR the first 500 addresses of a provided mnemonic.")
+        self.tip_show_balance = Tooltip(self.frame,
+                                        text="Will display the balance of all the provided addresses OR the first 500 addresses of a provided mnemonic.")
 
         self.button_show_CATs = ttk.Button(self.frame, text='Show CATs', command=(lambda :self.master_show_balance(True)))
         self.button_show_CATs.grid(column=1, row=8, sticky=W)
-        self.tip_show_balance = tix.Balloon(self.frame)
-        self.tip_show_balance.bind_widget(self.button_show_CATs,balloonmsg="Will display the CATs in all the provided addresses OR the first 500 addresses of a provided mnemonic.")
+        self.tip_show_balance = Tooltip(self.frame,
+                                        text="Will display the CATs in all the provided addresses OR the first x addresses of a provided mnemonic.")
 
     def check_coin_selection(self):
         if self.coin_to_use.get() == 'SELECT A COIN':
