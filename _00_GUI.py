@@ -106,7 +106,7 @@ class ConsoleUi(configure_logger_and_queue):
         # add a button to clear the text
         self.button_clear_console = ttk.Button(self.frame, text='CLEAR CONSOLE', command=self.clear_console)
         self.button_clear_console.grid(column=0, row=0, sticky=W)
-        self.tip_clear_console = Tooltip(self.frame,
+        self.tip_clear_console = Tooltip(self.button_clear_console,
                                          text="Will clear the text from the console frame.")
 
         # Create a ScrolledText wdiget
@@ -201,7 +201,7 @@ class FormInput():
         self.scrolled_text_input = ScrolledText(self.frame, width=58, height=28)
         self.scrolled_text_input.grid(row=0, column=0, sticky=(N, S, W, E))
         self.scrolled_text_input.configure(font='TkFixedFont')
-        self.tip_text_input = Tooltip(self.frame,
+        self.tip_text_input = Tooltip(self.scrolled_text_input,
                                       text="Insert here the mnemonic (1 mnemonic 1 line) or the wallet addresses (x addresses 1 line).")
 
     def return_input(self):
@@ -276,12 +276,12 @@ class FormControls(buttons_label_state_change,
 
         self.button_show_balance = ttk.Button(self.frame, text='Show balance', command=(lambda :self.master_show_balance(False)))
         self.button_show_balance.grid(column=0, row=8, sticky=W)
-        self.tip_show_balance = Tooltip(self.frame,
-                                        text="Will display the balance of all the provided addresses OR the first 500 addresses of a provided mnemonic.")
+        self.tip_show_balance = Tooltip(self.button_show_balance,
+                                        text="Will display the balance of all the provided addresses OR the first x addresses of a provided mnemonic.")
 
         self.button_show_CATs = ttk.Button(self.frame, text='Show CATs', command=(lambda :self.master_show_balance(True)))
         self.button_show_CATs.grid(column=1, row=8, sticky=W)
-        self.tip_show_balance = Tooltip(self.frame,
+        self.tip_show_balance = Tooltip(self.button_show_CATs,
                                         text="Will display the CATs in all the provided addresses OR the first x addresses of a provided mnemonic.")
 
     def check_coin_selection(self):
