@@ -114,7 +114,7 @@ class ConsoleUi(configure_logger_and_queue):
         self.v_scroll = Scrollbar(self.frame, orient='vertical')
         self.v_scroll.grid(row=1, column=1, sticky=(N, S))
 
-        self.scrolled_text = Text(frame, state='disabled', width=110, height=46, wrap=NONE, xscrollcommand=self.h_scroll.set, yscrollcommand=self.v_scroll.set)
+        self.scrolled_text = Text(frame, state='disabled', width=110, height=49, wrap=NONE, xscrollcommand=self.h_scroll.set, yscrollcommand=self.v_scroll.set)
         self.scrolled_text.grid(row=1, column=0, sticky=(N, S, W, E))
         self.scrolled_text.configure(font=('Consolas', 10))
         self.scrolled_text.tag_config('INFO', foreground='black')
