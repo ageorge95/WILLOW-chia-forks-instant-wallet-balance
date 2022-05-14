@@ -66,14 +66,14 @@ def configure_logger():
             return formatter.format(record)
 
     ch = StreamHandler(stream=stdout)
-    ch.setLevel(DEBUG)
+    ch.setLevel(INFO)
     ch.setFormatter(CustomFormatter())
     fh = FileHandler("runtime_log.log")
-    fh.setLevel(DEBUG)
+    fh.setLevel(INFO)
     fh.setFormatter(Formatter('%(asctime)s,%(msecs)d %(levelname)-4s [%(filename)s:%(lineno)d -> %(name)s - %(funcName)s] ___ %(message)s'))
 
     basicConfig(datefmt='%Y-%m-%d:%H:%M:%S',
-                level=DEBUG,
+                level=INFO,
                 handlers=[
                     fh,
                     ch
