@@ -1,6 +1,10 @@
 from os import path
 
-initial_config = {'assets': {'XPT': {'db_filepath': '{userdir}\\.petroleum\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+initial_config = {'assets': {'XSE': {'db_filepath': '{userdir}\\.seno2\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                                     'denominator': 1000000000000,
+                                     'friendly_name': 'seno',
+                                     'wallet_sk_derivation_port': 8444},
+                             'XPT': {'db_filepath': '{userdir}\\.petroleum\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                      'denominator': 1000000000000,
                                      'friendly_name': 'petroleum',
                                      'wallet_sk_derivation_port': 8444},
