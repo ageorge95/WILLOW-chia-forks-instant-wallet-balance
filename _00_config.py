@@ -116,7 +116,7 @@ initial_config = {'assets': {'XSE': {'db_filepath': '{userdir}\\.seno2\\mainnet\
                                     'denominator': 1000000000000,
                                     'friendly_name': 'silicoin',
                                     'wallet_sk_derivation_port': 8444},
-                            'SIX': {'db_filepath': '{userdir}\\.lucky\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                            'SIX': {'db_filepath': '{userdir}\\.lucky\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                     'denominator': 1000000000000,
                                     'friendly_name': 'lucky',
                                     'wallet_sk_derivation_port': 8444},
