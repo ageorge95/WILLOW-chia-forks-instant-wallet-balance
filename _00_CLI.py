@@ -10,7 +10,6 @@ class WILLOWcli(configure_logger_and_queue,
     def __init__(self):
         super(WILLOWcli, self).__init__()
 
-
     def return_configured_coins(self):
         return [entry[0] for entry in self.config['assets'].items()]
 
@@ -53,6 +52,9 @@ parser.set_defaults(cats_only=False)
 parser.add_argument('--just_addresses', dest='just_addresses', action='store_true')
 parser.set_defaults(just_addresses=False)
 
+parser.add_argument('--last_win_time', dest='last_win_time', action='store_true')
+parser.set_defaults(last_win_time=False)
+
 if __name__ == '__main__':
 
     args = parser.parse_args()
@@ -63,15 +65,22 @@ if __name__ == '__main__':
             super(mixer, self).__init__()
 
     WILLOWobj = mixer()
-    if not args.just_addresses:
+    if args.just_addresses:
+        print('$$$' + str(WILLOWobj.return_addresses(mnemonic=' '.join(args.mnemonic),
+                                                     prefix=args.coin.lower(),
+                                                     asset=args.coin,
+                                                     nr_of_addresses=args.numberAddresses)))
+    elif args.last_win_time:
+        WILLOWobj.return_last_block_win_ts(asset=args.coin,
+                                           addresses=args.addresses,
+                                           mnemonic=' '.join(args.mnemonic) if args.mnemonic else None,
+                                           prefix=args.coin.lower(),
+                                           nr_of_addresses=args.numberAddresses)
+
+    else:
         WILLOWobj.exec_full_cycle(mnemonic=' '.join(args.mnemonic),
                                   prefix=args.coin.lower(),
                                   asset=args.coin,
                                   cats_only=args.cats_only,
                                   nr_of_addresses=args.numberAddresses,
                                   custom_addresses=args.addresses)
-    else:
-        print('$$$' + str(WILLOWobj.return_addresses(mnemonic=' '.join(args.mnemonic),
-                                                     prefix=args.coin.lower(),
-                                                     asset=args.coin,
-                                                     nr_of_addresses=args.numberAddresses)))

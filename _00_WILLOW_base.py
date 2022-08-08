@@ -24,6 +24,11 @@ class db_wrapper_v1():
         self._dbcursor.execute("SELECT timestamp, amount, spent_index FROM coin_record WHERE puzzle_hash=? ORDER BY timestamp DESC", (puzzlehash,))
         return self._dbcursor.fetchall()
 
+    def get_last_win_time(self,
+                          puzzlehash):
+        self._dbcursor.execute("SELECT timestamp FROM coin_record WHERE puzzle_hash=? AND coinbase = 1 ORDER BY timestamp DESC LIMIT 1", (puzzlehash,))
+        return self._dbcursor.fetchall()
+
 class db_wrapper_v2():
     def connect_to_db(self,
                       db_filepath):
@@ -33,6 +38,11 @@ class db_wrapper_v2():
     def get_coins_by_puzzlehash(self,
                                 puzzlehash):
         self._dbcursor.execute("SELECT timestamp, amount, spent_index FROM coin_record WHERE puzzle_hash=? ORDER BY timestamp DESC", (bytes.fromhex(puzzlehash),))
+        return self._dbcursor.fetchall()
+
+    def get_last_win_time(self,
+                          puzzlehash):
+        self._dbcursor.execute("SELECT timestamp FROM coin_record WHERE puzzle_hash=? AND coinbase = 1 ORDER BY timestamp DESC LIMIT 1", (bytes.fromhex(puzzlehash),))
         return self._dbcursor.fetchall()
 
 def db_wrapper_selector(version: int):

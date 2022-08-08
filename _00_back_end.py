@@ -268,6 +268,53 @@ class WILLOW_back_end():
 
         return to_return
 
+    def return_last_block_win_ts(self,
+                                 asset: str,
+                                 addresses: list = None,
+                                 mnemonic: str = None,
+                                 prefix: str = None,
+                                 nr_of_addresses: int = 500) -> None:
+
+        if mnemonic:
+
+            addresses = self.return_addresses(mnemonic=mnemonic,
+                                              prefix=prefix,
+                                              asset=asset,
+                                              nr_of_addresses=nr_of_addresses)
+            addresses = addresses['hardened'] + addresses['unhardened']
+
+        try:
+            db_filepath = self.config['assets'][asset]['db_filepath']
+            db_ver = 0
+            if 'v1' in path.basename(db_filepath).lower():
+                db_ver = 1
+            if 'v2' in path.basename(db_filepath).lower():
+                db_ver = 2
+            db_wrapper = db_wrapper_selector(db_ver)()
+            if not db_wrapper:
+                self._log.error(f"INCOMPATIBLE DB: {db_filepath}")
+                raise Exception(f"INCOMPATIBLE DB: {db_filepath}")
+
+            db_wrapper.connect_to_db(db_filepath=db_filepath)
+
+            last_win_ts = 0
+            for wallet_addr in addresses:
+
+                puzzle_hash_bytes = decode_puzzle_hash(wallet_addr)
+                puzzle_hash = puzzle_hash_bytes.hex()
+
+                rows = db_wrapper.get_last_win_time(puzzlehash=puzzle_hash)
+                if rows:
+                    if rows[0][0] > last_win_ts:
+                        last_win_ts = rows[0][0]
+
+            self._log.info(f'Last win timestamp is ${last_win_ts}${datetime.utcfromtimestamp(last_win_ts)}')
+
+        except:
+            self._log.error(f"Failed to execute return_last_block_win_ts. Reason:\n{format_exc(chain=False)}")
+
+
+
     def return_total_balance(self,
                              addresses: list,
                              asset,
