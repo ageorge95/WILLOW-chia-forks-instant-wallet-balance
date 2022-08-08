@@ -273,13 +273,9 @@ class WILLOW_back_end():
                                  addresses: list = None,
                                  mnemonic: str = None,
                                  prefix: str = None,
-                                 nr_of_addresses: int = 10) -> None:
+                                 nr_of_addresses: int = 500) -> None:
 
         if mnemonic:
-
-            if not prefix:
-                self._log.error('A mnemonic was provided but no prefix !')
-                raise Exception('A mnemonic was provided but no prefix !')
 
             addresses = self.return_addresses(mnemonic=mnemonic,
                                               prefix=prefix,
@@ -301,15 +297,16 @@ class WILLOW_back_end():
 
             db_wrapper.connect_to_db(db_filepath=db_filepath)
 
-            last_win_ts = -1
+            last_win_ts = 0
             for wallet_addr in addresses:
 
                 puzzle_hash_bytes = decode_puzzle_hash(wallet_addr)
                 puzzle_hash = puzzle_hash_bytes.hex()
 
                 rows = db_wrapper.get_last_win_time(puzzlehash=puzzle_hash)
-                if rows[0][0] > last_win_ts:
-                    last_win_ts = rows[0][0]
+                if rows:
+                    if rows[0][0] > last_win_ts:
+                        last_win_ts = rows[0][0]
 
             self._log.info(f'Last win timestamp is ${last_win_ts}${datetime.utcfromtimestamp(last_win_ts)}')
 
