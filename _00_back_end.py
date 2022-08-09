@@ -308,7 +308,7 @@ class WILLOW_back_end():
                     if rows[0][0] > last_win_ts:
                         last_win_ts = rows[0][0]
 
-            self._log.info(f'Last win timestamp is ${last_win_ts}${datetime.utcfromtimestamp(last_win_ts)}')
+            self._log.info(f'Last win timestamp is ${last_win_ts}${datetime.utcfromtimestamp(last_win_ts)}$')
 
         except:
             self._log.error(f"Failed to execute return_last_block_win_ts. Reason:\n{format_exc(chain=False)}")
