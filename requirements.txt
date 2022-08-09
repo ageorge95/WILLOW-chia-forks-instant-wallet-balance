@@ -24,3 +24,4 @@ websockets
 pillow
 clvm_rs
 chia_rs
+ttkwidgets
