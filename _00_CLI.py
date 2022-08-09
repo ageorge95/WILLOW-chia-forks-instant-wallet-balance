@@ -55,6 +55,9 @@ parser.set_defaults(just_addresses=False)
 parser.add_argument('--last_win_time', dest='last_win_time', action='store_true')
 parser.set_defaults(last_win_time=False)
 
+parser.add_argument('--balance_statistics', dest='balance_statistics', action='store_true')
+parser.set_defaults(last_win_time=False)
+
 if __name__ == '__main__':
 
     args = parser.parse_args()
@@ -76,7 +79,12 @@ if __name__ == '__main__':
                                            mnemonic=' '.join(args.mnemonic) if args.mnemonic else None,
                                            prefix=args.coin.lower(),
                                            nr_of_addresses=args.numberAddresses)
-
+    elif args.balance_statistics:
+        WILLOWobj.return_balance_statistics(asset=args.coin,
+                                           addresses=args.addresses,
+                                           mnemonic=' '.join(args.mnemonic) if args.mnemonic else None,
+                                           prefix=args.coin.lower(),
+                                           nr_of_addresses=args.numberAddresses)
     else:
         WILLOWobj.exec_full_cycle(mnemonic=' '.join(args.mnemonic),
                                   prefix=args.coin.lower(),
