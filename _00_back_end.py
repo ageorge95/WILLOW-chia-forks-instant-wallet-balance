@@ -21,7 +21,7 @@ from io import StringIO
 from clvm_tools.cmds import brun
 from chia_blockchain.chia.wallet.puzzles.p2_delegated_puzzle_or_hidden_puzzle import puzzle_for_pk
 from tabulate import tabulate
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class Capturing(list):
     def __enter__(self):
@@ -313,7 +313,66 @@ class WILLOW_back_end():
         except:
             self._log.error(f"Failed to execute return_last_block_win_ts. Reason:\n{format_exc(chain=False)}")
 
+    def return_balance_statistics(self,
+                                 asset: str,
+                                 addresses: list = None,
+                                 mnemonic: str = None,
+                                 prefix: str = None,
+                                 nr_of_addresses: int = 500) -> None:
+        if mnemonic:
 
+            addresses = self.return_addresses(mnemonic=mnemonic,
+                                              prefix=prefix,
+                                              asset=asset,
+                                              nr_of_addresses=nr_of_addresses)
+            addresses = addresses['hardened'] + addresses['unhardened']
+        try:
+            db_filepath = self.config['assets'][asset]['db_filepath']
+            db_ver = 0
+            if 'v1' in path.basename(db_filepath).lower():
+                db_ver = 1
+            if 'v2' in path.basename(db_filepath).lower():
+                db_ver = 2
+            db_wrapper = db_wrapper_selector(db_ver)()
+            if not db_wrapper:
+                self._log.error(f"INCOMPATIBLE DB: {db_filepath}")
+                raise Exception(f"INCOMPATIBLE DB: {db_filepath}")
+
+            db_wrapper.connect_to_db(db_filepath=db_filepath)
+
+            all_coins = []
+            for wallet_addr in addresses:
+                puzzle_hash_bytes = decode_puzzle_hash(wallet_addr)
+                puzzle_hash = puzzle_hash_bytes.hex()
+
+                all_coins += db_wrapper.get_coins_by_puzzlehash(puzzle_hash)
+
+            final_data_store = {}
+            for task in {'INCOME_ALL_TIME': 0,
+                         'INCOME_30_DAY': (datetime.now() - timedelta(days=30)).timestamp(),
+                         'INCOME_7_DAY': (datetime.now() - timedelta(days=7)).timestamp(),
+                         'INCOME_3_DAY': (datetime.now() - timedelta(days=3)).timestamp(),
+                         'INCOME_1_DAY': (datetime.now() - timedelta(days=1)).timestamp()}.items():
+                final_data_store[task[0]] = sum([int.from_bytes(_[1], 'big')
+                                                 for _ in list(filter(lambda _:
+                                                                      _[0] > task[1] and not _[2],
+                                                                      all_coins))])\
+                                            /self.config['assets'][asset]['denominator']
+            for task in {'SPENT_ALL_TIME': 0,
+                         'SPENT_30_DAY': (datetime.now() - timedelta(days=30)).timestamp(),
+                         'SPENT_7_DAY': (datetime.now() - timedelta(days=7)).timestamp(),
+                         'SPENT_3_DAY': (datetime.now() - timedelta(days=3)).timestamp(),
+                         'SPENT_1_DAY': (datetime.now() - timedelta(days=1)).timestamp()}.items():
+                final_data_store[task[0]] = sum([int.from_bytes(_[1], 'big')
+                                                 for _ in list(filter(lambda _:
+                                                                      _[0] > task[1] and _[2],
+                                                                      all_coins))])\
+                                            /self.config['assets'][asset]['denominator']
+
+            self._log.info(f'Balance statistics result:${str(final_data_store)}$')
+
+        except:
+            self._log.error(f"Failed to execute return_balance_statistics. Reason:\n{format_exc(chain=False)}")
 
     def return_total_balance(self,
                              addresses: list,
