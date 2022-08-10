@@ -348,6 +348,16 @@ class WILLOW_back_end():
                 all_coins += db_wrapper.get_coins_by_puzzlehash(puzzle_hash)
 
             final_data_store = {}
+            for task in {'AVAILABLE_ALL_TIME': 0,
+                         'AVAILABLE_30_DAY': (datetime.now() - timedelta(days=30)).timestamp(),
+                         'AVAILABLE_7_DAY': (datetime.now() - timedelta(days=7)).timestamp(),
+                         'AVAILABLE_3_DAY': (datetime.now() - timedelta(days=3)).timestamp(),
+                         'AVAILABLE_1_DAY': (datetime.now() - timedelta(days=1)).timestamp()}.items():
+                final_data_store[task[0]] = sum([int.from_bytes(_[1], 'big')
+                                                 for _ in list(filter(lambda _:
+                                                                      _[0] > task[1] and not _[2],
+                                                                      all_coins))])\
+                                            /self.config['assets'][asset]['denominator']
             for task in {'INCOME_ALL_TIME': 0,
                          'INCOME_30_DAY': (datetime.now() - timedelta(days=30)).timestamp(),
                          'INCOME_7_DAY': (datetime.now() - timedelta(days=7)).timestamp(),
@@ -355,7 +365,7 @@ class WILLOW_back_end():
                          'INCOME_1_DAY': (datetime.now() - timedelta(days=1)).timestamp()}.items():
                 final_data_store[task[0]] = sum([int.from_bytes(_[1], 'big')
                                                  for _ in list(filter(lambda _:
-                                                                      _[0] > task[1] and not _[2],
+                                                                      _[0] > task[1],
                                                                       all_coins))])\
                                             /self.config['assets'][asset]['denominator']
             for task in {'SPENT_ALL_TIME': 0,
