@@ -136,7 +136,7 @@ initial_config = {'assets': {'XSE': {'db_filepath': '{userdir}\\.seno2\\mainnet\
                                      'denominator': 1000000000000,
                                      'friendly_name': 'stor',
                                      'wallet_sk_derivation_port': 8444},
-                            'TAD': {'db_filepath': '{userdir}\\.tad\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                            'TAD': {'db_filepath': '{userdir}\\.tad\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                     'denominator': 1000000000000,
                                     'friendly_name': 'tad',
                                     'wallet_sk_derivation_port': 8444},
