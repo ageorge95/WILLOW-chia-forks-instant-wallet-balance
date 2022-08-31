@@ -23,7 +23,7 @@ initial_config = {'assets': {'XSE': {'db_filepath': '{userdir}\\.seno2\\mainnet\
                              'XJK': {'db_filepath': '{userdir}\\.joker\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                      'denominator': 100000000,
                                      'friendly_name': 'joker',
-                                     'wallet_sk_derivation_port': 18444},
+                                     'wallet_sk_derivation_port': 9699},
                              'GL': {'db_filepath': '{userdir}\\.gold\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                     'denominator': 1000000000000,
                                     'friendly_name': 'gold',
