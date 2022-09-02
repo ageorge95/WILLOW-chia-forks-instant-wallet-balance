@@ -220,7 +220,7 @@ initial_config = {'assets': {'XSE': {'db_filepath': '{userdir}\\.seno2\\mainnet\
                                     'denominator': 1000000000000,
                                     'friendly_name': 'melati',
                                     'wallet_sk_derivation_port': 8444},
-                            'XMZ': {'db_filepath': '{userdir}\\.maize\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                            'XMZ': {'db_filepath': '{userdir}\\.maize\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                     'denominator': 1000000000000,
                                     'friendly_name': 'maize',
                                     'wallet_sk_derivation_port': 8444},
