@@ -25,3 +25,4 @@ pillow
 clvm_rs
 chia_rs
 ttkwidgets
+filelock

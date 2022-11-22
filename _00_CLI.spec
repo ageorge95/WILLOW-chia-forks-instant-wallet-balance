@@ -41,7 +41,8 @@ a = Analysis(['_00_CLI.py'],
 							'clvm_tools.curry',
 							'clvm_tools.clvmc',
 							'clvm_rs',
-							'chia_rs'
+							'chia_rs',
+							'filelock'
 			 ],
              hookspath=[],
              hooksconfig={},
