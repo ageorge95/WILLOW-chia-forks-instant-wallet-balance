@@ -20,6 +20,7 @@ from _00_WILLOW_base import configure_logger_and_queue,\
     config_handler
 from _00_back_end import WILLOW_back_end
 from traceback import format_exc
+import asyncio
 
 class buttons_label_state_change():
     combobox_coin_to_use: ttk.Combobox
@@ -307,7 +308,7 @@ class FormControls(buttons_label_state_change,
     def master_show_balance(self,
                             cats_only: bool):
         if self.check_coin_selection() and self.check_method_selection() and self.check_addresses_to_use_input():
-            def action():
+            async def action():
                 self.disable_all_buttons()
                 self.backend_label_busy(text='Busy with computing the balance !')
 
@@ -323,7 +324,11 @@ class FormControls(buttons_label_state_change,
 
                 self.enable_all_buttons()
                 self.backend_label_free()
-            Thread(target=action).start()
+                
+            loop = asyncio.get_event_loop()
+            loop.run_until_complete(action())
+            # using threading would cause clvm to "panick"
+            # Thread(target=action).start()
 
 class App():
 

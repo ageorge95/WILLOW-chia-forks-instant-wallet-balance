@@ -80,7 +80,7 @@ class WILLOW_back_end():
 
         if self.check_mnemonic_integrity(mnemonic):
 
-            seed: bytes = mnemonic_to_seed(mnemonic, passphrase="")
+            seed: bytes = mnemonic_to_seed(mnemonic)
             master_sk: PrivateKey = AugSchemeMPL.key_gen(seed)
 
             # generate hardened addresses
