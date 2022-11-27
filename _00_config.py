@@ -1,6 +1,10 @@
 from os import path
 
-initial_config = {'assets': {'XCF': {'db_filepath': '{userdir}\\.coffee\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+initial_config = {'assets': {'GBTC': {'db_filepath': '{userdir}\\.greenbtc\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                                      'denominator': 1000000000000,
+                                      'friendly_name': 'greenbtc',
+                                      'wallet_sk_derivation_port': 8444},
+                             'XCF': {'db_filepath': '{userdir}\\.coffee\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                      'denominator': 1000000000000,
                                      'friendly_name': 'coffee',
                                      'wallet_sk_derivation_port': 8444},
