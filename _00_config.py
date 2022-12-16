@@ -200,7 +200,7 @@ initial_config = {'assets': {'KIK': {'db_filepath': '{userdir}\\.kiwi\\mainnet\\
                                     'denominator': 1000000000000,
                                     'friendly_name': 'dogechia',
                                     'wallet_sk_derivation_port': 8444},
-                            'XETH': {'db_filepath': '{userdir}\\.ethgreen\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                            'XETH': {'db_filepath': '{userdir}\\.ethgreen\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                      'denominator': 1000000000,
                                      'friendly_name': 'ethgreen',
                                      'wallet_sk_derivation_port': 8444},
