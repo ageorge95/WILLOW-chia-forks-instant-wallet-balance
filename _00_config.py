@@ -1,6 +1,10 @@
 from os import path
 
-initial_config = {'assets': {'KIK': {'db_filepath': '{userdir}\\.kiwi\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+initial_config = {'assets': {'XONE': {'db_filepath': '{userdir}\\.one\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                                      'denominator': 100000000,
+                                      'friendly_name': 'one',
+                                      'wallet_sk_derivation_port': 8444},
+                             'KIK': {'db_filepath': '{userdir}\\.kiwi\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                       'denominator': 1000000,
                                       'friendly_name': 'kiwi',
                                       'wallet_sk_derivation_port': 8444},
