@@ -280,10 +280,10 @@ class FormControls(buttons_label_state_change,
         self.tip_show_balance = Tooltip(self.button_show_balance,
                                         text="Will display the balance of all the provided addresses OR the first x addresses of a provided mnemonic.")
 
-        self.button_show_CATs = ttk.Button(self.frame, text='Show CATs', command=(lambda :self.master_show_balance(True)))
+        self.button_show_CATs = ttk.Button(self.frame, text='Show CATs (V1)', command=(lambda :self.master_show_balance(True)))
         self.button_show_CATs.grid(column=1, row=8, sticky=W)
         self.tip_show_balance = Tooltip(self.button_show_CATs,
-                                        text="Will display the CATs in all the provided addresses OR the first x addresses of a provided mnemonic.")
+                                        text="Will display the V1 CATs in all the provided addresses OR the first x addresses of a provided mnemonic.")
 
     def check_coin_selection(self):
         if self.coin_to_use.get() == 'SELECT A COIN':
