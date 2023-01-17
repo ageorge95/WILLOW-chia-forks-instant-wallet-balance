@@ -1,6 +1,10 @@
 from os import path
 
-initial_config = {'assets': {'XONE': {'db_filepath': '{userdir}\\.one\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+initial_config = {'assets': {'BALL': {'db_filepath': '{userdir}\\.ball\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                                      'denominator': 1000000000000,
+                                      'friendly_name': 'ballcoin',
+                                      'wallet_sk_derivation_port': 8444},
+                             'XONE': {'db_filepath': '{userdir}\\.one\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                       'denominator': 100000000,
                                       'friendly_name': 'one',
                                       'wallet_sk_derivation_port': 8444},
