@@ -338,10 +338,26 @@ class FormControls(buttons_label_state_change,
             # Thread(target=action).start()
 
     def mnemonic_info(self):
-        if self.check_coin_selection() and self.check_method_selection() and self.check_addresses_to_use_input():
+        if self.check_coin_selection() and self.check_addresses_to_use_input():
             self.disable_all_buttons()
             self.backend_label_busy(text='Computing mnemonic info')
-            # self.enable_all_buttons()
+
+            try:
+                data_to_display = WILLOW_back_end().return_addresses(mnemonic=' '.join(self.input_frame.return_input()[:-1]),
+                                                                     prefix=self.coin_to_use.get().split('__')[0].lower(),
+                                                                     asset=self.coin_to_use.get().split('__')[0],
+                                                                     nr_of_addresses=int(self.addresses_to_use_entry.get()))
+
+                hardened_str = '\n'.join(data_to_display['hardened'])
+                unhardened_str = '\n'.join(data_to_display['unhardened'])
+                self._log.info(f"Generated hardened addresses:\n{hardened_str}\n\n")
+                self._log.info(f"Generated unhardened addresses:\n{unhardened_str}\n\n")
+                self._log.info(f"Generated farmer address:\n{data_to_display['farmeraddr']}\n\n")
+
+            except:
+                self._log.error(f"Failed to create the info data !\n{format_exc(chain=False)}")
+
+            self.enable_all_buttons()
 
 class App():
 

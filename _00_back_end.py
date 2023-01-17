@@ -20,6 +20,7 @@ from _00_WILLOW_base import db_wrapper_selector
 from io import StringIO
 from clvm_tools.cmds import brun
 from chia_blockchain.chia.wallet.puzzles.p2_delegated_puzzle_or_hidden_puzzle import puzzle_for_pk
+from chia_blockchain.chia.wallet.derive_keys import master_sk_to_farmer_sk
 from tabulate import tabulate
 from datetime import datetime, timedelta
 
@@ -76,12 +77,27 @@ class WILLOW_back_end():
                          nr_of_addresses: int = 500) -> dict:
 
         all_addresses = {'hardened': [],
-                         'unhardened': []}
+                         'unhardened': [],
+                         'farmeraddr': ''}
 
         if self.check_mnemonic_integrity(mnemonic):
 
             seed: bytes = mnemonic_to_seed(mnemonic)
             master_sk: PrivateKey = AugSchemeMPL.key_gen(seed)
+            farmer_sk: PrivateKey = master_sk_to_farmer_sk(master_sk)
+            farmer_pk: G1Element = farmer_sk.get_g1()
+
+            # generate farmer address
+            self._log.info(f"Generating the farmer address based on the provided mnemonic. Please wait ...")
+            try:
+                puzzle = puzzle_for_pk(farmer_pk)
+                puzzle_hash = puzzle.get_tree_hash()
+                farmer_address = encode_puzzle_hash(puzzle_hash, prefix)
+                all_addresses['farmeraddr'] = farmer_address
+                self._log.info('Farmer address generated successfully !')
+
+            except:
+                self._log.error(f"Oh snap ! There was an error while generating the farmer address:\n{format_exc(chain=False)}")
 
             # generate hardened addresses
             self._log.info(f"Generating {nr_of_addresses} hardened addresses based on the provided mnemonic. Please wait ...")
