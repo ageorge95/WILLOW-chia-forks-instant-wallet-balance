@@ -26,3 +26,4 @@ clvm_rs
 chia_rs
 ttkwidgets
 filelock
+typing_extensions
