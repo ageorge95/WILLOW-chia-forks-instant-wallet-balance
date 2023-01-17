@@ -358,6 +358,7 @@ class FormControls(buttons_label_state_change,
                 self._log.error(f"Failed to create the info data !\n{format_exc(chain=False)}")
 
             self.enable_all_buttons()
+            self.backend_label_free()
 
 class App():
 
