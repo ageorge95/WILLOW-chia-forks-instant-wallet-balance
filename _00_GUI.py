@@ -352,7 +352,7 @@ class FormControls(buttons_label_state_change,
                 unhardened_str = '\n'.join(data_to_display['unhardened'])
                 self._log.info(f"Generated hardened addresses:\n{hardened_str}\n\n")
                 self._log.info(f"Generated unhardened addresses:\n{unhardened_str}\n\n")
-                self._log.info(f"Generated farmer address:\n{data_to_display['farmeraddr']}\n\n")
+                self._log.info(f"Generated farmer address (aka staking address):\n{data_to_display['farmeraddr']}\n\n")
 
             except:
                 self._log.error(f"Failed to create the info data !\n{format_exc(chain=False)}")
