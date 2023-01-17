@@ -27,6 +27,7 @@ class buttons_label_state_change():
     combobox_method_to_use: ttk.Combobox
     button_show_balance: ttk.Button
     button_show_CATs: ttk.Button
+    button_show_INFO: ttk.Button
     label_backend_status: Label
     _log: getLogger
 
@@ -39,7 +40,8 @@ class buttons_label_state_change():
         self.buttons = [self.combobox_coin_to_use,
                         self.combobox_method_to_use,
                         self.button_show_balance,
-                        self.button_show_CATs
+                        self.button_show_CATs,
+                        self.button_show_INFO
                         ]
     def disable_all_buttons(self):
         self.get_buttons_reference()
@@ -199,7 +201,7 @@ class FormInput():
     def __init__(self, frame):
         self.frame = frame
 
-        self.scrolled_text_input = ScrolledText(self.frame, width=58, height=28)
+        self.scrolled_text_input = ScrolledText(self.frame, width=60, height=28)
         self.scrolled_text_input.grid(row=0, column=0, sticky=(N, S, W, E))
         self.scrolled_text_input.configure(font='TkFixedFont')
         self.tip_text_input = Tooltip(self.scrolled_text_input,
@@ -262,15 +264,15 @@ class FormControls(buttons_label_state_change,
         self.combobox_method_to_use.grid(column=0, row=5, sticky=W)
 
         self.label_backend_status_notify = Label(self.frame, text='Back-end status:')
-        self.label_backend_status_notify.grid(column=3, row=1)
+        self.label_backend_status_notify.grid(column=4, row=1)
         self.label_backend_status = Label(self.frame, text="Doing nothing ...", fg='#33cc33')
-        self.label_backend_status.grid(column=3, row=2)
+        self.label_backend_status.grid(column=4, row=2)
 
         self.separator_filtering_v = ttk.Separator(self.frame, orient='vertical')
-        self.separator_filtering_v.grid(column=2, row=0, rowspan=10, sticky=(N, S))
+        self.separator_filtering_v.grid(column=3, row=0, rowspan=10, sticky=(N, S))
 
         self.separator_filtering_h = ttk.Separator(self.frame, orient='horizontal')
-        self.separator_filtering_h.grid(column=0, row=6, columnspan=3, sticky=(W, E))
+        self.separator_filtering_h.grid(column=0, row=6, columnspan=4, sticky=(W, E))
 
         self.label_hover_hints = Label(self.frame, text='NOTE: Hover on the buttons below for more info.')
         self.label_hover_hints.grid(column=0, row=7, columnspan=2)
@@ -284,6 +286,11 @@ class FormControls(buttons_label_state_change,
         self.button_show_CATs.grid(column=1, row=8, sticky=W)
         self.tip_show_balance = Tooltip(self.button_show_CATs,
                                         text="Will display the V1 CATs in all the provided addresses OR the first x addresses of a provided mnemonic.")
+
+        self.button_show_INFO = ttk.Button(self.frame, text='Show INFO', command=(lambda: self.mnemonic_info()))
+        self.button_show_INFO.grid(column=2, row=8, sticky=W)
+        self.tip_show_balance = Tooltip(self.button_show_INFO,
+                                        text="Will display various info for a given mnemonic.")
 
     def check_coin_selection(self):
         if self.coin_to_use.get() == 'SELECT A COIN':
@@ -310,7 +317,7 @@ class FormControls(buttons_label_state_change,
         if self.check_coin_selection() and self.check_method_selection() and self.check_addresses_to_use_input():
             async def action():
                 self.disable_all_buttons()
-                self.backend_label_busy(text='Busy with computing the balance !')
+                self.backend_label_busy(text='Computing the balance')
 
                 try:
                     WILLOW_back_end().exec_full_cycle(mnemonic=' '.join(self.input_frame.return_input()[:-1]) if self.method_to_use.get() == 'via_mnemonic' else '',
@@ -329,6 +336,28 @@ class FormControls(buttons_label_state_change,
             loop.run_until_complete(action())
             # using threading would cause clvm to "panick"
             # Thread(target=action).start()
+
+    def mnemonic_info(self):
+        if self.check_coin_selection() and self.check_addresses_to_use_input():
+            self.disable_all_buttons()
+            self.backend_label_busy(text='Computing mnemonic info')
+
+            try:
+                data_to_display = WILLOW_back_end().return_addresses(mnemonic=' '.join(self.input_frame.return_input()[:-1]),
+                                                                     prefix=self.coin_to_use.get().split('__')[0].lower(),
+                                                                     asset=self.coin_to_use.get().split('__')[0],
+                                                                     nr_of_addresses=int(self.addresses_to_use_entry.get()))
+
+                hardened_str = '\n'.join(data_to_display['hardened'])
+                unhardened_str = '\n'.join(data_to_display['unhardened'])
+                self._log.info(f"Generated hardened addresses:\n{hardened_str}\n\n")
+                self._log.info(f"Generated unhardened addresses:\n{unhardened_str}\n\n")
+                self._log.info(f"Generated farmer address:\n{data_to_display['farmeraddr']}\n\n")
+
+            except:
+                self._log.error(f"Failed to create the info data !\n{format_exc(chain=False)}")
+
+            self.enable_all_buttons()
 
 class App():
 
