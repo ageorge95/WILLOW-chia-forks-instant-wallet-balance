@@ -2,13 +2,14 @@
 - The tool:
   - can check the asset's wallet balance, for x addresses of that wallet, using a mnemonic
   - can check the asset's wallet balance of single/multiple addresses, without the need of a mnemonic
-  - can check the CATs balance of a wallet, including ALL the addresses of that wallet, using a mnemonic
-  - can check the CATs balance of single/multiple addresses, without the need of a mnemonic
-  - works with both hardened & unhardened addresses, at the same time (meaning that for a given mnemonic it will check for funds the first x hardened and unhardened addresses)
-  - has a lite blockchain explorer which shows the last n transactions of a given mnemonic/ address/ set of addresses; works for both the normal and CATs wallets
+  - can check the CATs (V1) balance of a wallet, including ALL the addresses of that wallet, using a mnemonic
+  - can check the CATs (V1) balance of single/multiple addresses, without the need of a mnemonic
+  - works with both hardened & unhardened addresses, at the same time (meaning that for a given mnemonic it will check for funds in the first x hardened and unhardened addresses)
+  - has a lite blockchain explorer which shows the last n transactions of a given mnemonic/ address/ set of addresses; works for both the normal and CATs (V1) wallets
+  - can quickly show various information of a given mnemonic (the first x number of hardened/ unhardened addresses, the farmer address (aka the staking address) ...)
 
 - The tool needs:
-  - a full node database
+  - a full node database (the full node service is not mandatory)
 
 ## Contributors
 
@@ -33,9 +34,9 @@ NOTE#2: Long story short you have 3 ways to use willow in your scripts:
 
 ## WINDOWS usage - instructions
 
-1.1. Have the full node db of the coin you are about to check. As mentioned before, the full node does not need to be running.
+1.1. Have the full node database of the coin you are about to check. As mentioned before, the full node service does not need to be running.
 
-1.2. Run the compiled exe for windows and follow the instructions on screen.
+1.2. Run the windows compiled GUI and follow the instructions on screen.
 
 GUI overview:
    
@@ -43,35 +44,54 @@ GUI overview:
 
 OR
 
-2.1. Have the full node db of the coin you are about to check. As mentioned before, the full node does not need to be running.
+2.1. Have the full node db of the coin you are about to check. As mentioned before, the full node service does not need to be running.
 
-2.2. Use the compiled CLI interface you are more of a console type of person
+2.2. Use the windows compiled CLI interface
 
 2.2.1. Just launch the CLI in your favourite console with the -h switch to see the usage instructions; As of now those are:
 
 ![alt text](ReadMe_res/CLI_interface_ex.jpg?raw=true)
 
 # Usage example
-## View the "full" normal wallet balance via a mnemonic
-This requires a mnemonic as the input; full = Addresses_to_generate
+## CLI: return the "full" list of wallet addresses from a given mnemonic
+This requires a mnemonic as the input; "full" is limited by the Addresses_to_generate parameter. The output can very easily be parsed by splitting based on the "$$$ " string
+
+![alt text](ReadMe_res/CLI_List_of_addresses.jpg?raw=true)
+
+## CLI: return the last_win_time of a given mnemonic
+This requires a mnemonic as the input. The output can very easily be parsed by splitting based on the "$ $ $" string
+
+![alt text](ReadMe_res/CLI_last_win_time.jpg?raw=true)
+
+## CLI: return balance statistics
+This requires a mnemonic as the input. The output can very easily be parsed by splitting based on the "$ $" string
+
+![alt text](ReadMe_res/CLI_balance_statistics.jpg?raw=true)
+
+## GUI: View the "full" normal wallet balance via a mnemonic
+This requires a mnemonic as the input; "full" is limited by the Addresses_to_generate parameter
 
 ![alt text](ReadMe_res/normal_wallet.jpg?raw=true)
 
-## View the "full" CATs wallets balance via a mnemonic
-This requires a mnemonic as the input; full = Addresses_to_generate
+## GUI: View the "full" CATs wallet balance via a mnemonic
+This requires a mnemonic as the input; "full" is limited by the Addresses_to_generate parameter
 
 ![alt text](ReadMe_res/CATs_wallet.jpg?raw=true)
 
-## View the normal wallet balance via a single address
-This requires onlky an address of the wallet as the input.
+## GUI: View the normal wallet balance via a single address
+This requires only an address of the wallet as the input.
 
 ![alt text](ReadMe_res/normal_wallet_single_addr.jpg?raw=true)
 
-## View the CATs wallets balance via a single address
-This requires onlky an address of the wallet as the input.
+## GUI: View the CATs wallet balance via a single address
+This requires only an address of the wallet as the input.
 
 ![alt text](ReadMe_res/CATs_wallet_single_addr.jpg?raw=true)
 
+## GUI: View various mnemonic related info
+This requires a mnemonic as the input.
+
+![alt text](ReadMe_res/various_mnemonic_INFO.jpg?raw=true)
 
 # Support
 Found this project useful? Send your ❤ in any form you can 🙂. Please contact me if you donated and want to be added to the contributors list !
