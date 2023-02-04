@@ -96,7 +96,7 @@ initial_config = {'assets': {'BALL': {'db_filepath': '{userdir}\\.ball\\mainnet\
                                      'denominator': 1000000000000,
                                      'friendly_name': 'greendoge',
                                      'wallet_sk_derivation_port': 8444},
-                            'HDD': {'db_filepath': '{userdir}\\.hddcoin\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                            'HDD': {'db_filepath': '{userdir}\\.hddcoin\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                     'denominator': 1000000000000,
                                     'friendly_name': 'hddcoin',
                                     'wallet_sk_derivation_port': 8444},
