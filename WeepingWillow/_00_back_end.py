@@ -7,7 +7,7 @@ from logging import getLogger,\
     WARNING
 getLogger("urllib3").setLevel(WARNING)
 sys.path.insert(0,path.join(path.dirname(__file__)))
-sys.path.insert(0,path.join(path.dirname(__file__), 'chia_blockchain'))
+sys.path.insert(0, path.join(path.dirname(__file__), '../chia_blockchain'))
 from chia_blockchain.chia.util.keychain import mnemonic_to_seed
 from chia_blockchain.chia.util.byte_types import hexstr_to_bytes
 from chia_blockchain.chia.util.bech32m import encode_puzzle_hash,\
@@ -56,7 +56,7 @@ class WILLOW_back_end():
         self._log = getLogger()
 
         config_path = 'config_willow.json' if '_MEIPASS' in sys.__dict__\
-                                           else path.join(path.dirname(__file__),'config_willow.json')
+                                           else path.join(path.dirname(__file__), '../config_willow.json')
         if path.isfile(config_path):
             try:
                 with open(config_path, 'r') as json_in_handle:

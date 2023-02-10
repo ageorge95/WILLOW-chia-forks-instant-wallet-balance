@@ -68,7 +68,8 @@ class sponsor_reminder():
 
         self.label_sponsor_logo = Label(self.frame, text='Sponsor')
         self.label_sponsor_logo.grid(column=0, row=0)
-        donation_img = 'donation.gif' if path.isfile('donation.gif') else path.join(sys._MEIPASS, 'donation.gif')
+        donation_img = 'donation.gif' if path.isfile('../media/donation.gif') else path.join(sys._MEIPASS,
+                                                                                             '../media/donation.gif')
         info = Image.open(donation_img)
         self.frameCnt = info.n_frames-3
         self.sleep_between_frames = 0.1
@@ -364,8 +365,9 @@ class App():
 
     def __init__(self, root):
         self.root = root
-        self.root.title('WILLOW-chia-forks-offline-wallet-balance | ' + open(path.join(path.dirname(__file__),'version.txt'), 'r').read())
-        self.root.iconbitmap(path.join(path.dirname(__file__),'icon.ico'))
+        self.root.title('WILLOW-chia-forks-offline-wallet-balance | ' + open(path.join(path.dirname(__file__),
+                                                                                       '../version.txt'), 'r').read())
+        self.root.iconbitmap(path.join(path.dirname(__file__), '../media/icon.ico'))
 
         sponsor_frame = ttk.Labelframe(text="Sponsor")
         sponsor_frame.grid(row=0, column=0, sticky="nsw")
