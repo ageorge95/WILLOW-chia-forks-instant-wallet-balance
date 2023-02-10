@@ -1,8 +1,8 @@
 from argparse import ArgumentParser
-from base import configure_logger_and_queue,\
-    config_handler
-from back_end import WILLOW_back_end
 import os
+from WeepingWillow.base import configure_logger_and_queue,\
+    config_handler
+from WeepingWillow.back_end import WILLOW_back_end
 
 class WILLOWcli(configure_logger_and_queue,
                 config_handler):

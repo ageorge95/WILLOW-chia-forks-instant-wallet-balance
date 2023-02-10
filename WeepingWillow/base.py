@@ -10,8 +10,8 @@ from os import path,\
 from json import load,\
     dump
 import sys
-from config import initial_config
 from sqlite3 import connect
+from WeepingWillow.config import initial_config
 
 class db_wrapper_v1():
     def connect_to_db(self,

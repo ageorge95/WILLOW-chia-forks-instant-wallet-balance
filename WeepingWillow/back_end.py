@@ -6,23 +6,21 @@ from traceback import format_exc
 from logging import getLogger,\
     WARNING
 getLogger("urllib3").setLevel(WARNING)
-sys.path.insert(0,path.join(path.dirname(__file__)))
-sys.path.insert(0, path.join(path.dirname(__file__), '../chia_blockchain'))
+from blspy import AugSchemeMPL,\
+    PrivateKey,\
+    G1Element
+from io import StringIO
+from tabulate import tabulate
+from datetime import datetime, timedelta
+from clvm_tools.cmds import brun
+from WeepingWillow.config import initial_config
+from WeepingWillow.base import db_wrapper_selector
+from chia_blockchain.chia.wallet.puzzles.p2_delegated_puzzle_or_hidden_puzzle import puzzle_for_pk
+from chia_blockchain.chia.wallet.derive_keys import master_sk_to_farmer_sk
 from chia_blockchain.chia.util.keychain import mnemonic_to_seed
 from chia_blockchain.chia.util.byte_types import hexstr_to_bytes
 from chia_blockchain.chia.util.bech32m import encode_puzzle_hash,\
     decode_puzzle_hash
-from blspy import AugSchemeMPL,\
-    PrivateKey,\
-    G1Element
-from config import initial_config
-from base import db_wrapper_selector
-from io import StringIO
-from clvm_tools.cmds import brun
-from chia_blockchain.chia.wallet.puzzles.p2_delegated_puzzle_or_hidden_puzzle import puzzle_for_pk
-from chia_blockchain.chia.wallet.derive_keys import master_sk_to_farmer_sk
-from tabulate import tabulate
-from datetime import datetime, timedelta
 
 class Capturing(list):
     def __enter__(self):
