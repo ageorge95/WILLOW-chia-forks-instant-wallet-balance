@@ -366,7 +366,7 @@ class App():
     def __init__(self, root):
         self.root = root
         self.root.title('WILLOW-chia-forks-offline-wallet-balance | ' + open(path.join(path.dirname(__file__),
-                                                                                       '../version.txt'), 'r').read())
+                                                                                       'version.txt'), 'r').read())
         self.root.iconbitmap(path.join(path.dirname(__file__), '../media/icon.ico'))
 
         sponsor_frame = ttk.Labelframe(text="Sponsor")
