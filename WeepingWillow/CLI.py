@@ -58,8 +58,7 @@ parser.set_defaults(last_win_time=False)
 parser.add_argument('--balance_statistics', dest='balance_statistics', action='store_true')
 parser.set_defaults(last_win_time=False)
 
-if __name__ == '__main__':
-
+def main():
     args = parser.parse_args()
 
     class mixer(WILLOWcli,
@@ -92,3 +91,6 @@ if __name__ == '__main__':
                                   cats_only=args.cats_only,
                                   nr_of_addresses=args.numberAddresses,
                                   custom_addresses=args.addresses)
+
+if __name__ == '__main__':
+    main()
