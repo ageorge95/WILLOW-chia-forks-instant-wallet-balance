@@ -1,8 +1,8 @@
 from argparse import ArgumentParser
-from _00_WILLOW_base import configure_logger_and_queue,\
-    config_handler
-from _00_back_end import WILLOW_back_end
 import os
+from WeepingWillow.base import configure_logger_and_queue,\
+    config_handler
+from WeepingWillow.back_end import WILLOW_back_end
 
 class WILLOWcli(configure_logger_and_queue,
                 config_handler):
@@ -20,7 +20,7 @@ class WILLOWcli(configure_logger_and_queue,
         return True
 
 parser = ArgumentParser(description='CLI: WILLOW-chia-forks-offline-wallet-balance |'
-                                    ' ' + open(os.path.join(os.path.dirname(__file__),'version.txt'), 'r').read())
+                                    ' ' + open(os.path.join(os.path.dirname(__file__), 'version.txt'), 'r').read())
 
 parser.add_argument('-c',
                     '--coin',
@@ -58,8 +58,7 @@ parser.set_defaults(last_win_time=False)
 parser.add_argument('--balance_statistics', dest='balance_statistics', action='store_true')
 parser.set_defaults(last_win_time=False)
 
-if __name__ == '__main__':
-
+def main():
     args = parser.parse_args()
 
     class mixer(WILLOWcli,
@@ -92,3 +91,6 @@ if __name__ == '__main__':
                                   cats_only=args.cats_only,
                                   nr_of_addresses=args.numberAddresses,
                                   custom_addresses=args.addresses)
+
+if __name__ == '__main__':
+    main()

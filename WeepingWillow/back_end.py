@@ -6,23 +6,21 @@ from traceback import format_exc
 from logging import getLogger,\
     WARNING
 getLogger("urllib3").setLevel(WARNING)
-sys.path.insert(0,path.join(path.dirname(__file__)))
-sys.path.insert(0,path.join(path.dirname(__file__), 'chia_blockchain'))
-from chia_blockchain.chia.util.keychain import mnemonic_to_seed
-from chia_blockchain.chia.util.byte_types import hexstr_to_bytes
-from chia_blockchain.chia.util.bech32m import encode_puzzle_hash,\
-    decode_puzzle_hash
 from blspy import AugSchemeMPL,\
     PrivateKey,\
     G1Element
-from _00_config import initial_config
-from _00_WILLOW_base import db_wrapper_selector
 from io import StringIO
-from clvm_tools.cmds import brun
-from chia_blockchain.chia.wallet.puzzles.p2_delegated_puzzle_or_hidden_puzzle import puzzle_for_pk
-from chia_blockchain.chia.wallet.derive_keys import master_sk_to_farmer_sk
 from tabulate import tabulate
 from datetime import datetime, timedelta
+from clvm_tools.cmds import brun
+from WeepingWillow.config import initial_config
+from WeepingWillow.base import db_wrapper_selector
+from chia.wallet.puzzles.p2_delegated_puzzle_or_hidden_puzzle import puzzle_for_pk
+from chia.wallet.derive_keys import master_sk_to_farmer_sk
+from chia.util.keychain import mnemonic_to_seed
+from chia.util.byte_types import hexstr_to_bytes
+from chia.util.bech32m import encode_puzzle_hash,\
+    decode_puzzle_hash
 
 class Capturing(list):
     def __enter__(self):
@@ -56,7 +54,7 @@ class WILLOW_back_end():
         self._log = getLogger()
 
         config_path = 'config_willow.json' if '_MEIPASS' in sys.__dict__\
-                                           else path.join(path.dirname(__file__),'config_willow.json')
+                                           else path.join(path.dirname(__file__), '../config_willow.json')
         if path.isfile(config_path):
             try:
                 with open(config_path, 'r') as json_in_handle:
@@ -545,7 +543,7 @@ class WILLOW_back_end():
 # For debugging purposes
 # You can use this piece of code yourself either in your scripts or directly by running this script
 if __name__ == '__main__':
-    from _00_WILLOW_base import configure_logger_and_queue
+    from base import configure_logger_and_queue
     configure_logger_and_queue()
 
     my_obj = WILLOW_back_end()
