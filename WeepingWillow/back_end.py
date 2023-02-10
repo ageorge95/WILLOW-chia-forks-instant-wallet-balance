@@ -98,45 +98,46 @@ class WILLOW_back_end():
                 self._log.error(f"Oh snap ! There was an error while generating the farmer address:\n{format_exc(chain=False)}")
 
             # generate hardened addresses
-            self._log.info(f"Generating {nr_of_addresses} hardened addresses based on the provided mnemonic. Please wait ...")
-            try:
+            for derivation_port in self.config["assets"][asset]['wallet_sk_derivation_port']:
+                self._log.info(f"Generating {nr_of_addresses} hardened addresses based on the provided mnemonic via {derivation_port} derivation port. Please wait ...")
+                try:
 
-                wallet_sk_intermediate: PrivateKey = AugSchemeMPL.derive_child_sk(master_sk, 12381)
-                wallet_sk_intermediate: PrivateKey = AugSchemeMPL.derive_child_sk(wallet_sk_intermediate, self.config["assets"][asset]['wallet_sk_derivation_port'])
-                wallet_sk_intermediate: PrivateKey = AugSchemeMPL.derive_child_sk(wallet_sk_intermediate, 2)
-                for i in range(nr_of_addresses):
-                    child_sk: PrivateKey = AugSchemeMPL.derive_child_sk(wallet_sk_intermediate, i)
-                    child_pk: G1Element = child_sk.get_g1()
-                    puzzle = puzzle_for_pk(child_pk)
-                    puzzle_hash = puzzle.get_tree_hash()
-                    address = encode_puzzle_hash(puzzle_hash, prefix)
-                    all_addresses['hardened'].append(address)
+                    wallet_sk_intermediate: PrivateKey = AugSchemeMPL.derive_child_sk(master_sk, 12381)
+                    wallet_sk_intermediate: PrivateKey = AugSchemeMPL.derive_child_sk(wallet_sk_intermediate, derivation_port)
+                    wallet_sk_intermediate: PrivateKey = AugSchemeMPL.derive_child_sk(wallet_sk_intermediate, 2)
+                    for i in range(nr_of_addresses):
+                        child_sk: PrivateKey = AugSchemeMPL.derive_child_sk(wallet_sk_intermediate, i)
+                        child_pk: G1Element = child_sk.get_g1()
+                        puzzle = puzzle_for_pk(child_pk)
+                        puzzle_hash = puzzle.get_tree_hash()
+                        address = encode_puzzle_hash(puzzle_hash, prefix)
+                        all_addresses['hardened'].append(address)
 
-                self._log.info('Hardened addresses generated successfully !')
+                    self._log.info('Hardened addresses generated successfully !')
 
-            except:
-                self._log.error(f"Oh snap ! There was an error while generating the hardened addresses:\n{format_exc(chain=False)}")
+                except:
+                    self._log.error(f"Oh snap ! There was an error while generating the hardened addresses:\n{format_exc(chain=False)}")
 
-            # generate unhardened addresses
-            self._log.info(f"Generating {nr_of_addresses} unhardened addresses based on the provided mnemonic. Please wait ...")
-            try:
+                # generate unhardened addresses
+                self._log.info(f"Generating {nr_of_addresses} unhardened addresses based on the provided mnemonic via {derivation_port} derivation port. Please wait ...")
+                try:
 
-                # unhardened public keys
-                wallet_sk_intermediate: PrivateKey = AugSchemeMPL.derive_child_sk_unhardened(master_sk, 12381)
-                wallet_sk_intermediate: PrivateKey = AugSchemeMPL.derive_child_sk_unhardened(wallet_sk_intermediate, self.config["assets"][asset]['wallet_sk_derivation_port'])
-                wallet_sk_intermediate: PrivateKey = AugSchemeMPL.derive_child_sk_unhardened(wallet_sk_intermediate, 2)
-                for i in range(nr_of_addresses):
-                    child_sk: PrivateKey = AugSchemeMPL.derive_child_sk_unhardened(wallet_sk_intermediate, i)
-                    child_pk: G1Element = child_sk.get_g1()
-                    puzzle = puzzle_for_pk(child_pk)
-                    puzzle_hash = puzzle.get_tree_hash()
-                    address = encode_puzzle_hash(puzzle_hash, prefix)
-                    all_addresses['unhardened'].append(address)
+                    # unhardened public keys
+                    wallet_sk_intermediate: PrivateKey = AugSchemeMPL.derive_child_sk_unhardened(master_sk, 12381)
+                    wallet_sk_intermediate: PrivateKey = AugSchemeMPL.derive_child_sk_unhardened(wallet_sk_intermediate, derivation_port)
+                    wallet_sk_intermediate: PrivateKey = AugSchemeMPL.derive_child_sk_unhardened(wallet_sk_intermediate, 2)
+                    for i in range(nr_of_addresses):
+                        child_sk: PrivateKey = AugSchemeMPL.derive_child_sk_unhardened(wallet_sk_intermediate, i)
+                        child_pk: G1Element = child_sk.get_g1()
+                        puzzle = puzzle_for_pk(child_pk)
+                        puzzle_hash = puzzle.get_tree_hash()
+                        address = encode_puzzle_hash(puzzle_hash, prefix)
+                        all_addresses['unhardened'].append(address)
 
-                self._log.info('Unhardened addresses generated successfully !')
+                    self._log.info('Unhardened addresses generated successfully !')
 
-            except:
-                self._log.error(f"Oh snap ! There was an error while generating the unhardened addresses:\n{format_exc(chain=False)}")
+                except:
+                    self._log.error(f"Oh snap ! There was an error while generating the unhardened addresses:\n{format_exc(chain=False)}")
 
         return all_addresses
 
