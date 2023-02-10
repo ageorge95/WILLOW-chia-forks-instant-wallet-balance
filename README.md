@@ -53,7 +53,7 @@ install.bat
 # Usage modes
 ## CLI
 
-![alt text](ReadMe_res/CLI_interface_ex.jpg?raw=true)
+![alt text](media/CLI_interface_ex.jpg?raw=true)
 
 ### Windows
 ```
@@ -70,7 +70,7 @@ deactivate
 
 ## GUI
   
-![alt text](ReadMe_res/GUI_overview.jpg?raw=true)
+![alt text](media/GUI_overview.jpg?raw=true)
 
 ### Windows
 ```
@@ -89,42 +89,42 @@ deactivate
 ## CLI: return the "full" list of wallet addresses from a given mnemonic
 This requires a mnemonic as the input; "full" is limited by the Addresses_to_generate parameter. The output can very easily be parsed by splitting based on the "$$$ " string
 
-![alt text](ReadMe_res/CLI_List_of_addresses.jpg?raw=true)
+![alt text](media/CLI_List_of_addresses.jpg?raw=true)
 
 ## CLI: return the last_win_time of a given mnemonic
 This requires a mnemonic as the input. The output can very easily be parsed by splitting based on the "$ $ $" string
 
-![alt text](ReadMe_res/CLI_last_win_time.jpg?raw=true)
+![alt text](media/CLI_last_win_time.jpg?raw=true)
 
 ## CLI: return balance statistics
 This requires a mnemonic as the input. The output can very easily be parsed by splitting based on the "$ $" string
 
-![alt text](ReadMe_res/CLI_balance_statistics.jpg?raw=true)
+![alt text](media/CLI_balance_statistics.jpg?raw=true)
 
 ## GUI: View the "full" normal wallet balance via a mnemonic
 This requires a mnemonic as the input; "full" is limited by the Addresses_to_generate parameter
 
-![alt text](ReadMe_res/normal_wallet.jpg?raw=true)
+![alt text](media/normal_wallet.jpg?raw=true)
 
 ## GUI: View the "full" CATs wallet balance via a mnemonic
 This requires a mnemonic as the input; "full" is limited by the Addresses_to_generate parameter
 
-![alt text](ReadMe_res/CATs_wallet.jpg?raw=true)
+![alt text](media/CATs_wallet.jpg?raw=true)
 
 ## GUI: View the normal wallet balance via a single address
 This requires only an address of the wallet as the input.
 
-![alt text](ReadMe_res/normal_wallet_single_addr.jpg?raw=true)
+![alt text](media/normal_wallet_single_addr.jpg?raw=true)
 
 ## GUI: View the CATs wallet balance via a single address
 This requires only an address of the wallet as the input.
 
-![alt text](ReadMe_res/CATs_wallet_single_addr.jpg?raw=true)
+![alt text](media/CATs_wallet_single_addr.jpg?raw=true)
 
 ## GUI: View various mnemonic related info
 This requires a mnemonic as the input.
 
-![alt text](ReadMe_res/various_mnemonic_INFO.jpg?raw=true)
+![alt text](media/various_mnemonic_INFO.jpg?raw=true)
 
 # Support
 Found this project useful? Send your ❤ in any form you can 🙂. Please contact me if you donated and want to be added to the contributors list !
