@@ -15,11 +15,11 @@ from datetime import datetime, timedelta
 from clvm_tools.cmds import brun
 from WeepingWillow.config import initial_config
 from WeepingWillow.base import db_wrapper_selector
-from chia_blockchain.chia.wallet.puzzles.p2_delegated_puzzle_or_hidden_puzzle import puzzle_for_pk
-from chia_blockchain.chia.wallet.derive_keys import master_sk_to_farmer_sk
-from chia_blockchain.chia.util.keychain import mnemonic_to_seed
-from chia_blockchain.chia.util.byte_types import hexstr_to_bytes
-from chia_blockchain.chia.util.bech32m import encode_puzzle_hash,\
+from chia.wallet.puzzles.p2_delegated_puzzle_or_hidden_puzzle import puzzle_for_pk
+from chia.wallet.derive_keys import master_sk_to_farmer_sk
+from chia.util.keychain import mnemonic_to_seed
+from chia.util.byte_types import hexstr_to_bytes
+from chia.util.bech32m import encode_puzzle_hash,\
     decode_puzzle_hash
 
 class Capturing(list):
