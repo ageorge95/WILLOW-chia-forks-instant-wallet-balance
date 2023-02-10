@@ -7,7 +7,8 @@
   - works with both hardened & unhardened addresses, at the same time (meaning that for a given mnemonic it will check for funds in the first x hardened and unhardened addresses)
   - has a lite blockchain explorer which shows the last n transactions of a given mnemonic/ address/ set of addresses; works for both the normal and CATs (V1) wallets
   - can quickly show various information of a given mnemonic (the first x number of hardened/ unhardened addresses, the farmer address (aka the staking address) ...)
-
+  - Works with chia and with all chia forks
+  - 
 - The tool needs:
   - a full node database (the full node service is not mandatory)
 
@@ -20,39 +21,71 @@
 - Do not forget to join the Discord server dedicated for this tool: https://discord.gg/qU9zRP9x5u
 - Also, feel free to contribute to the tool's development with a PR.
 
-# How to use
-The tool was designed mainly for Windows, but should work on every OS where python is supported.
+# Setup
+## Ubuntu (tested with 22.04.1)
+### Prerequisites
+```
+sudo apt install git
+sudo apt install python3-venv
+sudo apt install python3-tk
+sudo apt install tix
+```
 
-It can be used as a sub-module, so if you want to include it in a bigger set of scripts, you can do that 🙂. Just import _00_back_end.WILLOW_back_end and you are good to go.
+### Installation
+```
+git clone https://github.com/ageorge95/WILLOW-chia-forks-instant-wallet-balance willow
+cd willow
+sh install.sh
+```
 
-NOTE#1: Using it as a sub-module may get you to fall into a rabbit hole. For that reason, recently a CLI interface was implemented which will completely isolate your scripts from willow.
+## Windows (tested with win10Pro, win11Pro)
+### Prerequisites
+- git for windows: https://gitforwindows.org/
+- python 3.x (>=3.9, 3.11 is recommended): https://www.python.org/downloads/
 
-NOTE#2: Long story short you have 3 ways to use willow in your scripts:
-- M#1 using the WILLOW class directly
-- M#2 using _00_CLI.py to direct your queries (recommended)
-- M#3 using the compiled CLI exe (more I/O overhead then M#2)
+### Installation
+```
+git clone https://github.com/ageorge95/WILLOW-chia-forks-instant-wallet-balance willow
+cd willow
+install.bat
+```
 
-## WINDOWS usage - instructions
-
-1.1. Have the full node database of the coin you are about to check. As mentioned before, the full node service does not need to be running.
-
-1.2. Run the windows compiled GUI and follow the instructions on screen.
-
-GUI overview:
-   
-![alt text](ReadMe_res/GUI_overview.jpg?raw=true)
-
-OR
-
-2.1. Have the full node db of the coin you are about to check. As mentioned before, the full node service does not need to be running.
-
-2.2. Use the windows compiled CLI interface
-
-2.2.1. Just launch the CLI in your favourite console with the -h switch to see the usage instructions; As of now those are:
+# Usage modes
+## CLI
 
 ![alt text](ReadMe_res/CLI_interface_ex.jpg?raw=true)
 
-# Usage example
+### Windows
+```
+activate
+willow -h
+deactivate
+```
+### Ubuntu
+```
+. activate
+wiollow -h
+deactivate
+```
+
+## GUI
+  
+![alt text](ReadMe_res/GUI_overview.jpg?raw=true)
+
+### Windows
+```
+activate
+gui_willow
+deactivate
+```
+### Ubuntu
+```
+. activate
+gui_willow
+deactivate
+```
+
+# Highlights
 ## CLI: return the "full" list of wallet addresses from a given mnemonic
 This requires a mnemonic as the input; "full" is limited by the Addresses_to_generate parameter. The output can very easily be parsed by splitting based on the "$$$ " string
 
