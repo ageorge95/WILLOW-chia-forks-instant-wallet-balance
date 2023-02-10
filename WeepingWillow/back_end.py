@@ -15,8 +15,8 @@ from chia_blockchain.chia.util.bech32m import encode_puzzle_hash,\
 from blspy import AugSchemeMPL,\
     PrivateKey,\
     G1Element
-from _00_config import initial_config
-from _00_WILLOW_base import db_wrapper_selector
+from config import initial_config
+from base import db_wrapper_selector
 from io import StringIO
 from clvm_tools.cmds import brun
 from chia_blockchain.chia.wallet.puzzles.p2_delegated_puzzle_or_hidden_puzzle import puzzle_for_pk
@@ -545,7 +545,7 @@ class WILLOW_back_end():
 # For debugging purposes
 # You can use this piece of code yourself either in your scripts or directly by running this script
 if __name__ == '__main__':
-    from _00_WILLOW_base import configure_logger_and_queue
+    from base import configure_logger_and_queue
     configure_logger_and_queue()
 
     my_obj = WILLOW_back_end()

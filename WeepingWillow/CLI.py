@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
-from _00_WILLOW_base import configure_logger_and_queue,\
+from base import configure_logger_and_queue,\
     config_handler
-from _00_back_end import WILLOW_back_end
+from back_end import WILLOW_back_end
 import os
 
 class WILLOWcli(configure_logger_and_queue,

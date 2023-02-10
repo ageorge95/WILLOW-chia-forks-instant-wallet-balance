@@ -10,7 +10,7 @@ from os import path,\
 from json import load,\
     dump
 import sys
-from _00_config import initial_config
+from config import initial_config
 from sqlite3 import connect
 
 class db_wrapper_v1():
