@@ -1,3 +1,4 @@
 TITLE Willow GUI
-python _00_GUI.py
+call activate
+gui_willow
 pause
