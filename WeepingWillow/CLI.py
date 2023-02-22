@@ -19,7 +19,7 @@ class WILLOWcli(configure_logger_and_queue,
             return False
         return True
 
-parser = ArgumentParser(description='CLI: WILLOW-chia-forks-offline-wallet-balance |'
+parser = ArgumentParser(description='CLI: WILLOW |'
                                     ' ' + open(os.path.join(os.path.dirname(__file__), 'version.txt'), 'r').read())
 
 parser.add_argument('-c',
