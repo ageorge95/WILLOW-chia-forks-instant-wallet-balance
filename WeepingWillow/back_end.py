@@ -482,7 +482,7 @@ class WILLOW_back_end(config_handler):
                 self._log.info(f"Transactions history for all $${addr_type}$$ addresses:\n"
                                f"{tabulate(table, ['Timestamp', 'Balance', 'Spent', 'Affected wallet'], tablefmt='grid')}")
 
-                self._log.info(f"TOTAL: available coins:{total_coin_balance}, spent coins:{total_coin_spent}")
+                self._log.info(f"TOTAL: available amount:{total_coin_balance}, spent amount:{total_coin_spent}")
 
         else:
             total_coin_balance = {}
