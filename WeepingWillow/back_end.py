@@ -188,6 +188,9 @@ class WILLOW_back_end(config_handler):
         except:
             self._log.error(f"Failed to execute process_balance. Reason:\n{format_exc(chain=False)}")
 
+        # sort the transactions returned data time-wise
+        to_return['transactions'] = sorted(to_return['transactions'], key=lambda _:_['timestamp'],
+                                           reverse=True)
         return to_return
 
     def process_balance_CATS_only(self,
