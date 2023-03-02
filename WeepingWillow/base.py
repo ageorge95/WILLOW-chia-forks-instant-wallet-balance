@@ -78,7 +78,7 @@ def configure_logger():
     ch = StreamHandler(stream=stdout)
     ch.setLevel(INFO)
     ch.setFormatter(CustomFormatter())
-    fh = FileHandler("../runtime_log.log")
+    fh = FileHandler("runtime_log.log")
     fh.setLevel(INFO)
     fh.setFormatter(Formatter('%(asctime)s,%(msecs)d %(levelname)-4s [%(filename)s:%(lineno)d -> %(name)s - %(funcName)s] ___ %(message)s'))
 
@@ -127,16 +127,15 @@ class config_handler():
     def __init__(self):
         super(config_handler, self).__init__()
 
-        config_path = 'config_willow.json' if '_MEIPASS' in sys.__dict__ \
-            else path.join(path.dirname(__file__), '../config_willow.json')
+        config = 'config_willow.json'
 
-        if path.isfile(config_path):
+        if path.isfile(config):
             try:
-                with open(config_path, 'r') as json_in_handle:
+                with open(config, 'r') as json_in_handle:
                     self.config = load(json_in_handle)
             except:
                 self.config = initial_config
         else:
             self.config = initial_config
-            with open(config_path, 'w') as json_out_handle:
+            with open(config, 'w') as json_out_handle:
                 dump(self.config, json_out_handle, indent=2)

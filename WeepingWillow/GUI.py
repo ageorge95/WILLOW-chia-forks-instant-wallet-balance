@@ -373,8 +373,7 @@ class App():
 
     def __init__(self, root):
         self.root = root
-        self.root.title('WILLOW | ' + open(path.join(path.dirname(__file__),
-                                                                                       'version.txt'), 'r').read())
+        self.root.title('WILLOW | ' + open(path.join(path.dirname(__file__), 'version.txt'), 'r').read())
         if ( sys.platform.startswith('win')):
             self.root.iconbitmap('../media/icon.ico' if path.isfile('../media/icon.ico') else 'media/icon.ico')
         else:

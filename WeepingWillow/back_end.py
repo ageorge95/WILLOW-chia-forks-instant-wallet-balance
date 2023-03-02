@@ -14,7 +14,8 @@ from tabulate import tabulate
 from datetime import datetime, timedelta
 from clvm_tools.cmds import brun
 from WeepingWillow.config import initial_config
-from WeepingWillow.base import db_wrapper_selector
+from WeepingWillow.base import db_wrapper_selector,\
+    config_handler
 from chia.wallet.puzzles.p2_delegated_puzzle_or_hidden_puzzle import puzzle_for_pk
 from chia.wallet.derive_keys import master_sk_to_farmer_sk
 from chia.util.keychain import mnemonic_to_seed
@@ -47,24 +48,11 @@ def get_brun_output(asset_ID,
                   f" 0x{ph})"])
     return output[0]
 
-class WILLOW_back_end():
+class WILLOW_back_end(config_handler):
 
     def __init__(self):
 
         self._log = getLogger()
-
-        config_path = 'config_willow.json' if '_MEIPASS' in sys.__dict__\
-                                           else path.join(path.dirname(__file__), '../config_willow.json')
-        if path.isfile(config_path):
-            try:
-                with open(config_path, 'r') as json_in_handle:
-                    self.config = load(json_in_handle)
-            except:
-                self.config = initial_config
-        else:
-            self.config = initial_config
-            with open(config_path, 'w') as json_out_handle:
-                dump(self.config, json_out_handle, indent=2)
 
         super(WILLOW_back_end, self).__init__()
 
