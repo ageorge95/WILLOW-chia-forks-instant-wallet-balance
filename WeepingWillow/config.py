@@ -268,7 +268,7 @@ initial_config = {'assets': {'XTWO': {'db_filepath': '{userdir}\\.two\\mainnet\\
                                       'denominator': 1000,
                                       'friendly_name': 'shibgreen',
                                       'wallet_sk_derivation_port': [8444]},
-                            'XSLV': {'db_filepath': '{userdir}\\.salvia\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                            'XSLV': {'db_filepath': '{userdir}\\.salvia\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                      'denominator': 1000000000000,
                                      'friendly_name': 'salvia',
                                      'wallet_sk_derivation_port': [8444]},
