@@ -385,6 +385,13 @@ class WILLOW_back_end(config_handler):
                                                                       all_coins))])\
                                             /self.config['assets'][asset]['denominator']
 
+            for task in {'AVAILABLE_COINS_COUNT_ALL_TIME': 0,
+                         'AVAILABLE_COINS_COUNT_30_DAY': (datetime.now() - timedelta(days=30)).timestamp(),
+                         'AVAILABLE_COINS_COUNT_7_DAY': (datetime.now() - timedelta(days=7)).timestamp(),
+                         'AVAILABLE_COINS_COUNT_3_DAY': (datetime.now() - timedelta(days=3)).timestamp(),
+                         'AVAILABLE_COINS_COUNT_1_DAY': (datetime.now() - timedelta(days=1)).timestamp()}.items():
+                final_data_store[task[0]] = len(list(filter(lambda _:_[0] > task[1] and not _[2], all_coins)))
+
             self._log.info(f'Balance statistics result:${str(final_data_store)}$')
 
         except:
