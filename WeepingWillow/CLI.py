@@ -25,6 +25,7 @@ parser = ArgumentParser(description='CLI: WILLOW |'
 parser.add_argument('-c',
                     '--coin',
                     type=str,
+                    required=True,
                     help='Coin to be processed, Can be one of the following: {}'.format('|'.join(coin for coin in WILLOWcli().return_configured_coins())))
 
 parser.add_argument('-m',
