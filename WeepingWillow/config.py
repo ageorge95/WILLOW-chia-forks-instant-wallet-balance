@@ -220,7 +220,7 @@ initial_config = {'assets': {'XTWO': {'db_filepath': '{userdir}\\.two\\mainnet\\
                                     'denominator': 1000000000000,
                                     'friendly_name': 'fork',
                                     'wallet_sk_derivation_port': [8444]},
-                            'XFL': {'db_filepath': '{userdir}\\.flora\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                            'XFL': {'db_filepath': '{userdir}\\.flora\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                     'denominator': 1000000000000,
                                     'friendly_name': 'flora',
                                     'wallet_sk_derivation_port': [8444]},
