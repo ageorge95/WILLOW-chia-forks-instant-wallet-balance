@@ -152,7 +152,7 @@ initial_config = {'assets': {'XTWO': {'db_filepath': '{userdir}\\.two\\mainnet\\
                                      'denominator': 1000000000000,
                                      'friendly_name': 'socks',
                                      'wallet_sk_derivation_port': [8444]},
-                            'SPARE': {'db_filepath': '{userdir}\\.spare-blockchain\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                            'SPARE': {'db_filepath': '{userdir}\\.spare\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                       'denominator': 1000000000000,
                                       'friendly_name': 'spare',
                                       'wallet_sk_derivation_port': [8444]},
