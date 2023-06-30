@@ -1,6 +1,10 @@
 from os import path
 
-initial_config = {'assets': {'XTWO': {'db_filepath': '{userdir}\\.two\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+initial_config = {'assets': {'XCK': {'db_filepath': '{userdir}\\.chik\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                                    'denominator': 1000000000000,
+                                    'friendly_name': 'chik',
+                                    'wallet_sk_derivation_port': [8444]},
+                             'XTWO': {'db_filepath': '{userdir}\\.two\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                       'denominator': 1000000000000,
                                       'friendly_name': 'two',
                                       'wallet_sk_derivation_port': [8444]},
