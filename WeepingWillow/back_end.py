@@ -12,6 +12,7 @@ from blspy import AugSchemeMPL,\
 from io import StringIO
 from tabulate import tabulate
 from datetime import datetime, timedelta
+from decimal import Decimal
 from clvm_tools.cmds import brun
 from WeepingWillow.config import initial_config
 from WeepingWillow.base import db_wrapper_selector,\
@@ -160,15 +161,15 @@ class WILLOW_back_end(config_handler):
 
                 rows = db_wrapper.get_coins_by_puzzlehash(puzzlehash=puzzle_hash)
 
-                coin_spent = 0
-                coin_balance = 0
+                coin_spent = Decimal('0')
+                coin_balance = Decimal('0')
 
                 for row in rows:
 
                     timestamp, amount, spent = row
 
-                    coin_raw=int.from_bytes(amount, 'big')
-                    parsed_coin=coin_raw/self.config['assets'][asset]['denominator']
+                    coin_raw=Decimal(str(int.from_bytes(amount, 'big', signed=True)))
+                    parsed_coin=coin_raw/Decimal(str(self.config['assets'][asset]['denominator']))
                     is_coin_spent = spent
                     if is_coin_spent:
                         coin_spent += parsed_coin
@@ -231,13 +232,13 @@ class WILLOW_back_end(config_handler):
             for CAT_name, vanilla_wrapped_addrs in all_CAT_addrs.items():
 
                 for CAT_addrs in vanilla_wrapped_addrs:
-                    coin_spent = 0
-                    coin_balance = 0
+                    coin_spent = Decimal('0')
+                    coin_balance = Decimal('0')
 
                     if CAT_name not in to_return.keys():
                         to_return[CAT_name] = {'address_info': [],
-                                               'total_coin_balance': 0,
-                                               'total_coin_spent': 0,
+                                               'total_coin_balance': Decimal('0'),
+                                               'total_coin_spent': Decimal('0'),
                                                'transactions': []}
 
                     wrapped_addr = CAT_addrs['wrapped_addr']
@@ -251,8 +252,8 @@ class WILLOW_back_end(config_handler):
 
                         timestamp, amount, spent = row
 
-                        coin_raw=int.from_bytes(amount, 'big')
-                        parsed_coin=coin_raw/self.config['CATs'][asset][CAT_name]['denominator']
+                        coin_raw=Decimal(str(int.from_bytes(amount, 'big')))
+                        parsed_coin=coin_raw/Decimal(str(self.config['CATs'][asset][CAT_name]['denominator']))
                         is_coin_spent = spent
                         if is_coin_spent:
                             to_return[CAT_name]['total_coin_spent'] += parsed_coin
@@ -359,7 +360,7 @@ class WILLOW_back_end(config_handler):
                          'AVAILABLE_7_DAY': (datetime.now() - timedelta(days=7)).timestamp(),
                          'AVAILABLE_3_DAY': (datetime.now() - timedelta(days=3)).timestamp(),
                          'AVAILABLE_1_DAY': (datetime.now() - timedelta(days=1)).timestamp()}.items():
-                final_data_store[task[0]] = sum([int.from_bytes(_[1], 'big')
+                final_data_store[task[0]] = sum([Decimal(str(int.from_bytes(_[1], 'big', signed=True)))
                                                  for _ in list(filter(lambda _:
                                                                       _[0] > task[1] and not _[2],
                                                                       all_coins))])\
@@ -369,7 +370,7 @@ class WILLOW_back_end(config_handler):
                          'INCOME_7_DAY': (datetime.now() - timedelta(days=7)).timestamp(),
                          'INCOME_3_DAY': (datetime.now() - timedelta(days=3)).timestamp(),
                          'INCOME_1_DAY': (datetime.now() - timedelta(days=1)).timestamp()}.items():
-                final_data_store[task[0]] = sum([int.from_bytes(_[1], 'big')
+                final_data_store[task[0]] = sum([Decimal(str(int.from_bytes(_[1], 'big', signed=True)))
                                                  for _ in list(filter(lambda _:
                                                                       _[0] > task[1],
                                                                       all_coins))])\
@@ -379,7 +380,7 @@ class WILLOW_back_end(config_handler):
                          'SPENT_7_DAY': (datetime.now() - timedelta(days=7)).timestamp(),
                          'SPENT_3_DAY': (datetime.now() - timedelta(days=3)).timestamp(),
                          'SPENT_1_DAY': (datetime.now() - timedelta(days=1)).timestamp()}.items():
-                final_data_store[task[0]] = sum([int.from_bytes(_[1], 'big')
+                final_data_store[task[0]] = sum([Decimal(str(int.from_bytes(_[1], 'big', signed=True)))
                                                  for _ in list(filter(lambda _:
                                                                       _[0] > task[1] and _[2],
                                                                       all_coins))])\
@@ -464,8 +465,8 @@ class WILLOW_back_end(config_handler):
 
         # print the results
         if not cats_only:
-            total_coin_balance = 0
-            total_coin_spent = 0
+            total_coin_balance = Decimal('0')
+            total_coin_spent = Decimal('0')
 
             for addr_type in types_to_show:
 
@@ -502,8 +503,8 @@ class WILLOW_back_end(config_handler):
                 for CAT in balance[addr_type].keys():
 
                     if CAT not in total_coin_balance.keys():
-                        total_coin_balance[CAT] = 0
-                        total_coin_spent[CAT] = 0
+                        total_coin_balance[CAT] = Decimal('0')
+                        total_coin_spent[CAT] = Decimal('0')
 
                     tabular_data = []
                     for appended_data in balance[addr_type][CAT]['address_info']:
