@@ -360,31 +360,31 @@ class WILLOW_back_end(config_handler):
                          'AVAILABLE_7_DAY': (datetime.now() - timedelta(days=7)).timestamp(),
                          'AVAILABLE_3_DAY': (datetime.now() - timedelta(days=3)).timestamp(),
                          'AVAILABLE_1_DAY': (datetime.now() - timedelta(days=1)).timestamp()}.items():
-                final_data_store[task[0]] = sum([Decimal(str(int.from_bytes(_[1], 'big', signed=True)))
+                final_data_store[task[0]] = float(sum([Decimal(str(int.from_bytes(_[1], 'big', signed=True)))
                                                  for _ in list(filter(lambda _:
                                                                       _[0] > task[1] and not _[2],
                                                                       all_coins))])\
-                                            /self.config['assets'][asset]['denominator']
+                                            /Decimal(str(self.config['assets'][asset]['denominator'])))
             for task in {'INCOME_ALL_TIME': 0,
                          'INCOME_30_DAY': (datetime.now() - timedelta(days=30)).timestamp(),
                          'INCOME_7_DAY': (datetime.now() - timedelta(days=7)).timestamp(),
                          'INCOME_3_DAY': (datetime.now() - timedelta(days=3)).timestamp(),
                          'INCOME_1_DAY': (datetime.now() - timedelta(days=1)).timestamp()}.items():
-                final_data_store[task[0]] = sum([Decimal(str(int.from_bytes(_[1], 'big', signed=True)))
+                final_data_store[task[0]] = float(sum([Decimal(str(int.from_bytes(_[1], 'big', signed=True)))
                                                  for _ in list(filter(lambda _:
                                                                       _[0] > task[1],
                                                                       all_coins))])\
-                                            /self.config['assets'][asset]['denominator']
+                                            /Decimal(str(self.config['assets'][asset]['denominator'])))
             for task in {'SPENT_ALL_TIME': 0,
                          'SPENT_30_DAY': (datetime.now() - timedelta(days=30)).timestamp(),
                          'SPENT_7_DAY': (datetime.now() - timedelta(days=7)).timestamp(),
                          'SPENT_3_DAY': (datetime.now() - timedelta(days=3)).timestamp(),
                          'SPENT_1_DAY': (datetime.now() - timedelta(days=1)).timestamp()}.items():
-                final_data_store[task[0]] = sum([Decimal(str(int.from_bytes(_[1], 'big', signed=True)))
+                final_data_store[task[0]] = float(sum([Decimal(str(int.from_bytes(_[1], 'big', signed=True)))
                                                  for _ in list(filter(lambda _:
                                                                       _[0] > task[1] and _[2],
                                                                       all_coins))])\
-                                            /self.config['assets'][asset]['denominator']
+                                            /Decimal(str(self.config['assets'][asset]['denominator'])))
 
             for task in {'AVAILABLE_COINS_COUNT_ALL_TIME': 0,
                          'AVAILABLE_COINS_COUNT_30_DAY': (datetime.now() - timedelta(days=30)).timestamp(),
