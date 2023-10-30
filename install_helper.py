@@ -1,7 +1,7 @@
 from sys import version_info
 
 invalid_python_versions = [
-    '3.12' # not compatible with clvm
+    '3.12' # not compatible with blspy
 ]
 
 current_python_version = f'{version_info.major}.{version_info.minor}'
