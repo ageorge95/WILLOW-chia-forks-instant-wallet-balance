@@ -8,7 +8,7 @@
   - has a lite blockchain explorer which shows the last n transactions of a given mnemonic/ address/ set of addresses; works for both the normal and CATs (V1) wallets
   - can quickly show various information of a given mnemonic (the first x number of hardened/ unhardened addresses, the farmer address (aka the staking address) ...)
   - Works with chia and with all chia forks
-  - 
+    
 - The tool needs:
   - a full node database (the full node service is not mandatory)
 
