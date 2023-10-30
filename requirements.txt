@@ -6,6 +6,9 @@ keyring
 pyyaml
 cryptography
 watchdog
+click
+pillow
+ttkwidgets
 blspy==2.0.2
 clvm_tools==0.4.6
 chia_rs==0.2.11
