@@ -9,6 +9,5 @@ watchdog
 click
 pillow
 ttkwidgets
-blspy==2.0.2
-clvm_tools==0.4.6
-chia_rs==0.2.11
+clvm_tools==0.4.7
+chia_rs==0.2.13
