@@ -6,7 +6,7 @@ from traceback import format_exc
 from logging import getLogger,\
     WARNING
 getLogger("urllib3").setLevel(WARNING)
-from blspy import AugSchemeMPL,\
+from chia_rs import AugSchemeMPL,\
     PrivateKey,\
     G1Element
 from io import StringIO
