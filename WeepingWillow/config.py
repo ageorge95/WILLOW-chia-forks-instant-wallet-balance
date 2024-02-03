@@ -24,7 +24,7 @@ initial_config = {'assets': {'XSEA': {'db_filepath': '{userdir}\\.sea\\mainnet\\
                                       'denominator': 1000000,
                                       'friendly_name': 'kiwi',
                                       'wallet_sk_derivation_port': [8444]},
-                             'GBTC': {'db_filepath': '{userdir}\\.greenbtc\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                             'GBTC': {'db_filepath': '{userdir}\\.greenbtc\\mainnet\\db\\blockchain_v2_r1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                       'denominator': 1000000000000,
                                       'friendly_name': 'greenbtc',
                                       'wallet_sk_derivation_port': [8444]},
