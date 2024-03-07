@@ -10,4 +10,4 @@ click
 pillow
 ttkwidgets
 clvm_tools==0.4.7
-chia_rs==0.2.15
+chia_rs==0.4.1
