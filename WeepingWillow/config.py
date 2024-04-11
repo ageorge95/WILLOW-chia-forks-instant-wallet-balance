@@ -20,7 +20,7 @@ initial_config = {'assets': {'XXCH': {'db_filepath': '{userdir}\\.xxch\\mainnet\
                                       'denominator': 1000000000000,
                                       'friendly_name': 'two',
                                       'wallet_sk_derivation_port': [8444]},
-                             'BALL': {'db_filepath': '{userdir}\\.ball\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                             'BALL': {'db_filepath': '{userdir}\\.ball\\mainnet\\db\\blockchain_v2_r1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                       'denominator': 1000000000000,
                                       'friendly_name': 'ballcoin',
                                       'wallet_sk_derivation_port': [8444]},
