@@ -1,6 +1,10 @@
 from os import path
 
-initial_config = {'assets': {'XSEA': {'db_filepath': '{userdir}\\.sea\\mainnet\\db\\blockchain_v2_r1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+initial_config = {'assets': {'XXCH': {'db_filepath': '{userdir}\\.xxch\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                                      'denominator': 1000000000000,
+                                      'friendly_name': 'xxch',
+                                      'wallet_sk_derivation_port': [8444]},
+                             'XSEA': {'db_filepath': '{userdir}\\.sea\\mainnet\\db\\blockchain_v2_r1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                       'denominator': 1000000000000,
                                       'friendly_name': 'seacoin',
                                       'wallet_sk_derivation_port': [8444]},
