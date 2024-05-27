@@ -180,7 +180,7 @@ initial_config = {'assets': {'ABA': {'db_filepath': '{userdir}\\.aba\\mainnet\\d
                                      'denominator': 1000000000,
                                      'friendly_name': 'staicoin',
                                      'wallet_sk_derivation_port': [8444]},
-                            'STOR': {'db_filepath': '{userdir}\\.stor\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                            'STOR': {'db_filepath': '{userdir}\\.stor\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                      'denominator': 1000000000000,
                                      'friendly_name': 'stor',
                                      'wallet_sk_derivation_port': [8444]},
