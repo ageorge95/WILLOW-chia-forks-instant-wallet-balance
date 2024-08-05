@@ -228,7 +228,7 @@ initial_config = {'assets': {'ABA': {'db_filepath': '{userdir}\\.aba\\mainnet\\d
                                     'denominator': 1000000000,
                                     'friendly_name': 'chiarose',
                                     'wallet_sk_derivation_port': [8444]},
-                            'XDG': {'db_filepath': '{userdir}\\.dogechia\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                            'XDG': {'db_filepath': '{userdir}\\.dogechia\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                     'denominator': 1000000000000,
                                     'friendly_name': 'dogechia',
                                     'wallet_sk_derivation_port': [8444]},
