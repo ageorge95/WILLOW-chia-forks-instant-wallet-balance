@@ -1,6 +1,10 @@
 from os import path
 
-initial_config = {'assets': {'ABA': {'db_filepath': '{userdir}\\.aba\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+initial_config = {'assets': {'LOT': {'db_filepath': '{userdir}\\.lottery\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                                      'denominator': 1000000000,
+                                      'friendly_name': 'lottery',
+                                      'wallet_sk_derivation_port': [8444]},
+                             'ABA': {'db_filepath': '{userdir}\\.aba\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                       'denominator': 1000000000000,
                                       'friendly_name': 'aba',
                                       'wallet_sk_derivation_port': [8444]},
