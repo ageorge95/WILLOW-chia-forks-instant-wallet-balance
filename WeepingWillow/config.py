@@ -76,7 +76,7 @@ initial_config = {'assets': {'LOT': {'db_filepath': '{userdir}\\.lottery\\mainne
                                      'denominator': 100000000,
                                      'friendly_name': 'joker',
                                      'wallet_sk_derivation_port': [9699]},
-                             'GL': {'db_filepath': '{userdir}\\.gold\\mainnet\\db\\blockchain_v1_mainnet.sqlite'.format(userdir=path.expanduser("~")),
+                             'GL': {'db_filepath': '{userdir}\\.gold\\mainnet\\db\\blockchain_v2_mainnet.sqlite'.format(userdir=path.expanduser("~")),
                                     'denominator': 1000000000000,
                                     'friendly_name': 'gold',
                                     'wallet_sk_derivation_port': [8444]},
