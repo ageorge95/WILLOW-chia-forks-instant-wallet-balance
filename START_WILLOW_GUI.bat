@@ -1,4 +1,3 @@
 TITLE Willow GUI
 call activate
-gui_willow
-pause
+start "" pythonw -m WeepingWillow.GUI
